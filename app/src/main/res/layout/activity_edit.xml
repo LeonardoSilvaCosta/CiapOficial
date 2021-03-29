@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID"
+        android:id="@+id/ed_id"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="NOME"
+        android:id="@+id/ed_nome"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="EMAIL"
+        android:id="@+id/ed_email"
+        android:textSize="20sp"/>
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/design_default_color_primary"
+        android:text="Update"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="10dp"
+        android:onClick="updateData"/>
+
+</LinearLayout>

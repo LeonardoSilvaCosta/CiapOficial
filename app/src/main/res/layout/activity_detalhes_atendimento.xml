@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".view.DetalhesAtendimentoActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="Dados do atendimento"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaOficialResponsavel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oficial: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtOficialResponsavel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="oficial"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaAtendido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Atendidos(as): "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtAtendido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="atendido(a)"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaUnidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unidade: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtUnidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="unidade"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaModalidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modalidade: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtModalidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="modalidade"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaAcesso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acesso: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtAcesso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="acesso"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tipo"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaAvaliacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Avaliação: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtAvaliacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="avaliação"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaPrograma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Programa: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtPrograma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="programa"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaDeslocamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deslocamento: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDeslocamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="deslocamento"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaDemandaGeral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Demanda Geral: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDemandaGeral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="demanda_geral"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaDemandasEspecificas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Demanda(s) especifica(s): "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDemandaEspecifica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Demandas especificas: "
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaCondicaoLaboral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Condição laboral: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtCondicaoLaboral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="condicao_laboral"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaProcedimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Procedimento: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtProcedimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="procedimento"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaDocumentoProduzido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Documento(s): "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDocumentoProduzido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data_inclusão"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaAfastamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Afastamento: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtAfastamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="afastamento"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaEvolucao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Evolução: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtEvolucao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="evolucao"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <TextView
+            android:id="@+id/txtLegendaDataHoraCadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registrado em: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtDataHoraCadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dd/MM/yyyy"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>
