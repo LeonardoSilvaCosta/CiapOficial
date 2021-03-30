@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
+import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Especialidade;
 import com.br.ciapoficial.model.Estado;
@@ -35,6 +37,7 @@ import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +48,7 @@ import java.util.ArrayList;
 public class UserRegisterFragment3 extends Fragment {
 
     private PrincipalFragment principalFragment;
+    private TextInputLayout textInputLayoutRegistroConselho;
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra,
             textInputEditTextRegistroConselho;
     private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewUnidade, autoCompleteTextViewQuadro,
@@ -88,6 +92,7 @@ public class UserRegisterFragment3 extends Fragment {
 
     private void configurarComponentes(View view)
     {
+        textInputLayoutRegistroConselho = view.findViewById(R.id.textInputLayoutRegistroConselho);
         textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
         autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtSpinPostoGrad);
         textInputEditTextNomeGuerra = view.findViewById(R.id.edtNomeGuerra);
@@ -103,6 +108,7 @@ public class UserRegisterFragment3 extends Fragment {
         popularCampoUnidadeComDB();
         popularCampoQuadroComDB();
         popularCampoEspecialidadeComDB();
+        configurarCampoRegistroConselhoComBaseNaEspecialidade();
         popularCampoFuncaoAdministrativaComDB();
         popularCampoSituacaoFuncionalComDB();
     }
@@ -299,6 +305,26 @@ public class UserRegisterFragment3 extends Fragment {
 
     }
 
+    private void configurarCampoRegistroConselhoComBaseNaEspecialidade()
+    {
+        autoCompleteTextViewEspecialidade.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                int psicólogo = 0;
+                int assistente_social = 1;
+
+                if (position == psicólogo || position == assistente_social) {
+                    textInputLayoutRegistroConselho.setVisibility(View.VISIBLE);
+                    textInputEditTextRegistroConselho.setVisibility(View.VISIBLE);
+                } else {
+                    textInputEditTextRegistroConselho.setVisibility(View.GONE);
+                    textInputLayoutRegistroConselho.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
     private void popularCampoFuncaoAdministrativaComDB()
     {
         FuncaoAdministrativaController funcaoAdministrativaController = new FuncaoAdministrativaController();
@@ -468,7 +494,8 @@ public class UserRegisterFragment3 extends Fragment {
 
                             if (!TextUtils.isEmpty(especialidade)) {
 
-                                if (!TextUtils.isEmpty(registroConselho)) {
+                                if (!TextUtils.isEmpty(registroConselho) ||
+                                        especialidade.equals(String.valueOf(listaEspecialidadesRecuperadas.size()))) {
 
                                     if (!TextUtils.isEmpty(funcaoAdministrativa)) {
 
@@ -562,6 +589,8 @@ public class UserRegisterFragment3 extends Fragment {
         else if(especialidade.equals("2"))
         {
             usuario.setRegistroConselho("1/" + registroConselho);
+        }else {
+            usuario.setRegistroConselho("Não se aplica");
         }
 
         usuario.setFuncaoAdministrativa((funcaoAdministrativa));

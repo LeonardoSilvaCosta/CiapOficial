@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -475,14 +476,48 @@ public class UserUpdateFragment3 extends Fragment {
     private void receberDadosUsuarioPreenchidos()
     {
         rgMilitar = textInputEditTextRgMilitar.getText().toString();
-        postoGradCat = autoCompleteTextViewPostGradCat.getText().toString();
+
+        for(int i = 0; i < listaPostoGradCatRecuperados.size(); i++) {
+            PostoGradCat postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
+            if(postoGradCatSelecionado.getDescricao().equals(autoCompleteTextViewPostGradCat.getText().toString())) {
+                postoGradCat = String.valueOf(postoGradCatSelecionado.getId());
+            }
+        }
         nomeGuerra = textInputEditTextNomeGuerra.getText().toString();
-        unidade = autoCompleteTextViewUnidade.getText().toString();
-        quadro = autoCompleteTextViewQuadro.getText().toString();
-        especialidade = autoCompleteTextViewEspecialidade.getText().toString();
+        for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
+            Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
+            if(unidadeSelecionada.getDescricao().equals(autoCompleteTextViewUnidade.getText().toString())) {
+                unidade = String.valueOf(unidadeSelecionada.getId());
+            }
+        }
+
+        for(int i = 0; i < listaQuadrosRecuperados.size(); i++) {
+            Quadro quadroSelecionado = listaQuadrosRecuperados.get(i);
+            if(quadroSelecionado.getDescricao().equals(autoCompleteTextViewQuadro.getText().toString())) {
+                quadro = String.valueOf(quadroSelecionado.getId());
+            }
+        }
+
+        for(int i = 0; i < listaEspecialidadesRecuperadas.size(); i++) {
+            Especialidade especialidadeSelecionada = listaEspecialidadesRecuperadas.get(i);
+            if(especialidadeSelecionada.getDescricao().equals(autoCompleteTextViewEspecialidade.getText().toString())) {
+                especialidade = String.valueOf(especialidadeSelecionada.getId());
+            }
+        }
         registroConselho = textInputEditTextRegistroConselho.getText().toString();
-        funcaoAdministrativa = autoCompleteTextViewFuncaoAdministrativa.getText().toString();
-        situacaoFuncional = autoCompleteTextViewSituacaoFuncional.getText().toString();
+        for(int i = 0; i < listaFuncoesAdministrativasRecuperadas.size(); i++) {
+            FuncaoAdministrativa funcaoAdministrativaSelecionada = listaFuncoesAdministrativasRecuperadas.get(i);
+            if(funcaoAdministrativaSelecionada.getDescricao().equals(autoCompleteTextViewFuncaoAdministrativa.getText().toString())) {
+                funcaoAdministrativa = String.valueOf(funcaoAdministrativaSelecionada.getId());
+            }
+        }
+
+        for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
+            SituacaoFuncional situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
+            if(situacaoFuncionalSelecionada.getDescricao().equals(autoCompleteTextViewSituacaoFuncional.getText().toString())) {
+                situacaoFuncional = String.valueOf(situacaoFuncionalSelecionada.getId());
+            }
+        }
     }
 
     private boolean validarCadastroUsuario() {
@@ -582,6 +617,7 @@ public class UserUpdateFragment3 extends Fragment {
         usuario.setEspecialidade(especialidade);
         usuario.setRegistroConselho(registroConselho);
         usuario.setFuncaoAdministrativa(funcaoAdministrativa);
+        usuario.setSituacaoFuncional((situacaoFuncional));
         usuario.setSenha(valoresRecebidosFragment1.getString("senha"));
 
         return usuario;
@@ -597,6 +633,7 @@ public class UserUpdateFragment3 extends Fragment {
                 new VolleyCallback() {
                     @Override
                     public void onSucess(String response) {
+                        Log.e("UpdateError", response);
 
                         try{
 

@@ -25,13 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.UsuarioController;
+import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.Permissao;
@@ -66,13 +69,16 @@ public class UserUpdateFragment1 extends Fragment {
     private static final int SELECAO_CAMERA = 100;
     private static final int SELECAO_GALERIA = 200;
 
+    private LinearLayout linearLayoutTelefone;
     private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
             textInputEditTextCpf, textInputEditTextTelefone, textInputEditTextEmail, textInputEditTextSenha;
     private RadioGroup radioGroupSexo;
     private RadioButton rbtnMasculino, rbtnFeminino;
 
+    private ArrayList<String> arrayListTelefonesAdicionados = new ArrayList<>();
+
     private UserUpdateFragment2 userUpdateFragment2;
-    private Button btnProxima;
+    private Button btnAdicionarTelefone, btnProxima;
     private CircleImageView fotoPerfil;
     private ImageButton imageButtonCamera, imageButtonGaleria;
     private String encodedImage;
@@ -85,6 +91,7 @@ public class UserUpdateFragment1 extends Fragment {
     private String senha;
 
     private ArrayList<String> arrayListTelefonesRecuperados = new ArrayList<>();
+    private ArrayList<String> listaDeTelefonesAdicionados = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
 
@@ -104,6 +111,7 @@ public class UserUpdateFragment1 extends Fragment {
         configurarComponentes(view);
         configurarMascaraData();
         configurarMascaraCpf();
+        configurarMascaraTelefone();
         definirComportamentoRadioButtons();
         abrirCamera();
         abrirGaleria();
@@ -115,6 +123,7 @@ public class UserUpdateFragment1 extends Fragment {
 
     private void configurarComponentes(View view)
     {
+        linearLayoutTelefone = view.findViewById(R.id.linearLayoutTelefone);
         fotoPerfil = view.findViewById(R.id.imgUsuario);
         textInputEditTextNomeCompleto = view.findViewById(R.id.edtNomeCompleto);
         textInputEditTextDataNascimento = view.findViewById(R.id.edtDataNascimento);
@@ -127,6 +136,7 @@ public class UserUpdateFragment1 extends Fragment {
         textInputEditTextSenha = view.findViewById(R.id.edtSenha);
         imageButtonCamera = view.findViewById(R.id.imageButtonCamera);
         imageButtonGaleria = view.findViewById(R.id.imageButtonGaleria);
+        btnAdicionarTelefone = view.findViewById(R.id.btnAdicionarTelefone);
         btnProxima = view.findViewById(R.id.btnProxima);
 
         bloquearEditText();
@@ -150,13 +160,6 @@ public class UserUpdateFragment1 extends Fragment {
                 Toast.makeText(getActivity(), "Campo não editável", Toast.LENGTH_SHORT).show();
             }
         });
-        textInputEditTextTelefone.setFocusable(false);
-        textInputEditTextTelefone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Campo não editável", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void configurarMascaraData()
@@ -171,15 +174,35 @@ public class UserUpdateFragment1 extends Fragment {
         mascara.criarMascaraCpf(textInputEditTextCpf);
     }
 
+    private void configurarMascaraTelefone()
+    {
+        Mascaras mascara = new Mascaras();
+        mascara.criarMascaraTelefone(textInputEditTextTelefone);
+    }
+
+    private void configurarCampoTelefone(ArrayList<String> listaDeTelefonesAdicionados, LinearLayout linearLayoutTelefone)
+    {
+        //linearLayoutTelefone.removeAllViews();
+
+        btnAdicionarTelefone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddRemoveTextView.adicionarTextViewTelefoneUsuario(getActivity(), textInputEditTextTelefone,
+                        listaDeTelefonesAdicionados, linearLayoutTelefone);
+            }
+        });
+    }
+
     private void definirComportamentoRadioButtons() {
 
         radioGroupSexo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnMasculino) {
-                    sexo = "Masculino";
+                    sexo = "1";
                 } else if (checkedId == R.id.rbtnFeminino) {
-                    sexo = "Feminino";
+                    sexo = "2";
                 }
             }
         });
@@ -263,27 +286,30 @@ public class UserUpdateFragment1 extends Fragment {
                     String success = jsonObject.getString("success");
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
 
-                    ArrayList<String> telefones = new ArrayList<>();
-
                     if(success.equals("1"))
                     {
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                                telefones.add(object.getString("telefone"));
+                                arrayListTelefonesAdicionados.add(object.getString("telefone"));
 
                             }
                             Usuario usuario = new Usuario();
-                            usuario.setTelefones(telefones);
+                            usuario.setTelefones(arrayListTelefonesAdicionados);
 
-                            String telefonesRecuperados = usuario.getTelefones().toString().
-                                    replace("[", "").
-                                    replace("]", "").
-                                    replace(",", "/").
-                                    replaceAll(" ", "");
+                            for(String telefone : arrayListTelefonesAdicionados) {
+                                TextView textView = new TextView(getActivity());
 
-                            textInputEditTextTelefone.setText(telefonesRecuperados);
+                                textView.setPadding(0, 10, 0, 10);
+                                textView.setText(telefone);
+                                textView.setTag("lista");
+
+                                linearLayoutTelefone.addView(textView);
+                                AddRemoveTextView.removerItemDaListaDeTelefones(textView, arrayListTelefonesAdicionados);
+                            }
+
+                            configurarCampoTelefone(arrayListTelefonesAdicionados, linearLayoutTelefone);
                         }
                     } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
@@ -303,6 +329,7 @@ public class UserUpdateFragment1 extends Fragment {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
         dataNascimento = textInputEditTextDataNascimento.getText().toString();
         cpf = textInputEditTextCpf.getText().toString();
+        listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
         email = textInputEditTextEmail.getText().toString();
         senha = textInputEditTextSenha.getText().toString();
 
@@ -324,29 +351,37 @@ public class UserUpdateFragment1 extends Fragment {
 
                             if (!TextUtils.isEmpty(sexo)) {
 
-                                if (!TextUtils.isEmpty(email)) {
+                                if (!listaDeTelefonesAdicionados.isEmpty()) {
 
-                                    if(senha.isEmpty() || senha.length() >= 6) {
+                                    if (!TextUtils.isEmpty(email)) {
 
-                                        if (validarCPF.equals(true)) {
+                                        if(senha.isEmpty() || senha.length() >= 6) {
 
-                                            encapsularValoresParaEnvio();
-                                            return true;
+                                            if (validarCPF.equals(true)) {
+
+                                                encapsularValoresParaEnvio();
+                                                return true;
+                                            }
+                                            else {
+                                                textInputEditTextCpf.setError("CPF invalido!");
+                                                textInputEditTextCpf.requestFocus();
+                                                return false; }
                                         }
                                         else {
-                                            textInputEditTextCpf.setError("CPF invalido!");
-                                            textInputEditTextCpf.requestFocus();
-                                            return false; }
+                                            textInputEditTextSenha.setError("o campo SENHA deve conter, no mínimo, 6 caracteres.");
+                                            textInputEditTextSenha.requestFocus();
+                                            return false;}
+
                                     }
                                     else {
-                                        textInputEditTextSenha.setError("o campo SENHA deve conter, no mínimo, 6 caracteres.");
-                                        textInputEditTextSenha.requestFocus();
-                                        return false;}
+                                        textInputEditTextEmail.setError("o campo EMAIL deve ser preenchido.");
+                                        textInputEditTextEmail.requestFocus();
+                                        return false; }
 
                                 }
                                 else {
-                                    textInputEditTextEmail.setError("o campo EMAIL deve ser preenchido.");
-                                    textInputEditTextEmail.requestFocus();
+                                    textInputEditTextTelefone.setError("É necessário adicionar ao menos um telefone.");
+                                    textInputEditTextTelefone.requestFocus();
                                     return false; }
 
                             }
@@ -398,6 +433,7 @@ public class UserUpdateFragment1 extends Fragment {
         bundle.putString("dataNascimento", dataNascimento);
         bundle.putString("cpf", cpf);
         bundle.putString("sexo", sexo);
+        bundle.putStringArrayList("telefones", listaDeTelefonesAdicionados);
         bundle.putString("email", email);
         bundle.putString("senha", senha);
 

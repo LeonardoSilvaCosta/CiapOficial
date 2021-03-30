@@ -18,6 +18,7 @@ import com.br.ciapoficial.controller.EstadoController;
 import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
+import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Estado;
@@ -80,6 +81,7 @@ public class UserUpdateFragment2 extends Fragment {
 
         receberDadosUsuarioPreviamentePreenchidos();
         popularCampoUfComDB();
+        popularCampoCidadeComDB();
     }
 
     private void chamarViaCep() {
@@ -200,10 +202,30 @@ public class UserUpdateFragment2 extends Fragment {
 
     }
 
+    private void popularCampoCidadeComDB() {
+
+        MunicipioComBaseNaUF.mostrarMunicipioComBaseNaUf(getActivity(), autoCompleteTextViewUf,
+                autoCompleteTextViewCidade, listaCidadesRecuperadas);
+
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidade);
+    }
+
     private void receberDadosUsuarioPreenchidos() {
         cep = textInputEditTextCep.getText().toString();
-        uf = autoCompleteTextViewUf.getText().toString();
-        cidade = autoCompleteTextViewCidade.getText().toString();
+
+        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
+            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
+            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUf.getText().toString())) {
+                uf = String.valueOf(estadoSelecionado.getId());
+            }
+        }
+
+        for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
+            Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
+            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
+                cidade = String.valueOf(cidadeSelecionada.getId());
+            }
+        }
         bairro = textInputEditTextBairro.getText().toString();
         logradouro = textInputEditTextLogradouro.getText().toString();
         numero = textInputEditTextNumero.getText().toString();
