@@ -16,7 +16,7 @@ public class SituacaoFuncionalController {
 
     public void listarSituacoesFuncionais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLSituacoesFuncionaisCasa + "/listar_situacoes_funcionais.php";
+        String url = Constants.URLSituacoesFuncionais + "/listar_situacoes_funcionais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

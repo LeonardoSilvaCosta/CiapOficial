@@ -2,7 +2,6 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +16,7 @@ public class UnidadeController {
 
     public void listarUnidades(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLUnidadesDeAtendimentoCasa + "/listar_unidades.php";
+        String url = Constants.URLUnidadesDeAtendimento + "/listar_unidades.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

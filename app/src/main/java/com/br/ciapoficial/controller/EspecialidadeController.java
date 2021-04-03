@@ -16,7 +16,7 @@ public class EspecialidadeController {
 
     public void listarEspecialidades(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLEspecialidadesCasa + "/listar_especialidades.php";
+        String url = Constants.URLEspecialidades + "/listar_especialidades.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

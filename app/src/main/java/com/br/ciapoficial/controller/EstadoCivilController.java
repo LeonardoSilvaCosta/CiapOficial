@@ -16,7 +16,7 @@ public class EstadoCivilController {
 
     public void listarEstadosCivis(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLEstadosCivisCasa + "/listar_estados_civis.php";
+        String url = Constants.URLEstadosCivis + "/listar_estados_civis.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

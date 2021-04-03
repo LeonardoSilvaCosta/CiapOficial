@@ -16,7 +16,7 @@ public class MedicacaoPsiquiatricaController {
 
     public void listarMedicacoesPsiquiatricas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLMedicacoesPsiquiatricasCasa + "/listar_medicacoes_psiquiatricas.php";
+        String url = Constants.URLMedicacoesPsiquiatricas + "/listar_medicacoes_psiquiatricas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

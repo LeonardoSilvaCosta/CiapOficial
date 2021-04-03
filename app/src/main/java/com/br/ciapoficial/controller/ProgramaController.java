@@ -2,7 +2,6 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +16,7 @@ public class ProgramaController {
 
     public void listarProgramas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLProgramasCasa + "/listar_programas.php";
+        String url = Constants.URLProgramas + "/listar_programas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

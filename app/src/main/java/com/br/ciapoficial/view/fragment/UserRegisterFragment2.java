@@ -258,4 +258,12 @@ public class UserRegisterFragment2 extends Fragment {
         });
 
     }
+
+    @Override
+    public void onResume() {
+
+        listaCidadesRecuperadas.clear();
+        listaEstadosRecuperados.clear();
+        super.onResume();
+    }
 }

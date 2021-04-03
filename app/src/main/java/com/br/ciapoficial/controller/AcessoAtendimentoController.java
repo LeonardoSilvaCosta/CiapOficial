@@ -16,7 +16,7 @@ public class AcessoAtendimentoController {
     
     public void listarAcessosAtendimento(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAcessosAoAtendimentoCasa + "/listar_acessos_ao_atendimento.php";
+        String url = Constants.URLAcessosAoAtendimento + "/listar_acessos_ao_atendimento.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

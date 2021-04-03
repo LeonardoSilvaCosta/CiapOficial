@@ -16,7 +16,7 @@ public class ProcedimentoController {
 
     public void listarProcedimentos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLProcedimentosCasa + "/listar_procedimentos.php";
+        String url = Constants.URLProcedimentos + "/listar_procedimentos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

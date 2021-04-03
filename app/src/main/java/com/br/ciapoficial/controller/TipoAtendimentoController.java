@@ -16,7 +16,7 @@ public class TipoAtendimentoController {
 
     public void listarTiposDeAtendimento(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLTiposDeAtendimentoCasa + "/listar_tipos_de_atendimento.php";
+        String url = Constants.URLTiposDeAtendimento + "/listar_tipos_de_atendimento.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

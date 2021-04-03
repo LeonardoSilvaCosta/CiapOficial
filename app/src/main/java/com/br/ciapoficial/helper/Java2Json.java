@@ -1,5 +1,6 @@
 package com.br.ciapoficial.helper;
 
+import com.br.ciapoficial.model.Telefone;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -14,6 +15,15 @@ public class Java2Json {
             // converte objetos Java para JSON e retorna JSON como String
             String jsonObj = gson.toJson(obj);
             return jsonObj;
+    }
+
+    public static String converterJava2JsonArrayTelefone(ArrayList<Telefone> telefone) {
+
+        Gson gson = new Gson();
+
+        // converte objeto telefone Java para JSON e retorna JSON como String
+        String jsonObj = gson.toJson(telefone);
+        return jsonObj;
     }
 
     public static String converterJava2JsonArrayString(ArrayList<String> arrayList)

@@ -24,10 +24,12 @@ import com.br.ciapoficial.controller.FuncaoAdministrativaController;
 import com.br.ciapoficial.controller.PostoGradCatController;
 import com.br.ciapoficial.controller.QuadroController;
 import com.br.ciapoficial.controller.SituacaoFuncionalController;
+import com.br.ciapoficial.controller.TelefoneController;
 import com.br.ciapoficial.controller.UnidadeController;
 import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DropDownClick;
+import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Especialidade;
@@ -35,8 +37,10 @@ import com.br.ciapoficial.model.FuncaoAdministrativa;
 import com.br.ciapoficial.model.PostoGradCat;
 import com.br.ciapoficial.model.Quadro;
 import com.br.ciapoficial.model.SituacaoFuncional;
+import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.view.MainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -661,6 +665,47 @@ public class UserUpdateFragment3 extends Fragment {
                 });
     }
 
+    private void deletarTelefones() {
+
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosUserRegisterFragment2();
+        Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
+
+        TelefoneController telefoneController = new TelefoneController();
+        telefoneController.deletarTelefone(
+                getActivity(),
+                (ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefonesParaDeletar"),
+                new VolleyCallback() {
+                    @Override
+                    public void onSucess(String response) {
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            boolean isErro = jsonObject.getBoolean("erro");
+                            String mensagem = jsonObject.getString("mensagem");
+
+                            if(isErro) {
+                                Toast.makeText(getActivity(),
+                                        "Exclusão falhou " + mensagem,
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
+
+                                Toast.makeText(getActivity(),
+                                        "Telefone excluído com sucesso! " + mensagem,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                        }catch (JSONException jsonE) {
+                            jsonE.printStackTrace();
+                        }
+
+                    }
+                }
+        );
+
+    }
+
     private void enviarFormulario() {
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
@@ -673,6 +718,7 @@ public class UserUpdateFragment3 extends Fragment {
                     novoUsuario = encapsularValoresParaCadastro();
 
                     atualizarUsuario(novoUsuario);
+                    deletarTelefones();
 
                     principalFragment = new PrincipalFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -687,5 +733,16 @@ public class UserUpdateFragment3 extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        listaPostoGradCatRecuperados.clear();
+        listaUnidadesRecuperadas.clear();
+        listaQuadrosRecuperados.clear();
+        listaEspecialidadesRecuperadas.clear();
+        listaFuncoesAdministrativasRecuperadas.clear();
+        listaSituacoesFuncionaisRecuperadas.clear();
+        super.onResume();
     }
 }

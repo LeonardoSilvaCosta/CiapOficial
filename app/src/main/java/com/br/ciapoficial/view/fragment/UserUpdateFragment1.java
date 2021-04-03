@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -41,6 +43,7 @@ import com.br.ciapoficial.helper.Permissao;
 import com.br.ciapoficial.helper.ValidarCPF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Telefone;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -51,7 +54,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -75,8 +77,6 @@ public class UserUpdateFragment1 extends Fragment {
     private RadioGroup radioGroupSexo;
     private RadioButton rbtnMasculino, rbtnFeminino;
 
-    private ArrayList<String> arrayListTelefonesAdicionados = new ArrayList<>();
-
     private UserUpdateFragment2 userUpdateFragment2;
     private Button btnAdicionarTelefone, btnProxima;
     private CircleImageView fotoPerfil;
@@ -90,8 +90,13 @@ public class UserUpdateFragment1 extends Fragment {
     private String email;
     private String senha;
 
-    private ArrayList<String> arrayListTelefonesRecuperados = new ArrayList<>();
+
+    private Telefone telefone;
+    private ArrayList<Telefone> arrayListTelefonesRecuperados = new ArrayList<>();
+    private ArrayList<TextView> textViesTelefonesRecuperados = new ArrayList<>();
+    private ArrayList<Telefone> arrayListTelefonesParaDeletar = new ArrayList<>();
     private ArrayList<String> listaDeTelefonesAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> listaDeTelefonesParaDeletar = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
 
@@ -112,7 +117,9 @@ public class UserUpdateFragment1 extends Fragment {
         configurarMascaraData();
         configurarMascaraCpf();
         configurarMascaraTelefone();
+        receberDadosUsuarioPreviamentePreenchidos();
         definirComportamentoRadioButtons();
+        receberTelefoneUsuarioLogado();
         abrirCamera();
         abrirGaleria();
         abrirProximaTela();
@@ -140,9 +147,6 @@ public class UserUpdateFragment1 extends Fragment {
         btnProxima = view.findViewById(R.id.btnProxima);
 
         bloquearEditText();
-
-        receberDadosUsuarioPreviamentePreenchidos();
-        receberTelefoneUsuarioLogado();
     }
 
     private void bloquearEditText() {
@@ -180,18 +184,26 @@ public class UserUpdateFragment1 extends Fragment {
         mascara.criarMascaraTelefone(textInputEditTextTelefone);
     }
 
-    private void configurarCampoTelefone(ArrayList<String> listaDeTelefonesAdicionados, LinearLayout linearLayoutTelefone)
+    private void configurarCampoTelefone(ArrayList<TextView> textViews, ArrayList<Telefone> listaDeTelefonesAdd,
+                                         LinearLayout linearLayoutTelefone)
     {
-        //linearLayoutTelefone.removeAllViews();
+        int idUsuarioLogado = Integer.parseInt(sharedPreferences.getString("userId", ""));
 
         btnAdicionarTelefone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AddRemoveTextView.adicionarTextViewTelefoneUsuario(getActivity(), textInputEditTextTelefone,
-                        listaDeTelefonesAdicionados, linearLayoutTelefone);
+                AddRemoveTextView.adicionarTextViewTelefoneUsuarioObjeto(getActivity(), idUsuarioLogado, textInputEditTextTelefone,
+                        listaDeTelefonesAdd, linearLayoutTelefone);
+
             }
+
         });
+
+        AddRemoveTextView.removerItemDaListaDeTelefonesEListarParaDelecao(textViews, listaDeTelefonesAdd,
+                arrayListTelefonesParaDeletar);
+
+
     }
 
     private void definirComportamentoRadioButtons() {
@@ -292,31 +304,31 @@ public class UserUpdateFragment1 extends Fragment {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                                arrayListTelefonesAdicionados.add(object.getString("telefone"));
+                                telefone = new Telefone();
+                                telefone.setId(Integer.parseInt(object.getString("id")));
+                                telefone.setTelefone(object.getString("telefone"));
 
+                                arrayListTelefonesRecuperados.add(telefone);
                             }
-                            Usuario usuario = new Usuario();
-                            usuario.setTelefones(arrayListTelefonesAdicionados);
 
-                            for(String telefone : arrayListTelefonesAdicionados) {
+                            for(int i = 0; i < arrayListTelefonesRecuperados.size(); i++) {
+                                String telefoneRecuperado = arrayListTelefonesRecuperados.get(i).getTelefone();
                                 TextView textView = new TextView(getActivity());
 
                                 textView.setPadding(0, 10, 0, 10);
-                                textView.setText(telefone);
+                                textView.setText(telefoneRecuperado);
                                 textView.setTag("lista");
 
                                 linearLayoutTelefone.addView(textView);
-                                AddRemoveTextView.removerItemDaListaDeTelefones(textView, arrayListTelefonesAdicionados);
+
+                                textViesTelefonesRecuperados.add(textView);
                             }
 
-                            configurarCampoTelefone(arrayListTelefonesAdicionados, linearLayoutTelefone);
+                            configurarCampoTelefone(textViesTelefonesRecuperados, arrayListTelefonesRecuperados, linearLayoutTelefone);
+
                         }
                     } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
-                }
-
-                for(int t = 0; t < arrayListTelefonesRecuperados.size(); t++) {
-
                 }
             }
 
@@ -329,7 +341,13 @@ public class UserUpdateFragment1 extends Fragment {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
         dataNascimento = textInputEditTextDataNascimento.getText().toString();
         cpf = textInputEditTextCpf.getText().toString();
-        listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
+
+        for(Telefone contato : arrayListTelefonesRecuperados) {
+            listaDeTelefonesAdicionados.add(contato.getTelefone());
+        }
+
+        listaDeTelefonesParaDeletar = arrayListTelefonesParaDeletar;
+
         email = textInputEditTextEmail.getText().toString();
         senha = textInputEditTextSenha.getText().toString();
 
@@ -434,6 +452,7 @@ public class UserUpdateFragment1 extends Fragment {
         bundle.putString("cpf", cpf);
         bundle.putString("sexo", sexo);
         bundle.putStringArrayList("telefones", listaDeTelefonesAdicionados);
+        bundle.putSerializable("telefonesParaDeletar", listaDeTelefonesParaDeletar);
         bundle.putString("email", email);
         bundle.putString("senha", senha);
 
@@ -590,7 +609,7 @@ public class UserUpdateFragment1 extends Fragment {
 
                                 String imagemUrl = object.getString("imagem");
 
-                                String url = Constants.URLUsuariosCasa + "/Images/"+imagemUrl;
+                                String url = Constants.URLUsuarios + "/Images/"+imagemUrl;
 
 
                                 Glide.with(getActivity()).
@@ -654,4 +673,9 @@ public class UserUpdateFragment1 extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onStop() {
+        arrayListTelefonesRecuperados.clear();
+        super.onStop();
+    }
 }

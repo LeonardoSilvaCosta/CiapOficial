@@ -14,8 +14,6 @@ import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendido;
-import com.br.ciapoficial.model.UserModel;
-import com.br.ciapoficial.model.Usuario;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class AtendidoController {
 
     public void cadastrarAtendido(Context context, Atendido atendido, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendidosTrabalho + "/cadastrar.php";
+        String url = Constants.URLAtendidos + "/cadastrar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -94,7 +92,7 @@ public class AtendidoController {
 
     public void listarAtendidos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendidosCasa + "/listar_atendidos.php";
+        String url = Constants.URLAtendidos + "/listar_atendidos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

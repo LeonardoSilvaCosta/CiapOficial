@@ -2,7 +2,6 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +16,7 @@ public class ModalidadeController {
 
     public void listarModalidades(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLModalidadesCasa + "/listar_modalidades.php";
+        String url = Constants.URLModalidades + "/listar_modalidades.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

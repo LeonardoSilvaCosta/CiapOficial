@@ -23,7 +23,7 @@ public class AtendimentoController {
 
     public void registrarAtendimento(Context context, Atendimento atendimento, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/cadastrar.php";
+        String url = Constants.URLAtendimentos + "/cadastrar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -77,7 +77,7 @@ public class AtendimentoController {
 
     public void listarAtendimentos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -101,7 +101,7 @@ public class AtendimentoController {
 
     public void listarAtendimentosOficiais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos_oficiais.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos_oficiais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -125,7 +125,7 @@ public class AtendimentoController {
 
     public void listarAtendimentosAtendidos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos_atendidos.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos_atendidos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -149,7 +149,7 @@ public class AtendimentoController {
 
     public void listarAtendimentosDeslocamentos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos_deslocamentos.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos_deslocamentos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -173,7 +173,7 @@ public class AtendimentoController {
 
     public void listarAtendimentosDocumentosProduzidos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos_documentos_produzidos.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos_documentos_produzidos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -197,7 +197,7 @@ public class AtendimentoController {
 
     public void listarAtendimentosDemandasEspecificas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentosCasa + "/listar_atendimentos_demandas_especificas.php";
+        String url = Constants.URLAtendimentos + "/listar_atendimentos_demandas_especificas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

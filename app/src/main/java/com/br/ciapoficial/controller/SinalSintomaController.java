@@ -16,7 +16,7 @@ public class SinalSintomaController {
 
     public void listarSinaisSintomas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLSinaisSintomasCasa + "/listar_sinais_sintomas.php";
+        String url = Constants.URLSinaisSintomas + "/listar_sinais_sintomas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

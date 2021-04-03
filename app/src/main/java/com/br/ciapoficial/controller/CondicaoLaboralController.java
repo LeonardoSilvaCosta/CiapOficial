@@ -16,7 +16,7 @@ public class CondicaoLaboralController {
 
     public void listarCondicoesLaborais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCondicaoLaboralCasa + "/listar_condicoes_laborais.php";
+        String url = Constants.URLCondicaoLaboral + "/listar_condicoes_laborais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

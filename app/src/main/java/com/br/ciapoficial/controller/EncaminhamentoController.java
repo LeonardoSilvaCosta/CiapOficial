@@ -16,7 +16,7 @@ public class EncaminhamentoController {
 
     public void listarEncaminhamentos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLEncaminhamentosCasa + "/listar_encaminhamentos.php";
+        String url = Constants.URLEncaminhamentos + "/listar_encaminhamentos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

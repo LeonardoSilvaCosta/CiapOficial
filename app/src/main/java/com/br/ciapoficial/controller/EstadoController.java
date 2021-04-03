@@ -16,7 +16,7 @@ public class EstadoController {
 
     public void listarUfs(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLEstadosCasa + "/listar_ufs.php";
+        String url = Constants.URLEstados + "/listar_ufs.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

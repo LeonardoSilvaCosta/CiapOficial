@@ -16,7 +16,7 @@ public class QuadroController {
 
     public void listarQuadros(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLQuadrosCasa + "/listar_quadros.php";
+        String url = Constants.URLQuadros + "/listar_quadros.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

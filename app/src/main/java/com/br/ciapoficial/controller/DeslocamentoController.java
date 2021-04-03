@@ -2,7 +2,6 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +16,7 @@ public class DeslocamentoController {
 
     public void listarDeslocamentos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLDeslocamentosCasa + "/listar_deslocamentos.php";
+        String url = Constants.URLDeslocamentos + "/listar_deslocamentos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

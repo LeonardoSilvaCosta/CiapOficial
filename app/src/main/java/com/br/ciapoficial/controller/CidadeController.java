@@ -16,7 +16,7 @@ public class CidadeController {
 
     public void listarCidades(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades.php";
+        String url = Constants.URLCidades + "/listar_cidades.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -40,7 +40,7 @@ public class CidadeController {
 
     public void listarCidadesAcre(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_acre.php";
+        String url = Constants.URLCidades + "/listar_cidades_acre.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -64,7 +64,7 @@ public class CidadeController {
 
     public void listarCidadeAlagoas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_alagoas.php";
+        String url = Constants.URLCidades + "/listar_cidades_alagoas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -88,7 +88,7 @@ public class CidadeController {
 
     public void listarCidadeAmazonas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_amazonas.php";
+        String url = Constants.URLCidades + "/listar_cidades_amazonas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -112,7 +112,7 @@ public class CidadeController {
 
     public void listarCidadeAmapa(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_amapa.php";
+        String url = Constants.URLCidades + "/listar_cidades_amapa.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -136,7 +136,7 @@ public class CidadeController {
 
     public void listarCidadeBahia(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_bahia.php";
+        String url = Constants.URLCidades + "/listar_cidades_bahia.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -160,7 +160,7 @@ public class CidadeController {
 
     public void listarCidadeCeara(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_ceara.php";
+        String url = Constants.URLCidades + "/listar_cidades_ceara.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -184,7 +184,7 @@ public class CidadeController {
 
     public void listarCidadeDistritoFederal(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_distrito_federal.php";
+        String url = Constants.URLCidades + "/listar_cidades_distrito_federal.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -208,7 +208,7 @@ public class CidadeController {
 
     public void listarCidadeEspiritoSanto(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_espirito_santo.php";
+        String url = Constants.URLCidades + "/listar_cidades_espirito_santo.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -232,7 +232,7 @@ public class CidadeController {
 
     public void listarCidadeGoias(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_goias.php";
+        String url = Constants.URLCidades + "/listar_cidades_goias.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -256,7 +256,7 @@ public class CidadeController {
 
     public void listarCidadeMaranhao(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_maranhao.php";
+        String url = Constants.URLCidades + "/listar_cidades_maranhao.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -280,7 +280,7 @@ public class CidadeController {
 
     public void listarCidadeMinasGerais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_minas_gerais.php";
+        String url = Constants.URLCidades + "/listar_cidades_minas_gerais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -304,7 +304,7 @@ public class CidadeController {
 
     public void listarCidadeMatoGrossoDoSul(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_mato_grosso_do_sul.php";
+        String url = Constants.URLCidades + "/listar_cidades_mato_grosso_do_sul.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -328,7 +328,7 @@ public class CidadeController {
 
     public void listarCidadeMatoGrosso(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_mato_grosso.php";
+        String url = Constants.URLCidades + "/listar_cidades_mato_grosso.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -352,7 +352,7 @@ public class CidadeController {
 
     public void listarCidadePara(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_para.php";
+        String url = Constants.URLCidades + "/listar_cidades_para.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -376,7 +376,7 @@ public class CidadeController {
 
     public void listarCidadeParaiba(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_paraiba.php";
+        String url = Constants.URLCidades + "/listar_cidades_paraiba.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -400,7 +400,7 @@ public class CidadeController {
 
     public void listarCidadePernambuco(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_pernambuco.php";
+        String url = Constants.URLCidades + "/listar_cidades_pernambuco.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -424,7 +424,7 @@ public class CidadeController {
 
     public void listarCidadePiaui(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_piaui.php";
+        String url = Constants.URLCidades + "/listar_cidades_piaui.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -448,7 +448,7 @@ public class CidadeController {
 
     public void listarCidadeParana(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_parana.php";
+        String url = Constants.URLCidades + "/listar_cidades_parana.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -472,7 +472,7 @@ public class CidadeController {
 
     public void listarCidadeRioDeJaneiro(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_rio_de_janeiro.php";
+        String url = Constants.URLCidades + "/listar_cidades_rio_de_janeiro.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -496,7 +496,7 @@ public class CidadeController {
 
     public void listarCidadeRioGrandeDoNorte(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_rio_grande_do_norte.php";
+        String url = Constants.URLCidades + "/listar_cidades_rio_grande_do_norte.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -520,7 +520,7 @@ public class CidadeController {
 
     public void listarCidadeRondonia(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_rondonia.php";
+        String url = Constants.URLCidades + "/listar_cidades_rondonia.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -544,7 +544,7 @@ public class CidadeController {
 
     public void listarCidadeRoraima(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_roraima.php";
+        String url = Constants.URLCidades + "/listar_cidades_roraima.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -568,7 +568,7 @@ public class CidadeController {
 
     public void listarCidadeRioGrandeDoSul(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_rio_grande_do_sul.php";
+        String url = Constants.URLCidades + "/listar_cidades_rio_grande_do_sul.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -592,7 +592,7 @@ public class CidadeController {
 
     public void listarCidadeSantaCatarina(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_santa_catarina.php";
+        String url = Constants.URLCidades + "/listar_cidades_santa_catarina.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -616,7 +616,7 @@ public class CidadeController {
 
     public void listarCidadeSergipe(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_sergipe.php";
+        String url = Constants.URLCidades + "/listar_cidades_sergipe.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -640,7 +640,7 @@ public class CidadeController {
 
     public void listarCidadeSaoPaulo(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_sao_paulo.php";
+        String url = Constants.URLCidades + "/listar_cidades_sao_paulo.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -664,7 +664,7 @@ public class CidadeController {
 
     public void listarCidadeTocantins(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLCidadesCasa + "/listar_cidades_tocantins.php";
+        String url = Constants.URLCidades + "/listar_cidades_tocantins.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

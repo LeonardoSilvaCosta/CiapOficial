@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -18,11 +17,9 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.helper.AddRemoveTextView;
-import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.helper.Permissao;
 import com.br.ciapoficial.helper.ValidarCPF;
-import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Telefone;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -111,7 +108,7 @@ public class UserRegisterFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                AddRemoveTextView.adicionarTextViewTelefoneUsuario(getActivity(), textInputEditTextTelefone,
+                AddRemoveTextView.adicionarTextViewTelefoneUsuarioString(getActivity(), textInputEditTextTelefone,
                         arrayListTelefonesAdicionados, linearLayoutTelefone);
             }
         });
@@ -138,6 +135,7 @@ public class UserRegisterFragment1 extends Fragment {
         cpf = textInputEditTextCpf.getText().toString();
         listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
         email = textInputEditTextEmail.getText().toString();
+
     }
 
     private boolean validarCadastroUsuario() {

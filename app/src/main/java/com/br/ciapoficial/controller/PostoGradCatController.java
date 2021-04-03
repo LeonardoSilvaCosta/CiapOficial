@@ -16,7 +16,7 @@ public class PostoGradCatController {
 
     public void listarPostoGradCat(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLPostoGradCatCasa + "/listar_posto_grad_cat.php";
+        String url = Constants.URLPostoGradCat + "/listar_posto_grad_cat.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

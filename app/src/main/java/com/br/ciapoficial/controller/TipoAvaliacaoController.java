@@ -2,7 +2,6 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +16,7 @@ public class TipoAvaliacaoController {
 
     public void listarTiposDeAvaliacao(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLTiposDeAvaliacaoCasa + "/listar_tipos_de_avaliacao.php";
+        String url = Constants.URLTiposDeAvaliacao + "/listar_tipos_de_avaliacao.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

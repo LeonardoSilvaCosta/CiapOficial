@@ -66,6 +66,9 @@ public class UserUpdateFragment2 extends Fragment {
 
         configurarComponentes(view);
         configurarMascaraCep();
+        popularCampoUfComDB();
+        popularCampoCidadeComDB();
+        receberDadosUsuarioPreviamentePreenchidos();
         abrirProximaTela();
         return view;
     }
@@ -78,10 +81,6 @@ public class UserUpdateFragment2 extends Fragment {
         textInputEditTextLogradouro = view.findViewById(R.id.edtLogradouro);
         textInputEditTextNumero = view.findViewById(R.id.edtNumero);
         btnProxima = view.findViewById(R.id.btnProxima);
-
-        receberDadosUsuarioPreviamentePreenchidos();
-        popularCampoUfComDB();
-        popularCampoCidadeComDB();
     }
 
     private void chamarViaCep() {
@@ -320,5 +319,13 @@ public class UserUpdateFragment2 extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+
+        listaCidadesRecuperadas.clear();
+        listaEstadosRecuperados.clear();
+        super.onResume();
     }
 }

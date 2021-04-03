@@ -5,9 +5,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.br.ciapoficial.controller.CidadeController;
+import com.br.ciapoficial.enums.EstadoEnum;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 
@@ -29,35 +31,9 @@ public class MunicipioComBaseNaUF {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                int acre = 0;
-                int alagoas = 1;
-                int amazonas = 2;
-                int amapa = 3;
-                int bahia = 4;
-                int ceara = 5;
-                int df = 6;
-                int espiritoSanto = 7;
-                int goias = 8;
-                int maranhao = 9;
-                int minhasGerais = 10;
-                int matoGrossoDoSul = 11;
-                int matoGrosso = 12;
-                int para = 13;
-                int paraiba = 14;
-                int pernambuco = 15;
-                int piaui = 16;
-                int parana = 17;
-                int rioDeJaneiro = 18;
-                int rioGrandeDoNorte = 19;
-                int rondonia = 20;
-                int roraima = 21;
-                int rioGrandeDoSul = 22;
-                int santaCatarina = 23;
-                int sergipe = 24;
-                int saoPaulo = 25;
-                int tocantins = 26;
+                String estado = (String) ((TextView) view).getText();
 
-                if(position == acre)
+                if(estado.equals("AC"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -101,7 +77,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == alagoas)
+                if(estado.equals("AL"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -145,7 +121,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == amazonas)
+                if(estado.equals("AM"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -189,7 +165,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == amapa)
+                if(estado.equals("AP"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -232,7 +208,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
                 }
-                if(position == bahia)
+                if(estado.equals("BA"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -276,7 +252,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == ceara)
+                if(estado.equals("CE"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -318,7 +294,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == df)
+                }if(estado.equals("DF"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -362,7 +338,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == espiritoSanto)
+                if(estado.equals("ES"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -405,7 +381,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == goias)
+                }if(estado.equals("GO"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -449,7 +425,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == maranhao)
+                if(estado.equals("MA"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -493,7 +469,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == minhasGerais)
+                if(estado.equals("MG"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -536,7 +512,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == matoGrossoDoSul)
+                }if(estado.equals("MS"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -580,7 +556,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == matoGrosso)
+                if(estado.equals("MT"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -624,7 +600,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == para)
+                if(estado.equals("PA"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -668,7 +644,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == paraiba)
+                if(estado.equals("PB"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -712,7 +688,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == pernambuco)
+                if(estado.equals("PE"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -756,7 +732,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == piaui)
+                if(estado.equals("PI"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -800,7 +776,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == parana)
+                if(estado.equals("PR"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -844,7 +820,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == rioDeJaneiro)
+                if(estado.equals("RJ"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -887,7 +863,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == rioGrandeDoNorte)
+                }if(estado.equals("RN"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -931,7 +907,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == rondonia)
+                if(estado.equals("RO"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -975,7 +951,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == roraima)
+                if(estado.equals("RR"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1019,7 +995,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == rioGrandeDoSul)
+                if(estado.equals("RS"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1063,7 +1039,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(position == santaCatarina)
+                if(estado.equals("SC"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1106,7 +1082,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == sergipe)
+                }if(estado.equals("SE"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1149,7 +1125,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == saoPaulo)
+                }if(estado.equals("SP"))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1192,7 +1168,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(position == tocantins)
+                }if(estado.equals("TO"))
                 {
                     if(arrayAdapterChild != null)
                     {

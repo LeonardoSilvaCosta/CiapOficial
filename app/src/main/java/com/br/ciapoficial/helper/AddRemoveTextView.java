@@ -1,7 +1,6 @@
 package com.br.ciapoficial.helper;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,8 +16,10 @@ import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
 import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
 import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
 import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Telefone;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AddRemoveTextView {
@@ -97,9 +98,86 @@ public class AddRemoveTextView {
         });
     }
 
-    public static void adicionarTextViewTelefoneUsuario(Context context, TextInputEditText campo,
-                                                        ArrayList<String> listaDisplay,
-                                                        LinearLayout linearLayout)
+    public static void adicionarTextViewTelefoneUsuarioObjeto(Context context, int id_usuario, TextInputEditText campo,
+                                                              ArrayList<Telefone> listaDisplay,
+                                                              LinearLayout linearLayout)
+    {
+
+        ArrayList<String> telefonesListados = new ArrayList<>();
+
+        for(Telefone telefone : listaDisplay) {
+            telefonesListados.add(telefone.getTelefone());
+        }
+
+        String textoRecebido = Mascaras.removerMascaras(campo.getText().toString());
+        if(!(textoRecebido.length() < 11) && Patterns.PHONE.matcher(textoRecebido).matches())
+        {
+            TextView textView = new TextView(context);
+
+            if(textoRecebido.equals(""))
+            {
+                Toast.makeText(context,
+                        "O campo para inserção de telefone está vazio.",
+                        Toast.LENGTH_SHORT).show();
+            }else if(!(telefonesListados.contains(textoRecebido)))
+            {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(textoRecebido);
+                textView.setTag("lista");
+
+                linearLayout.addView(textView);
+
+                campo.setText("");
+
+                Telefone telefone = new Telefone();
+                telefone.setId(id_usuario);
+                telefone.setTelefone(textoRecebido);
+
+                listaDisplay.add(telefone);
+
+            }
+            else
+            {
+                Toast.makeText(context,
+                        "Esse telefone já foi inserido.",
+                        Toast.LENGTH_SHORT).show();
+                campo.setText("");
+            }
+
+            removerItemDaListaDeTelefonesObjeto(textView, listaDisplay);
+        }else
+        {
+            Toast.makeText(context, "Digite um número de telefone válido.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public static void removerItemDaListaDeTelefonesObjeto(TextView textView, ArrayList<Telefone> listaDisplay)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(int i = 0; i < listaDisplay.size(); i++)
+                {
+                    String telefoneSelecionado = listaDisplay.get(i).getTelefone();
+                    if(telefoneSelecionado.equals(string))
+                    {
+                        listaDisplay.remove(telefoneSelecionado);
+
+                        textView.setVisibility(View.GONE);
+                        break;
+
+                    }
+                }
+            }
+        });
+    }
+
+    public static void adicionarTextViewTelefoneUsuarioString(Context context, TextInputEditText campo,
+                                                              ArrayList<String> listaDisplay,
+                                                              LinearLayout linearLayout)
     {
 
         String textoRecebido = Mascaras.removerMascaras(campo.getText().toString());
@@ -133,7 +211,7 @@ public class AddRemoveTextView {
                 campo.setText("");
             }
 
-            removerItemDaListaDeTelefones(textView, listaDisplay);
+            removerItemDaListaDeTelefonesString(textView, listaDisplay);
         }else
         {
             Toast.makeText(context, "Digite um número de telefone válido.", Toast.LENGTH_SHORT).show();
@@ -141,7 +219,7 @@ public class AddRemoveTextView {
 
     }
 
-    public static void removerItemDaListaDeTelefones(TextView textView, ArrayList<String> listaDisplay)
+    public static void removerItemDaListaDeTelefonesString(TextView textView, ArrayList<String> listaDisplay)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +240,34 @@ public class AddRemoveTextView {
                 }
             }
         });
+    }
+
+    public static void removerItemDaListaDeTelefonesEListarParaDelecao(ArrayList<TextView> textViews, ArrayList<Telefone> listaDisplay,
+                                                                       ArrayList<Telefone> telefonesParaDeletar)
+    {
+        for(TextView textView : textViews) {
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String string = textView.getText().toString();
+                        for(int i = 0; i < listaDisplay.size(); i++)
+                        {
+                            String telefoneSelecionado = listaDisplay.get(i).getTelefone();
+                            if(telefoneSelecionado.equals(string))
+                            {
+                                telefonesParaDeletar.add(listaDisplay.get(i));
+                                listaDisplay.remove(listaDisplay.get(i));
+
+                                textView.setVisibility(View.GONE);
+                                break;
+
+                            }
+                        }
+                    }
+                });
+        }
+
     }
 
     public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo,

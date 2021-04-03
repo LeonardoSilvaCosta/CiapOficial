@@ -16,7 +16,7 @@ public class DocumentoProduzidoController {
 
     public void listarDocumentosProduzidos(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLDocumentosProduzidosCasa + "/listar_documentos_produzidos.php";
+        String url = Constants.URLDocumentosProduzidos + "/listar_documentos_produzidos.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

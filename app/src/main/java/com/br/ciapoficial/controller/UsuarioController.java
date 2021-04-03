@@ -23,7 +23,7 @@ public class UsuarioController {
 
     public void cadastrarUsuario(Context context, Usuario usuario, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/cadastrar.php";
+        String url = Constants.URLUsuarios + "/cadastrar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -77,7 +77,7 @@ public class UsuarioController {
 
     public void listarUsuarios(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/listar.php";
+        String url = Constants.URLUsuarios + "/listar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -101,7 +101,7 @@ public class UsuarioController {
 
     public void atualizarUsuario(Context context, final Usuario usuario, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/atualizar.php";
+        String url = Constants.URLUsuarios + "/atualizar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -121,7 +121,7 @@ public class UsuarioController {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", String.valueOf(usuario.getId()));
+                params.put("id", Java2Json.converterJava2JasonInt(usuario.getId()));
                 params.put("nomeCompleto", usuario.getNomeCompleto());
                 params.put("dataNascimento", usuario.getDataNascimento());
                 params.put("cpf", usuario.getCpf());
@@ -153,7 +153,7 @@ public class UsuarioController {
 
     public void deletarUsuario(Context context, final String id, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/deletar.php";
+        String url = Constants.URLUsuarios + "/deletar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -184,7 +184,7 @@ public class UsuarioController {
 
     public void logarUsuario(Context context, UserModel user, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/logar.php";
+        String url = Constants.URLUsuarios + "/logar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -215,7 +215,7 @@ public class UsuarioController {
 
     public void recuperarSenha(Context context, String email, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/recuperar_senha.php";
+        String url = Constants.URLUsuarios + "/recuperar_senha.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -245,7 +245,7 @@ public class UsuarioController {
 
     public void carregarImagemUsuario(Context context, String imagem, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/carregar_imagem.php";
+        String url = Constants.URLUsuarios + "/carregar_imagem.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -279,7 +279,7 @@ public class UsuarioController {
 
     public void recuperarImagem(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/recuperar_imagem.php";
+        String url = Constants.URLUsuarios + "/recuperar_imagem.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -303,7 +303,7 @@ public class UsuarioController {
 
     public void recuperarUsuarioLogado(Context context, final String email,  final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/recuperar_usuario_logado.php";
+        String url = Constants.URLUsuarios + "/recuperar_usuario_logado.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -335,7 +335,7 @@ public class UsuarioController {
 
     public void recuperarTelefoneUsuarioLogado(Context context, final String id,  final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/recuperar_telefones_usuario_logado.php";
+        String url = Constants.URLUsuarios + "/recuperar_telefones_usuario_logado.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -367,7 +367,7 @@ public class UsuarioController {
 
     public void listarOficiais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLUsuariosCasa + "/listar_oficiais.php";
+        String url = Constants.URLUsuarios + "/listar_oficiais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

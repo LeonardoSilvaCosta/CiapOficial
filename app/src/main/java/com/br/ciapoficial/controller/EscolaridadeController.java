@@ -16,7 +16,7 @@ public class EscolaridadeController {
 
     public void listarEscolaridades(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLEscolaridadesCasa + "/listar_escolaridades.php";
+        String url = Constants.URLEscolaridades + "/listar_escolaridades.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

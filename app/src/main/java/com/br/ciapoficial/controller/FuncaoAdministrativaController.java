@@ -16,7 +16,7 @@ public class FuncaoAdministrativaController {
 
     public void listarFuncoesAdministrativas(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLFuncoesAdministrativasCasa + "/listar_funcoes_administrativas.php";
+        String url = Constants.URLFuncoesAdministrativas + "/listar_funcoes_administrativas.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

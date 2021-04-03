@@ -16,7 +16,7 @@ public class DemandaGeralController {
 
     public void listarDemandasGerais(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLDemandasGeraisCasa + "/listar_demandas_gerais.php";
+        String url = Constants.URLDemandasGerais + "/listar_demandas_gerais.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
