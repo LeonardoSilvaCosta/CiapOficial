@@ -1,6 +1,5 @@
 package com.br.ciapoficial.helper;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;

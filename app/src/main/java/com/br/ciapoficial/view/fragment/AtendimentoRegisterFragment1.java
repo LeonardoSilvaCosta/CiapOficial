@@ -1,5 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -142,13 +143,19 @@ public class AtendimentoRegisterFragment1 extends Fragment {
                             JSONObject object = jsonArray.getJSONObject(i);
 
                             Usuario usuario = new Usuario();
-                            usuario.setId(Integer.valueOf(object.getString("id")));
-                            usuario.setPostoGradCat(object.getString("postoGradCat"));
-                            usuario.setNomeGuerra(object.getString("nomeGuerra"));
-                            usuario.setRgMilitar(object.getString("rgMilitar"));
 
-                            listaOficiaisRecuperados.add(usuario);
-                            configurarCampoOficialResponsavel(listaOficiaisRecuperados);
+                            String quadro = object.getString("quadro");
+                            String especialidade = object.getString("especialidade");
+                            if(quadro.equals("QCOPM") && especialidade.equals("Psicólogo(a)") || especialidade.equals("Assistente Social")) {
+                                usuario.setId(Integer.valueOf(object.getString("id")));
+                                usuario.setPostoGradCat(object.getString("postoGradCat"));
+                                usuario.setNomeGuerra(object.getString("nomeGuerra"));
+                                usuario.setRgMilitar(object.getString("rgMilitar"));
+
+                                listaOficiaisRecuperados.add(usuario);
+                                configurarCampoOficialResponsavel(listaOficiaisRecuperados);
+                            }
+
 
                         }
                     }

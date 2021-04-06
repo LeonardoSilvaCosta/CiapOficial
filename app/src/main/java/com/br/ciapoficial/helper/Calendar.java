@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
-import com.google.android.material.textfield.TextInputEditText;
-
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class Calendar {
@@ -44,9 +44,11 @@ public class Calendar {
                     if(event.getRawX() >= (campoDeTexto.getRight()
                             - campoDeTexto.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
 
-                        new DatePickerDialog(context, date, calendar
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(context, date, calendar
                                 .get(calendar.YEAR), calendar.get(calendar.MONTH),
-                                calendar.get(java.util.Calendar.DAY_OF_MONTH)).show();
+                                calendar.get(java.util.Calendar.DAY_OF_MONTH));
+                        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                        datePickerDialog.show();
                         campoDeTexto.showDropDown();
 
                         return true;

@@ -136,13 +136,14 @@ public class PesquisarAtendimentoFragment extends Fragment {
 
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
-                    JSONArray jsonAtendimento = jsonObject.getJSONArray("data");
-                    JSONArray jsonOficiais = jsonObject.getJSONArray("dados");
+                    JSONArray jsonAtendimentos = jsonObject.getJSONArray("dados_atendimentos");
+                    JSONArray jsonOficiais = jsonObject.getJSONArray("dados_oficiais");
+                    JSONArray jsonAtendidos = jsonObject.getJSONArray("dados_atendidos");
 
                     if(success.equals("1")){
-                        for(int i = 0; i < jsonAtendimento.length(); i++) {
+                        for(int i = 0; i < jsonAtendimentos.length(); i++) {
 
-                            JSONObject object = jsonAtendimento.getJSONObject(i);
+                            JSONObject object = jsonAtendimentos.getJSONObject(i);
 
                             Atendimento atendimento = new Atendimento();
                             atendimento.setId(Integer.valueOf(object.getString("id")));
@@ -161,9 +162,37 @@ public class PesquisarAtendimentoFragment extends Fragment {
                             atendimento.setDataHoraCadastro(DataEntreJavaEMysql.
                                     receberDataHoraDoMySqlComoString(object.getString("dataHoraCadastro")));
 
+                            ArrayList<String> nomes_oficiais = new ArrayList<>();
+                            ArrayList<String> nomes_atendidos = new ArrayList<>();
+
+                            for(int j = 0; j < jsonOficiais.length(); j++)
+                            {
+                                JSONObject object2 = jsonOficiais.getJSONObject(j);
+                                if(atendimento.getId() == object2.getInt("id_atendimento"))
+                                {
+                                    nomes_oficiais.add((object2.getString("nomeCompleto")));
+                                }
+                            }
+
+                            for(int k = 0; k < jsonAtendidos.length(); k++)
+                            {
+                                JSONObject object3 = jsonAtendidos.getJSONObject(k);
+                                if(atendimento.getId() == object3.getInt("id_atendimento")) {
+                                    nomes_atendidos.add((object3.getString("nomeCompleto")));
+                                }
+                            }
+
+
+                            atendimento.setOficiaisResponsaveis(nomes_oficiais);
+                            atendimento.setAtendidos(nomes_atendidos);
+
                             listaDeAtendimentos.add(atendimento);
 
                         }
+
+
+
+
                         adapter.notifyDataSetChanged();
 
                     }

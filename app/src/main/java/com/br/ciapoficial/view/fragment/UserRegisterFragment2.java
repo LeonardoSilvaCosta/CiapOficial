@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Estado;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 public class UserRegisterFragment2 extends Fragment {
 
     private UserRegisterFragment3 userRegisterFragment3;
+    private TextInputLayout tilUf;
     private AutoCompleteTextView autoCompleteTextViewUf, autoCompleteTextViewCidade;
     private TextInputEditText textInputEditTextCep, textInputEditTextBairro,
             textInputEditTextLogradouro, textInputEditTextNumero;
@@ -66,6 +69,7 @@ public class UserRegisterFragment2 extends Fragment {
     }
 
     private void configurarComponentes(View view) {
+        tilUf = view.findViewById(R.id.textInputLayoutUf);
         textInputEditTextCep = view.findViewById(R.id.edtCep);
         autoCompleteTextViewUf = view.findViewById(R.id.edtUf);
         autoCompleteTextViewCidade = view.findViewById(R.id.edtCidade);
@@ -145,6 +149,7 @@ public class UserRegisterFragment2 extends Fragment {
                 autoCompleteTextViewCidade, listaCidadesRecuperadas);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidade);
+
     }
 
     private void receberDadosUsuarioPreenchidos() {

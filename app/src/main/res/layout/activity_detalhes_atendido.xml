@@ -6,395 +6,544 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".view.DetalhesAtendidoActivity">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <TextView
-        android:id="@+id/txtTitulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
-        android:text="Dados do atendido"
-        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/txtLegendaNome"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtTitulo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome: "
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:text="Dados do atendido"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/txtNome"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Nome"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="nome"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaDataNascimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• DN"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtDataNascimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="dn"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="nome"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaCpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• CPF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtCpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="cpf"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaSexo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Sexo"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtSexo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="sexo"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Email"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="email"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaEstadoCivil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Estado Civil"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtEstadoCivil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="estado civil"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaNaturalidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Naturalidade"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtNaturalidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="naturalidade"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaEscolaridade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Escolaridade"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtEscolaridade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="escolaridade"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaNumeroFilhos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Número de filhos "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtNumeroFilhos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="número de filhos"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaEndereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Endereço"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtEndereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="endereco"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaNomeGuerra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Nome de Guerra"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtNomeGuerra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="@string/nome_de_guerra"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaRgMilitar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• RG"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtRgMilitar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="rg"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaPostoGradCat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Posto/Graduação/Categoria"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtPostoGradCat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="@string/posto_grad_ou_categoria"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaUnidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Unidade "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtUnidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="unidade"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaQuadro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Quadro"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtQuadro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="quadro"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaDataInclusao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Data de inclusão"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtDataInclusao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="data_inclusão"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaSituacaoFuncional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Situação funcional "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtSituacaoFuncional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="situacao_funcional"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaDataHoraCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Registrado em"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtDataHoraCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
+                android:text="dd/MM/yyyy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaDataNascimento"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DN: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtDataNascimento"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="dn"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaCpf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CPF: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtCpf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cpf"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaSexo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sexo: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtSexo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sexo"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="email"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaEstadoCivil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estado Civil: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtEstadoCivil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="estado civil"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaNaturalidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Naturalidade: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtNaturalidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="naturalidade"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaEscolaridade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Escolaridade: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtEscolaridade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="escolaridade"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaNumeroFilhos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Número de filhos: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtNumeroFilhos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="número de filhos"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaEndereco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Endereço: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtEndereco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="endereco"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaRgMilitar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RG: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtRgMilitar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="rg"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaPostoGradCat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NomeGuerra: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtPostoGradCat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="nome_guerra"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaUnidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Unidade: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtUnidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="unidade"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaQuadro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quadro: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtQuadro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="quadro"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaDataInclusao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Data de inclusão: "
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtDataInclusao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="data_inclusão"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaSituacaoFuncional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Situação funcional: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtSituacaoFuncional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="situacao_funcional"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtLegendaDataHoraCadastro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrado em: "
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtDataHoraCadastro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="dd/MM/yyyy"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-    </LinearLayout>
-</LinearLayout>
 </ScrollView>

@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="text"
+                    android:nextFocusDown="@id/edtDataNascimento"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="date"
+                    android:nextFocusDown="@id/edtCpf"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,6 +193,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="textEmailAddress"
+                    android:nextFocusDown="@id/btnProxima"
                     tools:targetApi="jelly_bean" />
 
 

@@ -53,8 +53,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtTipoAvaliacao"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,8 +78,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtPrograma"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,8 +103,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtDeslocamento"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,8 +128,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtDemandaGeral"
                     tools:targetApi="jelly_bean" />
 
                 <Button
@@ -174,8 +182,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtDemandaEspecifica"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -197,8 +207,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
                     tools:targetApi="jelly_bean" />
 
                 <Button
@@ -249,8 +260,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
-                    android:inputType="text"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
+                    android:inputType="text"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 

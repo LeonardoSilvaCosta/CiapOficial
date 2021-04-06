@@ -96,6 +96,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtDataNascimento"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,6 +119,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="date"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtTelefone"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,6 +189,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtSenha"
                     tools:targetApi="jelly_bean" />
 
                 <Button

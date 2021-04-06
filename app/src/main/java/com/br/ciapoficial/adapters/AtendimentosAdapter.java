@@ -36,8 +36,31 @@ public class AtendimentosAdapter extends RecyclerView.Adapter<AtendimentosAdapte
 
         Atendimento atendimento = atendimentos.get(position);
 
+        String resumoOficiais = atendimento.getOficiaisResponsaveis().get(0).
+                replace("[", "").replace("]", "");
+        String resumoAtendidos = atendimento.getAtendidos().
+                get(0).replace("[", "").
+                replace("]", "");
+
         holder.data.setText(atendimento.getData());
-        holder.nomeOficiais.setText(atendimento.getOficiaisResponsaveis().toString());
+        if(atendimento.getOficiaisResponsaveis().size() > 1)
+        {
+            holder.nomeOficiais.setText(resumoOficiais + "...+(" + (atendimento.getOficiaisResponsaveis().size() - 1) + ")");
+        }else
+        {
+            holder.nomeOficiais.setText(atendimento.getOficiaisResponsaveis().toString().
+                    replace("[", "").replace("]", ""));
+        }
+
+        if(atendimento.getAtendidos().size() > 1)
+        {
+            holder.nomeAtendidos.setText(resumoAtendidos + "...+(" + (atendimento.getAtendidos().size() - 1) + ")");
+        }else
+        {
+            holder.nomeAtendidos.setText(atendimento.getAtendidos().toString().
+                    replace("[", "").replace("]", ""));
+        }
+
     }
 
     @Override
@@ -47,12 +70,13 @@ public class AtendimentosAdapter extends RecyclerView.Adapter<AtendimentosAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView data, nomeOficiais;
+        TextView data, nomeAtendidos, nomeOficiais;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             data = itemView.findViewById(R.id.txtData);
+            nomeAtendidos = itemView.findViewById(R.id.txtNomeAtendido);
             nomeOficiais = itemView.findViewById(R.id.txtNomeOficial);
         }
     }

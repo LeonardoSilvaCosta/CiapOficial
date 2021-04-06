@@ -12,7 +12,7 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
 
     private TextView txtNome, txtDataNascimento, txtCpf, txtSexo, txtEmail, txtEstadoCivil,
     txtNaturalidade, txtEscolaridade, txtNumeroFilhos, txtEndereco, txtRgMilitar, txtPostoGradCat,
-    txtUnidade, txtQuadro, txtDataInclusao, txtSituacaoFuncional, txtDataHoraCadastro;
+    txtNomeGuerra, txtUnidade, txtQuadro, txtDataInclusao, txtSituacaoFuncional, txtDataHoraCadastro;
     private Atendido atendidoSelecionado;
 
     @Override
@@ -30,6 +30,7 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
         txtEscolaridade = (TextView) findViewById(R.id.txtEscolaridade);
         txtNumeroFilhos = (TextView) findViewById(R.id.txtNumeroFilhos);
         txtEndereco = (TextView) findViewById(R.id.txtEndereco);
+        txtNomeGuerra = (TextView) findViewById(R.id.txtNomeGuerra);
         txtRgMilitar = (TextView) findViewById(R.id.txtRgMilitar);
         txtPostoGradCat= (TextView) findViewById(R.id.txtPostoGradCat);
         txtUnidade= (TextView) findViewById(R.id.txtUnidade);
@@ -53,6 +54,7 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
             txtNumeroFilhos.setText(atendidoSelecionado.getNumeroFilhos());
             txtEndereco.setText(atendidoSelecionado.getLogradouro() + ", " + atendidoSelecionado.getNumero() + ", " +
                     atendidoSelecionado.getBairro() + ", " + atendidoSelecionado.getCidade() + "-" + atendidoSelecionado.getUf());
+            txtNomeGuerra.setText(atendidoSelecionado.getNomeGuerra());
             txtRgMilitar.setText(atendidoSelecionado.getRgMilitar());
             txtPostoGradCat.setText(atendidoSelecionado.getPostoGradCat());
             txtUnidade.setText(atendidoSelecionado.getUnidade());

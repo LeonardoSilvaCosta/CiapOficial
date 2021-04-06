@@ -53,10 +53,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtRgMilitar"
-                        android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="number"
+                        android:nextFocusDown="@id/edtSpinPostoGrad"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,6 +80,8 @@
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
                         android:fontFamily="@font/poppinsmedium"
                         android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/edtNomeGuerra"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,10 +100,12 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtNomeGuerra"
-                        android:inputType="text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/edtUnidade"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,11 +121,13 @@
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/edtUnidade"
-                        android:inputType="text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/edtQuadro"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,11 +143,13 @@
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/edtQuadro"
-                        android:inputType="text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/edtEspecialidade"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,11 +165,13 @@
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/edtEspecialidade"
-                        android:inputType="text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/edtRegistroConselho"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,6 +191,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsmedium"
                         android:inputType="number"
+                        android:nextFocusDown="@id/edtFuncaoAdministrativa"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,11 +208,13 @@
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/edtFuncaoAdministrativa"
-                    android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@mipmap/ic_seta_para_baixo"
                     android:fontFamily="@font/poppinsmedium"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/edtSitucaoFuncional"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -216,11 +230,11 @@
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/edtSitucaoFuncional"
-                        android:inputType="text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
                         android:fontFamily="@font/poppinsmedium"
+                        android:inputType="text"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 

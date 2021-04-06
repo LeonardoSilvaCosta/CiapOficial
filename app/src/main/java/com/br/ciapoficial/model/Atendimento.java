@@ -1,5 +1,12 @@
 package com.br.ciapoficial.model;
 
+import com.br.ciapoficial.model.in_atendimento.DemandaEspecifica;
+import com.br.ciapoficial.model.in_atendimento.Deslocamento;
+import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
+import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
+import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
+import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
