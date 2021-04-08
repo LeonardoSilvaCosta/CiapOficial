@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.EscolaridadeController;
 import com.br.ciapoficial.controller.EstadoCivilController;
 import com.br.ciapoficial.controller.EstadoController;
+import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 
 public class AtendidoRegisterFragment1 extends Fragment {
 
+    private LinearLayout linearLayoutTelefone;
     private TextInputLayout textInputLayoutVinculo, textInputLayoutDataNascimento;
     private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
             textInputEditTextCpf, textInputEditTextTelefone, textInputEditTextEmail,
@@ -48,7 +51,10 @@ public class AtendidoRegisterFragment1 extends Fragment {
             autoCompleteTextViewcidadeNatal, autoCompleteTextViewEscolaridade;
     private RadioGroup radioGroupSexo, radioGroupTipoAtendido;
     private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
-    private Button btnProxima;
+    private Button btnAdicionarTelefone, btnProxima;
+
+    private ArrayList<String> arrayListTelefonesAdicionados = new ArrayList<>();
+    private ArrayList<String> listaDeTelefonesAdicionados = new ArrayList<>();
 
     private AtendidoRegisterFragment2 atendidoPmRegisterFragment2;
 
@@ -86,6 +92,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
         configurarMascaraData();
         configurarMascaraCpf();
         configurarMascaraTelefone();
+        configurarCampoTelefone();
         definirComportamentoRadioButtonsTipoAtendido();
         definirComportamentoRadioButtonsSexo();
         abrirProximaTela();
@@ -93,10 +100,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         return view ;
     }
 
-
-
     private void configurarComponentes(View view)
     {
+        linearLayoutTelefone = view.findViewById(R.id.linearLayoutTelefone);
         textInputLayoutVinculo = view.findViewById(R.id.textInputLayoutVinculo);
         textInputLayoutDataNascimento = view.findViewById(R.id.textInputLayoutDataNascimento);
         textInputEditTextNomeCompleto = view.findViewById(R.id.edtNomeCompleto);
@@ -116,8 +122,8 @@ public class AtendidoRegisterFragment1 extends Fragment {
         autoCompleteTextViewcidadeNatal = view.findViewById(R.id.edtCidadeNatal);
         autoCompleteTextViewEscolaridade = view.findViewById(R.id.edtEscolaridade);
         textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
-        textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
         textInputEditTextVinculo = view.findViewById(R.id.edtVinculo);
+        btnAdicionarTelefone = view.findViewById(R.id.btnAdicionarTelefone);
         btnProxima = view.findViewById(R.id.btnProxima);
 
         configurarInicialVisibilidadeDeCampos();
@@ -150,25 +156,39 @@ public class AtendidoRegisterFragment1 extends Fragment {
         mascara.criarMascaraTelefone(textInputEditTextTelefone);
     }
 
+    private void configurarCampoTelefone()
+    {
+        linearLayoutTelefone.removeAllViews();
+
+        btnAdicionarTelefone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddRemoveTextView.adicionarTextViewTelefoneUsuarioString(getActivity(), textInputEditTextTelefone,
+                        arrayListTelefonesAdicionados, linearLayoutTelefone);
+            }
+        });
+    }
+
     private void definirComportamentoRadioButtonsTipoAtendido() {
 
         radioGroupTipoAtendido.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnPm) {
-                    tipoAtendido = "PM";
+                    tipoAtendido = "1";
                     textInputLayoutVinculo.setVisibility(View.GONE);
                     textInputEditTextVinculo.setVisibility(View.GONE);
                     textInputEditTextVinculo.setText("");
                     textInputLayoutDataNascimento.setHint(getResources().getString(R.string.data_de_nascimento));
                 } else if (checkedId == R.id.rbtnDependente) {
-                    tipoAtendido = "Dependente";
+                    tipoAtendido = "2";
                     textInputLayoutVinculo.setVisibility(View.VISIBLE);
                     textInputEditTextVinculo.setVisibility(View.VISIBLE);
                     textInputEditTextVinculo.setText("");
                     textInputLayoutDataNascimento.setHint(getResources().getString(R.string.data_de_nascimento_atendido_dependente_e_civil));
                 }else if (checkedId == R.id.rbtnCivil) {
-                    tipoAtendido = "Civil";
+                    tipoAtendido = "3";
                     textInputLayoutVinculo.setVisibility(View.GONE);
                     textInputEditTextVinculo.setVisibility(View.GONE);
                     textInputEditTextVinculo.setText("");
@@ -184,9 +204,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnMasculino) {
-                    sexo = "Masculino";
+                    sexo = "1";
                 } else if (checkedId == R.id.rbtnFeminino) {
-                    sexo = "Feminino";
+                    sexo = "2";
                 }
             }
         });
@@ -350,12 +370,34 @@ public class AtendidoRegisterFragment1 extends Fragment {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
         dataNascimento = textInputEditTextDataNascimento.getText().toString();
         cpf = textInputEditTextCpf.getText().toString();
-        telefone = textInputEditTextTelefone.getText().toString();
+        listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
         email = textInputEditTextEmail.getText().toString();
-        estadoCivil = autoCompleteTextViewEstadoCivil.getText().toString();
-        ufNatal = autoCompleteTextViewUfNatal.getText().toString();
-        cidadeNatal = autoCompleteTextViewcidadeNatal.getText().toString();
-        escolaridade = autoCompleteTextViewEscolaridade.getText().toString();
+        for(int i = 0; i < listaEstadosCivisRecuperados.size(); i++) {
+            EstadoCivil estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
+            if(estadoCivilSelecionado.getDescricao().equals(autoCompleteTextViewEstadoCivil.getText().toString())) {
+                estadoCivil = String.valueOf(estadoCivilSelecionado.getId());
+            }
+        }
+        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
+            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
+            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUfNatal.getText().toString())) {
+                ufNatal = String.valueOf(estadoSelecionado.getId());
+            }
+        }
+
+        for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
+            Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
+            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewcidadeNatal.getText().toString())) {
+                cidadeNatal = String.valueOf(cidadeSelecionada.getId());
+            }
+        }
+        for(int i = 0; i < listaEscolaridadesRecuperadas.size(); i++) {
+            Escolaridade escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
+            if(escolaridadeSelecionada.getDescricao().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
+                escolaridade = String.valueOf(escolaridadeSelecionada.getId());
+            }
+        }
+
         numeroFilhos = (textInputEditTextNumeroFilhos.getText().toString());
         vinculo = textInputEditTextVinculo.getText().toString();
     }
@@ -378,9 +420,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
 
                                 if (!TextUtils.isEmpty(sexo)) {
 
-                                    if (!TextUtils.isEmpty(telefone)) {
-
-                                        if (telefone.replaceAll("[(, ), -]", "").length() == 11) {
+                                    if (!listaDeTelefonesAdicionados.isEmpty()) {
 
                                                 if (validarCPF.equals(true)) {
 
@@ -401,16 +441,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
                                                     textInputEditTextCpf.requestFocus();
                                                     return false; }
 
-                                        }
-                                        else {
-                                            textInputEditTextTelefone.setError("digite um número de telefone válido.");
-                                            textInputEditTextTelefone.requestFocus();
-                                            return false; }
-
-
                                     }
                                     else {
-                                        textInputEditTextTelefone.setError("o campo TELEFONE deve ser preenchido.");
+                                        textInputEditTextTelefone.setError("É necessário adicionar ao menos um telefone.");
                                         textInputEditTextTelefone.requestFocus();
                                         return false; }
 
@@ -470,7 +503,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
         bundle.putString("dataNascimento", DataEntreJavaEMysql.enviarDataParaMySqlComoString(dataNascimento));
         bundle.putString("cpf", Mascaras.removerMascaras(cpf));
         bundle.putString("sexo", sexo);
-        bundle.putString("telefone", Mascaras.removerMascaras(telefone));
+        bundle.putStringArrayList("telefones", listaDeTelefonesAdicionados);
         bundle.putString("email", email);
         bundle.putString("estadoCivil", estadoCivil);
         bundle.putString("ufNatal", ufNatal);
@@ -503,6 +536,15 @@ public class AtendidoRegisterFragment1 extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+
+        arrayListTelefonesAdicionados.clear();
+        listaDeTelefonesAdicionados.clear();
+
+        super.onResume();
     }
 
 

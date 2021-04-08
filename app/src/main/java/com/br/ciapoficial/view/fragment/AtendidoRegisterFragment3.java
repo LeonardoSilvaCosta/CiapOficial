@@ -306,12 +306,36 @@ public class AtendidoRegisterFragment3 extends Fragment {
     private void receberDadosUsuarioPreenchidos()
     {
         rgMilitar = textInputEditTextRgMilitar.getText().toString();
-        postoGradCat = autoCompleteTextViewPostGradCat.getText().toString();
+
+        for(int i = 0; i < listaPostoGradCatRecuperados.size(); i++) {
+            PostoGradCat postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
+            if(postoGradCatSelecionado.getDescricao().equals(autoCompleteTextViewPostGradCat.getText().toString())) {
+                postoGradCat = String.valueOf(postoGradCatSelecionado.getId());
+            }
+        }
         nomeGuerra = textInputEditTextNomeGuerra.getText().toString();
-        unidade = autoCompleteTextViewUnidade.getText().toString();
-        quadro = autoCompleteTextViewQuadro.getText().toString();
+
+        for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
+            Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
+            if(unidadeSelecionada.getDescricao().equals(autoCompleteTextViewUnidade.getText().toString())) {
+                unidade = String.valueOf(unidadeSelecionada.getId());
+            }
+        }
+        for(int i = 0; i < listaQuadrosRecuperados.size(); i++) {
+            Quadro quadroSelecionado = listaQuadrosRecuperados.get(i);
+            if(quadroSelecionado.getDescricao().equals(autoCompleteTextViewQuadro.getText().toString())) {
+                quadro = String.valueOf(quadroSelecionado.getId());
+            }
+        }
+
         dataInclusao = textInputEditTextDataInclusao.getText().toString();
-        situacaoFuncional = autoCompleteTextViewSituacaoFuncional.getText().toString();
+
+        for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
+            SituacaoFuncional situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
+            if(situacaoFuncionalSelecionada.getDescricao().equals(autoCompleteTextViewSituacaoFuncional.getText().toString())) {
+                situacaoFuncional = String.valueOf(situacaoFuncionalSelecionada.getId());
+            }
+        }
     }
 
     private boolean validarCadastroAtendido() {
@@ -388,7 +412,7 @@ public class AtendidoRegisterFragment3 extends Fragment {
         atendido.setDataNascimento((valoresRecebidosFragment1.getString("dataNascimento")));
         atendido.setCpf((valoresRecebidosFragment1.getString("cpf")));
         atendido.setSexo(valoresRecebidosFragment1.getString("sexo"));
-        atendido.setTelefone((valoresRecebidosFragment1.getString("telefone")));
+        atendido.setTelefones((valoresRecebidosFragment1.getStringArrayList("telefones")));
         atendido.setEmail(valoresRecebidosFragment1.getString("email"));
         atendido.setEstadoCivil(valoresRecebidosFragment1.getString("estadoCivil"));
         atendido.setUfNatal(valoresRecebidosFragment1.getString("ufNatal"));

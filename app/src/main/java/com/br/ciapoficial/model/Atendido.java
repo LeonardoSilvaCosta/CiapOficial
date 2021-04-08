@@ -1,6 +1,7 @@
 package com.br.ciapoficial.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Atendido implements Serializable {
     private int id;
@@ -9,7 +10,7 @@ public class Atendido implements Serializable {
     private String dataNascimento;
     private String cpf;
     private String sexo;
-    private String telefone;
+    private ArrayList<String> telefones;
     private String email;
     private String estadoCivil;
     private String ufNatal;
@@ -80,12 +81,12 @@ public class Atendido implements Serializable {
         this.sexo = sexo;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public ArrayList<String> getTelefones() {
+        return telefones;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setTelefones(ArrayList<String> telefones) {
+        this.telefones = telefones;
     }
 
     public String getEmail() {

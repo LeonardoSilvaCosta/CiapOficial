@@ -36,30 +36,40 @@ public class AtendimentosAdapter extends RecyclerView.Adapter<AtendimentosAdapte
 
         Atendimento atendimento = atendimentos.get(position);
 
-        String resumoOficiais = atendimento.getOficiaisResponsaveis().get(0).
-                replace("[", "").replace("]", "");
-        String resumoAtendidos = atendimento.getAtendidos().
-                get(0).replace("[", "").
-                replace("]", "");
+        if(!atendimento.getOficiaisResponsaveis().isEmpty() && atendimento.getOficiaisResponsaveis() != null) {
+            String resumoOficiais = atendimento.getOficiaisResponsaveis().get(0).
+                    replace("[", "").replace("]", "");
+
+            if(atendimento.getOficiaisResponsaveis().size() > 1)
+            {
+                holder.nomeOficiais.setText(resumoOficiais + "...+(" + (atendimento.getOficiaisResponsaveis().size() - 1) + ")");
+            }else
+            {
+                holder.nomeOficiais.setText(atendimento.getOficiaisResponsaveis().toString().
+                        replace("[", "").replace("]", ""));
+            }
+        }
+
+        if(!atendimento.getAtendidos().isEmpty() && atendimento.getOficiaisResponsaveis() != null) {
+
+            String resumoAtendidos = atendimento.getAtendidos().
+                    get(0).replace("[", "").
+                    replace("]", "");
+
+            if(atendimento.getAtendidos().size() > 1)
+            {
+                holder.nomeAtendidos.setText(resumoAtendidos + "...+(" + (atendimento.getAtendidos().size() - 1) + ")");
+            }else
+            {
+                holder.nomeAtendidos.setText(atendimento.getAtendidos().toString().
+                        replace("[", "").replace("]", ""));
+            }
+
+        }
+
+
 
         holder.data.setText(atendimento.getData());
-        if(atendimento.getOficiaisResponsaveis().size() > 1)
-        {
-            holder.nomeOficiais.setText(resumoOficiais + "...+(" + (atendimento.getOficiaisResponsaveis().size() - 1) + ")");
-        }else
-        {
-            holder.nomeOficiais.setText(atendimento.getOficiaisResponsaveis().toString().
-                    replace("[", "").replace("]", ""));
-        }
-
-        if(atendimento.getAtendidos().size() > 1)
-        {
-            holder.nomeAtendidos.setText(resumoAtendidos + "...+(" + (atendimento.getAtendidos().size() - 1) + ")");
-        }else
-        {
-            holder.nomeAtendidos.setText(atendimento.getAtendidos().toString().
-                    replace("[", "").replace("]", ""));
-        }
 
     }
 

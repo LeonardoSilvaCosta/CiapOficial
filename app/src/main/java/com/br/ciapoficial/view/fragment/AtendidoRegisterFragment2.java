@@ -177,8 +177,21 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
     private void receberDadosAtendidoPreenchidos() {
         cep = textInputEditTextCep.getText().toString();
-        uf = autoCompleteTextViewUf.getText().toString();
-        cidade = autoCompleteTextViewCidade.getText().toString();
+
+        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
+            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
+            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUf.getText().toString())) {
+                uf = String.valueOf(estadoSelecionado.getId());
+            }
+        }
+
+        for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
+            Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
+            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
+                cidade = String.valueOf(cidadeSelecionada.getId());
+            }
+        }
+
         bairro = textInputEditTextBairro.getText().toString();
         logradouro = textInputEditTextLogradouro.getText().toString();
         numero = textInputEditTextNumero.getText().toString();
@@ -261,7 +274,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
                 if(validarAtendido())
                 {
-                    if(tipoAtendido.equals("PM"))
+                    if(tipoAtendido.equals("1"))
                     {
 
                         Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
@@ -307,7 +320,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
         atendido.setDataNascimento(valoresRecebidosFragment1.getString("dataNascimento"));
         atendido.setCpf(valoresRecebidosFragment1.getString("cpf"));
         atendido.setSexo(valoresRecebidosFragment1.getString("sexo"));
-        atendido.setTelefone((valoresRecebidosFragment1.getString("telefone")));
+        atendido.setTelefones((valoresRecebidosFragment1.getStringArrayList("telefones")));
         atendido.setEmail(valoresRecebidosFragment1.getString("email"));
         atendido.setEstadoCivil(valoresRecebidosFragment1.getString("estadoCivil"));
         atendido.setUfNatal(valoresRecebidosFragment1.getString("ufNatal"));
@@ -360,6 +373,14 @@ public class AtendidoRegisterFragment2 extends Fragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onResume() {
+
+        listaCidadesRecuperadas.clear();
+        listaEstadosRecuperados.clear();
+        super.onResume();
     }
 
 

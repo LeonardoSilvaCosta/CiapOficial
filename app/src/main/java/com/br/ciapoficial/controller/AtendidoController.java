@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
+import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendido;
 
@@ -51,36 +52,36 @@ public class AtendidoController {
                 params.put("nomeCompleto", atendido.getNomeCompleto());
                 params.put("dataNascimento", (atendido.getDataNascimento()));
                 params.put("cpf", atendido.getCpf());
-                params.put("sexo", atendido.getSexo());
-                params.put("telefone", atendido.getTelefone());
+                params.put("sexo", Java2Json.converterJava2JasonInt(Integer.parseInt(atendido.getSexo())));
+                params.put("telefones", Java2Json.converterJava2JsonArrayString(atendido.getTelefones()));
                 params.put("email", atendido.getEmail());
-                params.put("estadoCivil", atendido.getEstadoCivil());
+                params.put("estadoCivil", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getEstadoCivil())));
                 params.put("ufNatal", atendido.getUfNatal());
-                params.put("cidadeNatal", atendido.getCidadeNatal());
-                params.put("escolaridade", atendido.getEscolaridade());
-                params.put("numeroFilhos", String.valueOf(atendido.getNumeroFilhos()));
+                params.put("cidadeNatal", Java2Json.converterJava2JasonInt(Integer.parseInt(atendido.getCidadeNatal())));
+                params.put("escolaridade", Java2Json.converterJava2JasonInt(Integer.parseInt(atendido.getEscolaridade())));
+                params.put("numeroFilhos", atendido.getNumeroFilhos());
                 params.put("cep", atendido.getCep());
                 params.put("uf", atendido.getUf());
-                params.put("cidade", atendido.getCidade());
+                params.put("cidade", Java2Json.converterJava2JasonInt(Integer.parseInt(atendido.getCidade())));
                 params.put("bairro", atendido.getBairro());
                 params.put("logradouro", atendido.getLogradouro());
                 params.put("numero", atendido.getNumero());
 
 
-                if(atendido.getTipoAtendido().equals("PM"))
+                if(atendido.getTipoAtendido().equals("1"))
                 {
                     params.put("rgMilitar", atendido.getRgMilitar());
-                    params.put("postoGradCat", atendido.getPostoGradCat());
+                    params.put("postoGradCat", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getPostoGradCat())));
                     params.put("nomeGuerra", atendido.getNomeGuerra());
-                    params.put("unidade", atendido.getUnidade());
-                    params.put("quadro", atendido.getQuadro());
+                    params.put("unidade", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getUnidade())));
+                    params.put("quadro", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getQuadro())));
                     params.put("dataInclusao", atendido.getDataInclusao());
-                    params.put("situacaoFuncional", atendido.getSituacaoFuncional());
+                    params.put("situacaoFuncional", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getSituacaoFuncional())));
 
                 }
-                else if (atendido.getTipoAtendido().equals("Dependente"))
+                else if (atendido.getTipoAtendido().equals("2"))
                 {
-                    params.put("vinculo", atendido.getVinculo());
+                    params.put("vinculo", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getVinculo())));
                 }
 
                 return params;
