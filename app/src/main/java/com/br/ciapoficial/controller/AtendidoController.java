@@ -81,6 +81,7 @@ public class AtendidoController {
                 }
                 else if (atendido.getTipoAtendido().equals("2"))
                 {
+                    params.put("idTitular", Java2Json.converterJava2JasonInt(atendido.getIdTitular()));
                     params.put("vinculo", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getVinculo())));
                 }
 

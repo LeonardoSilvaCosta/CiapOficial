@@ -327,6 +327,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
         atendido.setCidadeNatal(valoresRecebidosFragment1.getString("cidadeNatal"));
         atendido.setEscolaridade(valoresRecebidosFragment1.getString("escolaridade"));
         atendido.setNumeroFilhos((valoresRecebidosFragment1.getString("numeroFilhos")));
+        atendido.setIdTitular(valoresRecebidosFragment1.getInt("titular"));
         atendido.setVinculo(valoresRecebidosFragment1.getString("vinculo"));
         atendido.setCep(Mascaras.removerMascaras(cep));
         atendido.setUf(uf);

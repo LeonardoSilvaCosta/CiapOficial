@@ -17,6 +17,7 @@ public class Atendido implements Serializable {
     private String cidadeNatal;
     private String escolaridade;
     private String numeroFilhos;
+    private int idTitular;
     private String vinculo;
     private String cep;
     private String uf;
@@ -135,6 +136,14 @@ public class Atendido implements Serializable {
 
     public void setNumeroFilhos(String numeroFilhos) {
         this.numeroFilhos = numeroFilhos;
+    }
+
+    public int getIdTitular() {
+        return idTitular;
+    }
+
+    public void setIdTitular(int idTitular) {
+        this.idTitular = idTitular;
     }
 
     public String getVinculo() {
