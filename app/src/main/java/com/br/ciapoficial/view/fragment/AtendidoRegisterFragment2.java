@@ -27,6 +27,7 @@ import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendido;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Estado;
+import com.br.ciapoficial.model.Titular;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -314,6 +315,8 @@ public class AtendidoRegisterFragment2 extends Fragment {
         Bundle valoresRecebidosFragment1 = recuperarDadosAtendidoRegisterFragment1();
 
        Atendido atendido = new Atendido();
+       Titular titular = new Titular();
+       titular.setId((valoresRecebidosFragment1.getInt("titular")));
 
         atendido.setTipoAtendido(valoresRecebidosFragment1.getString("tipoAtendido"));
         atendido.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
@@ -327,7 +330,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
         atendido.setCidadeNatal(valoresRecebidosFragment1.getString("cidadeNatal"));
         atendido.setEscolaridade(valoresRecebidosFragment1.getString("escolaridade"));
         atendido.setNumeroFilhos((valoresRecebidosFragment1.getString("numeroFilhos")));
-        atendido.setIdTitular(valoresRecebidosFragment1.getInt("titular"));
+        atendido.setTitular(titular);
         atendido.setVinculo(valoresRecebidosFragment1.getString("vinculo"));
         atendido.setCep(Mascaras.removerMascaras(cep));
         atendido.setUf(uf);

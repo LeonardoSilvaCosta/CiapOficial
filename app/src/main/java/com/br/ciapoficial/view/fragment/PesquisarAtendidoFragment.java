@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.br.ciapoficial.helper.RecyclerItemClickListener;
 import com.br.ciapoficial.helper.PadraoDeVisualizacao;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendido;
+import com.br.ciapoficial.model.Titular;
 import com.br.ciapoficial.view.DetalhesAtendidoActivity;
 
 import org.json.JSONArray;
@@ -98,6 +100,7 @@ public class PesquisarAtendidoFragment extends Fragment {
         {
             String nome = atendido.getNomeCompleto().toLowerCase();
             String cpf = atendido.getCpf().toLowerCase();
+
             if(nome.contains(texto) || cpf.contains(texto))
             {
                 listaAtendidosBusca.add(atendido);
@@ -126,6 +129,8 @@ public class PesquisarAtendidoFragment extends Fragment {
                 listaDeAtendidos.clear();
                 try {
 
+                    Log.e("pesquisarAt", response);
+
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -136,10 +141,11 @@ public class PesquisarAtendidoFragment extends Fragment {
                             JSONObject object = jsonArray.getJSONObject(i);
 
                             Atendido atendido = new Atendido();
-                            atendido.setId(Integer.valueOf(object.getString("id")));
-                            atendido.setNomeCompleto(object.getString("nomeCompleto"));
+                            atendido.setId(object.getInt("id"));
                             atendido.setDataNascimento(
                                     DataEntreJavaEMysql.receberDataDoMySqlComoString(object.getString("dataNascimento")));
+                            atendido.setTipoAtendido(object.getString("tipoAtendido"));
+                            atendido.setNomeCompleto(object.getString("nomeCompleto"));
                             atendido.setCpf(PadraoDeVisualizacao.visualizarCpf(object.getString("cpf")));
                             atendido.setSexo(object.getString("sexo"));
                             atendido.setEmail(object.getString("email"));
@@ -154,19 +160,39 @@ public class PesquisarAtendidoFragment extends Fragment {
                             atendido.setBairro(object.getString("bairro"));
                             atendido.setLogradouro(object.getString("logradouro"));
                             atendido.setNumero(object.getString("numero"));
-                            atendido.setRgMilitar(object.getString("rgMilitar"));
-                            atendido.setPostoGradCat(object.getString("postoGradCat"));
-                            atendido.setNomeGuerra(object.getString("nomeGuerra"));
-                            atendido.setUnidade(object.getString("unidade"));
-                            atendido.setQuadro(object.getString("quadro"));
-                            atendido.setDataInclusao(
-                                    DataEntreJavaEMysql.receberDataDoMySqlComoString(object.getString("dataInclusao")));
-                            atendido.setSituacaoFuncional(object.getString("situacaoFuncional"));
-                            atendido.setDataHoraCadastro(DataEntreJavaEMysql.receberDataHoraDoMySqlComoString(object.getString("dataHoraCadastro")));
+                            atendido.setDataHoraCadastro(
+                                    DataEntreJavaEMysql.receberDataHoraDoMySqlComoString(object.getString("dataHoraCadastro")));
+
+                            if(atendido.getTipoAtendido().equals("Policial Militar")) {
+                                atendido.setRgMilitar(object.getString("rgMilitar"));
+                                atendido.setPostoGradCat(object.getString("postoGradCat"));
+                                atendido.setNomeGuerra(object.getString("nomeGuerra"));
+                                atendido.setUnidade(object.getString("unidade"));
+                                atendido.setQuadro(object.getString("quadro"));
+                                atendido.setDataInclusao(
+                                        DataEntreJavaEMysql.receberDataDoMySqlComoString(object.getString("dataInclusao")));
+                                atendido.setSituacaoFuncional(object.getString("situacaoFuncional"));
+                            }else if(atendido.getTipoAtendido().equals("Dependente")) {
+                                Titular titular = new Titular();
+                                titular.setId(object.getInt("idTitular"));
+                                titular.setNome(object.getString("nomeTitular"));
+                                atendido.setTitular(titular);
+                                atendido.setVinculo(object.getString("vinculo"));
+                            }
+
+                            String atualizacao = object.getString("dataHoraAtualizacao");
+                            if(atualizacao.equals("null")) {
+                                atendido.setDataHoraAtualizacao(null);
+                            }else {
+                                atendido.setDataHoraAtualizacao(
+                                        DataEntreJavaEMysql.receberDataHoraDoMySqlComoString(object.getString("dataHoraAtualizacao")));
+                            }
+
 
                             listaDeAtendidos.add(atendido);
 
                         }
+
                         adapter.notifyDataSetChanged();
 
 

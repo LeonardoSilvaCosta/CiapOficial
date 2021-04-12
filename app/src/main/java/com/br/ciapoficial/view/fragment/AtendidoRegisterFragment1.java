@@ -646,19 +646,19 @@ public class AtendidoRegisterFragment1 extends Fragment {
         Bundle bundle = new Bundle();
 
         bundle.putString("tipoAtendido", tipoAtendido);
-        bundle.putString("nomeCompleto", nomeCompleto.trim());
+        bundle.putString("nomeCompleto", nomeCompleto);
         bundle.putString("dataNascimento", DataEntreJavaEMysql.enviarDataParaMySqlComoString(dataNascimento));
         bundle.putString("cpf", Mascaras.removerMascaras(cpf));
         bundle.putString("sexo", sexo);
         bundle.putStringArrayList("telefones", listaDeTelefonesAdicionados);
         bundle.putString("email", email);
-        bundle.putString("estadoCivil", estadoCivil.trim());
-        bundle.putString("ufNatal", ufNatal.trim());
-        bundle.putString("cidadeNatal", cidadeNatal.trim());
-        bundle.putString("escolaridade", escolaridade.trim());
-        bundle.putString("numeroFilhos", numeroFilhos.trim());
-        bundle.putInt("titular", Integer.valueOf(titular));
-        bundle.putString("vinculo", vinculo.trim());
+        bundle.putString("estadoCivil", estadoCivil);
+        bundle.putString("ufNatal", ufNatal);
+        bundle.putString("cidadeNatal", cidadeNatal);
+        bundle.putString("escolaridade", escolaridade);
+        bundle.putString("numeroFilhos", numeroFilhos);
+        bundle.putString("titular", titular);
+        bundle.putString("vinculo", vinculo);
 
         return bundle;
     }

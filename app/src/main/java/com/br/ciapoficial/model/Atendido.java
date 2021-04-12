@@ -1,5 +1,8 @@
 package com.br.ciapoficial.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,7 +20,7 @@ public class Atendido implements Serializable {
     private String cidadeNatal;
     private String escolaridade;
     private String numeroFilhos;
-    private int idTitular;
+    private Titular titular;
     private String vinculo;
     private String cep;
     private String uf;
@@ -33,6 +36,46 @@ public class Atendido implements Serializable {
     private String dataInclusao;
     private String situacaoFuncional;
     private String dataHoraCadastro;
+    private String dataHoraAtualizacao;
+
+    public Atendido(Parcel in) {
+        this.id = in.readInt();
+        this.tipoAtendido = in.readString();
+        this.nomeCompleto = in.readString();
+        this.dataNascimento = in.readString();
+        this.cpf = in.readString();
+        this.sexo = in.readString();
+        this.telefones = in.createStringArrayList();
+        this.email = in.readString();
+        this.estadoCivil = in.readString();
+        this.ufNatal = in.readString();
+        this.cidadeNatal = in.readString();
+        this.escolaridade = in.readString();
+        this.numeroFilhos = in.readString();
+        this.titular = (Titular) in.readValue(Titular.class.getClassLoader());
+        this.vinculo = in.readString();
+        this.cep = in.readString();
+        this.uf = in.readString();
+        this.cidade = in.readString();
+        this.bairro = in.readString();
+        this.logradouro = in.readString();
+        this.numero = in.readString();
+        this.rgMilitar = in.readString();
+        this.postoGradCat = in.readString();
+        this.nomeGuerra = in.readString();
+        this.unidade = in.readString();
+        this.quadro = in.readString();
+        this.dataInclusao = in.readString();
+        this.situacaoFuncional = in.readString();
+        this.dataHoraCadastro = in.readString();
+        this.dataHoraAtualizacao = in.readString();
+    }
+
+
+
+    public Atendido() {
+
+    }
 
     public String getTipoAtendido() {
         return tipoAtendido;
@@ -138,12 +181,12 @@ public class Atendido implements Serializable {
         this.numeroFilhos = numeroFilhos;
     }
 
-    public int getIdTitular() {
-        return idTitular;
+    public Titular getTitular() {
+        return titular;
     }
 
-    public void setIdTitular(int idTitular) {
-        this.idTitular = idTitular;
+    public void setTitular(Titular titular) {
+        this.titular = titular;
     }
 
     public String getVinculo() {
@@ -266,8 +309,17 @@ public class Atendido implements Serializable {
         this.dataHoraCadastro = dataHoraCadastro;
     }
 
+    public String getDataHoraAtualizacao() {
+        return dataHoraAtualizacao;
+    }
+
+    public void setDataHoraAtualizacao(String dataHoraAtualizacao) {
+        this.dataHoraAtualizacao = dataHoraAtualizacao;
+    }
+
     @Override
     public String toString () {
         return nomeCompleto + " - " + cpf;
     }
+
 }

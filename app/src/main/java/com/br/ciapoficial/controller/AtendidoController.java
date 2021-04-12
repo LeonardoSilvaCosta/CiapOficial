@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
+import com.br.ciapoficial.helper.Json2Java;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendido;
 
@@ -81,7 +82,7 @@ public class AtendidoController {
                 }
                 else if (atendido.getTipoAtendido().equals("2"))
                 {
-                    params.put("idTitular", Java2Json.converterJava2JasonInt(atendido.getIdTitular()));
+                    params.put("idTitular", Java2Json.converterJava2JasonInt(atendido.getTitular().getId()));
                     params.put("vinculo", Java2Json.converterJava2JasonInt(Integer.valueOf(atendido.getVinculo())));
                 }
 
