@@ -9,6 +9,10 @@ public class Telefone implements Serializable {
     public Telefone() {
     }
 
+    public Telefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public int getId() {
         return id;
     }
@@ -23,5 +27,10 @@ public class Telefone implements Serializable {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    @Override
+    public String toString() {
+        return this.telefone;
     }
 }

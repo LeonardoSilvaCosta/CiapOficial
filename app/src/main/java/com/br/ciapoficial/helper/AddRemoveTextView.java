@@ -9,24 +9,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.br.ciapoficial.model.Atendido;
+import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.in_atendimento.Deslocamento;
 import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
 import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
 import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
 import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
-import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Funcionario;
 import com.br.ciapoficial.model.Telefone;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AddRemoveTextView {
 
     public static void adicionarTextViewUsuario(Context context, AutoCompleteTextView campo,
-                                                ArrayList<Usuario> oficiasRecuperados, ArrayList<Usuario> listaDisplay,
-                                                ArrayAdapter<Usuario> adapter, LinearLayout linearLayout)
+                                                ArrayList<Funcionario> oficiasRecuperados, ArrayList<Funcionario> listaDisplay,
+                                                ArrayAdapter<Funcionario> adapter, LinearLayout linearLayout)
     {
 
         String textoRecebido = campo.getText().toString();
@@ -53,7 +52,7 @@ public class AddRemoveTextView {
             String rgMilitar = splitTextoRecebidoSemEspacos[1];
 
             for(int i = 0; i < oficiasRecuperados.size(); i++) {
-                Usuario oficialSelecionado = oficiasRecuperados.get(i);
+                Funcionario oficialSelecionado = oficiasRecuperados.get(i);
                 if(oficialSelecionado.getRgMilitar().equals(rgMilitar)) {
                     listaDisplay.add(oficialSelecionado);
                     break;
@@ -72,8 +71,8 @@ public class AddRemoveTextView {
         removerItemDaListaDeOficiaisResponsaveis(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeOficiaisResponsaveis(TextView textView, ArrayList<Usuario> listaDisplay,
-                                                                ArrayAdapter<Usuario> adapter)
+    public static void removerItemDaListaDeOficiaisResponsaveis(TextView textView, ArrayList<Funcionario> listaDisplay,
+                                                                ArrayAdapter<Funcionario> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +81,7 @@ public class AddRemoveTextView {
                 String string = textView.getText().toString();
                 for(int i = 0; i < listaDisplay.size(); i++)
                 {
-                    Usuario oficialSelecionado = listaDisplay.get(i);
+                    Funcionario oficialSelecionado = listaDisplay.get(i);
                     String dadosOficialSelecionado = oficialSelecionado.toString();
                     if(dadosOficialSelecionado.equals(string))
                     {
@@ -176,7 +175,7 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewTelefoneUsuarioString(Context context, TextInputEditText campo,
-                                                              ArrayList<String> listaDisplay,
+                                                              ArrayList<Telefone> telefonesListadosParaCadastro,
                                                               LinearLayout linearLayout)
     {
 
@@ -190,7 +189,7 @@ public class AddRemoveTextView {
                 Toast.makeText(context,
                         "O campo para inserção de telefone está vazio.",
                         Toast.LENGTH_SHORT).show();
-            }else if(!(listaDisplay.toString().contains(textoRecebido)))
+            }else if(!(telefonesListadosParaCadastro.toString().contains(textoRecebido)))
             {
                 textView.setPadding(0, 10, 0, 10);
                 textView.setText(textoRecebido);
@@ -200,7 +199,7 @@ public class AddRemoveTextView {
 
                 campo.setText("");
 
-                listaDisplay.add(textoRecebido);
+                telefonesListadosParaCadastro.add(new Telefone(textoRecebido));
 
             }
             else
@@ -211,7 +210,7 @@ public class AddRemoveTextView {
                 campo.setText("");
             }
 
-            removerItemDaListaDeTelefonesString(textView, listaDisplay);
+            removerItemDaListaDeTelefonesString(textView, telefonesListadosParaCadastro);
         }else
         {
             Toast.makeText(context, "Digite um número de telefone válido.", Toast.LENGTH_SHORT).show();
@@ -219,19 +218,19 @@ public class AddRemoveTextView {
 
     }
 
-    public static void removerItemDaListaDeTelefonesString(TextView textView, ArrayList<String> listaDisplay)
+    public static void removerItemDaListaDeTelefonesString(TextView textView, ArrayList<Telefone> listaDeTelefonesInseridos)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
+                for(int i = 0; i < listaDeTelefonesInseridos.size(); i++)
                 {
-                    String telefoneSelecionado = listaDisplay.get(i);
+                    String telefoneSelecionado = listaDeTelefonesInseridos.get(i).toString();
                     if(telefoneSelecionado.equals(string))
                     {
-                        listaDisplay.remove(telefoneSelecionado);
+                        listaDeTelefonesInseridos.remove(telefoneSelecionado);
 
                         textView.setVisibility(View.GONE);
                         break;
@@ -271,8 +270,8 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo,
-                                                 ArrayList<Atendido> atendidosRecuperados, ArrayList<Atendido> listaDisplay,
-                                                 ArrayAdapter<Atendido> adapter, LinearLayout linearLayout)
+                                                 ArrayList<Usuario> atendidosRecuperados, ArrayList<Usuario> listaDisplay,
+                                                 ArrayAdapter<Usuario> adapter, LinearLayout linearLayout)
     {
 
         String textoRecebido = campo.getText().toString();
@@ -298,9 +297,9 @@ public class AddRemoveTextView {
             String cpf = splitTextoRecebidoSemEspacos[1];
 
             for(int i = 0; i < atendidosRecuperados.size(); i++) {
-                Atendido atendidoSelecionado = atendidosRecuperados.get(i);
-                if(atendidoSelecionado.getCpf().equals(cpf)) {
-                    listaDisplay.add(atendidoSelecionado);
+                Usuario usuarioSelecionado = atendidosRecuperados.get(i);
+                if(usuarioSelecionado.getCpf().equals(cpf)) {
+                    listaDisplay.add(usuarioSelecionado);
                     break;
                 }
             }
@@ -317,8 +316,8 @@ public class AddRemoveTextView {
         removerItemDaListaDeAtendidos(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeAtendidos(TextView textView, ArrayList<Atendido> listaDisplay,
-                                                                ArrayAdapter<Atendido> adapter)
+    public static void removerItemDaListaDeAtendidos(TextView textView, ArrayList<Usuario> listaDisplay,
+                                                                ArrayAdapter<Usuario> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -327,11 +326,11 @@ public class AddRemoveTextView {
                 String string = textView.getText().toString();
                 for(int i = 0; i < listaDisplay.size(); i++)
                 {
-                    Atendido atendidoSelecionado = listaDisplay.get(i);
-                    String dadosAtendidoSelecionado = atendidoSelecionado.toString();
+                    Usuario usuarioSelecionado = listaDisplay.get(i);
+                    String dadosAtendidoSelecionado = usuarioSelecionado.toString();
                     if(dadosAtendidoSelecionado.equals(string))
                     {
-                        listaDisplay.remove(atendidoSelecionado);
+                        listaDisplay.remove(usuarioSelecionado);
                         adapter.notifyDataSetChanged();
 
                         textView.setVisibility(View.GONE);

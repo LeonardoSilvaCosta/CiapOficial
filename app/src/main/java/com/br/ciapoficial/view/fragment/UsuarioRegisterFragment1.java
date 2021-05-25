@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -17,24 +16,27 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.AtendidoController;
+import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.EscolaridadeController;
 import com.br.ciapoficial.controller.EstadoCivilController;
 import com.br.ciapoficial.controller.EstadoController;
 import com.br.ciapoficial.controller.VinculoController;
+import com.br.ciapoficial.enums.EscolaridadeEnum;
+import com.br.ciapoficial.enums.EstadoCivilEnum;
+import com.br.ciapoficial.enums.UfEnum;
+import com.br.ciapoficial.enums.SexoEnum;
+import com.br.ciapoficial.enums.TipoAtendido;
+import com.br.ciapoficial.enums.TipoVinculoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
+import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.helper.ValidarCPF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Atendido;
+import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Cidade;
-import com.br.ciapoficial.model.Escolaridade;
-import com.br.ciapoficial.model.Estado;
-import com.br.ciapoficial.model.EstadoCivil;
-import com.br.ciapoficial.model.Vinculo;
+import com.br.ciapoficial.model.Telefone;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -42,9 +44,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class AtendidoRegisterFragment1 extends Fragment {
+import lombok.SneakyThrows;
+
+public class UsuarioRegisterFragment1 extends Fragment {
 
     private LinearLayout linearLayoutConteudo, linearLayoutTelefone;
     private TextInputLayout textInputLayoutTitular, textInputLayoutVinculo, textInputLayoutDataNascimento;
@@ -52,42 +58,41 @@ public class AtendidoRegisterFragment1 extends Fragment {
             textInputEditTextCpf, textInputEditTextTelefone, textInputEditTextEmail,
             textInputEditTextNumeroFilhos;
     private AutoCompleteTextView autoCompleteTextViewEstadoCivil, autoCompleteTextViewUfNatal,
-            autoCompleteTextViewcidadeNatal, autoCompleteTextViewEscolaridade,
+            autoCompleteTextViewCidadeNatal, autoCompleteTextViewEscolaridade,
             autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
     private RadioGroup radioGroupSexo, radioGroupTipoAtendido;
     private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
     private Button btnAdicionarTelefone, btnProxima;
 
-    private ArrayList<String> arrayListTelefonesAdicionados = new ArrayList<>();
-    private ArrayList<String> listaDeTelefonesAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> arrayListTelefonesAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> listaDeTelefonesAdicionados = new ArrayList<>();
 
-    private AtendidoRegisterFragment2 atendidoPmRegisterFragment2;
+    private UsuarioRegisterFragment2 atendidoPmRegisterFragment2;
 
-    private ArrayList<EstadoCivil> listaEstadosCivisRecuperados = new ArrayList<>();
-    private ArrayList<Estado> listaEstadosRecuperados = new ArrayList<>();
+    private ArrayList<UfEnum> listaUfsRecuperadas = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
-    private ArrayList<Escolaridade> listaEscolaridadesRecuperadas = new ArrayList<>();
-    private ArrayList<Atendido> listaTitularesRecuperados = new ArrayList<>();
-    private ArrayList<Vinculo> listaVinculosRecuperados = new ArrayList<>();
+    private ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados = new ArrayList<>();
+    private ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas = new ArrayList<>();
+    private ArrayList<Usuario> listaTitularesRecuperados = new ArrayList<>();
+    private ArrayList<TipoVinculoEnum> listaVinculosRecuperados = new ArrayList<>();
 
-    private String tipoAtendido;
+    private TipoAtendido tipoAtendido;
     private String nomeCompleto;
-    private String dataNascimento;
+    private Date dataNascimento;
     private String cpf;
-    private String sexo;
+    private SexoEnum sexoEnum;
     private String email;
-    private String telefone;
-    private String estadoCivil;
-    private String ufNatal;
-    private String cidadeNatal;
-    private String escolaridade;
-    private String numeroFilhos;
-    private String titular;
-    private String vinculo;
+    private Telefone telefone;
+    private EstadoCivilEnum estadoCivilEnum;
+    private Cidade naturalidade;
+    private EscolaridadeEnum escolaridadeEnum;
+    private int numeroFilhos;
+    private Usuario titular;
+    private TipoVinculoEnum vinculoEnum;
 
     private ArrayAdapter arrayAdapterChild;
 
-    public AtendidoRegisterFragment1() {
+    public UsuarioRegisterFragment1() {
         // Required empty public constructor
     }
 
@@ -131,7 +136,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
         textInputEditTextEmail = view.findViewById(R.id.edtEmail);
         autoCompleteTextViewEstadoCivil = view.findViewById(R.id.edtEstadoCivil);
         autoCompleteTextViewUfNatal = view.findViewById(R.id.edtUfNatal);
-        autoCompleteTextViewcidadeNatal = view.findViewById(R.id.edtCidadeNatal);
+        autoCompleteTextViewCidadeNatal = view.findViewById(R.id.edtCidadeNatal);
         autoCompleteTextViewEscolaridade = view.findViewById(R.id.edtEscolaridade);
         textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
         autoCompleteTextViewTitular = view.findViewById(R.id.edtTitular);
@@ -140,9 +145,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         btnProxima = view.findViewById(R.id.btnProxima);
 
         configurarVisibilidadeInicialDeCampos();
-        popularCampoEstadoCivilComDB();
         popularCampoUfNatalComDB();
         popularCampoCidadeComDB();
+        popularCampoEstadoCivilComDB();
         popularCampoEscolaridadeComDB();
         popularCampoTitularComDB();
         popularCampoVinculoComDB();
@@ -192,7 +197,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnPm) {
-                    tipoAtendido = "1";
+                    tipoAtendido = TipoAtendido.PM;
                     linearLayoutConteudo.setVisibility(View.VISIBLE);
                     textInputLayoutTitular.setVisibility(View.GONE);
                     autoCompleteTextViewTitular.setVisibility(View.GONE);
@@ -202,7 +207,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
                     autoCompleteTextViewVinculo.setText("");
                     textInputLayoutDataNascimento.setHint(getResources().getString(R.string.data_de_nascimento));
                 } else if (checkedId == R.id.rbtnDependente) {
-                    tipoAtendido = "2";
+                    tipoAtendido = TipoAtendido.DEPENDENTE;
                     linearLayoutConteudo.setVisibility(View.VISIBLE);
                     textInputLayoutTitular.setVisibility(View.VISIBLE);
                     autoCompleteTextViewTitular.setVisibility(View.VISIBLE);
@@ -212,7 +217,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
                     autoCompleteTextViewVinculo.setText("");
                     textInputLayoutDataNascimento.setHint(getResources().getString(R.string.data_de_nascimento_atendido_dependente_e_civil));
                 }else if (checkedId == R.id.rbtnCivil) {
-                    tipoAtendido = "3";
+                    tipoAtendido = TipoAtendido.CIVIL;
                     linearLayoutConteudo.setVisibility(View.VISIBLE);
                     textInputLayoutTitular.setVisibility(View.GONE);
                     autoCompleteTextViewTitular.setVisibility(View.GONE);
@@ -232,9 +237,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnMasculino) {
-                    sexo = "1";
+                    sexoEnum = SexoEnum.MASCULINO;
                 } else if (checkedId == R.id.rbtnFeminino) {
-                    sexo = "2";
+                    sexoEnum = SexoEnum.FEMININO;
                 }
             }
         });
@@ -243,29 +248,23 @@ public class AtendidoRegisterFragment1 extends Fragment {
     private void popularCampoEstadoCivilComDB() {
 
         EstadoCivilController estadoCivilController = new EstadoCivilController();
-        estadoCivilController.listarEstadosCivis(getActivity(), new VolleyCallback() {
+        estadoCivilController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            EstadoCivil estadoCivil = new EstadoCivil();
-                            estadoCivil.setId(Integer.valueOf(object.getString("id")));
-                            estadoCivil.setDescricao(object.getString("descricao"));
+                            EstadoCivilEnum estadoCivil = EstadoCivilEnum.valueOf(object.getString("estadoCivil"));
 
                             listaEstadosCivisRecuperados.add(estadoCivil);
                             configurarCampoEstadoCivil(listaEstadosCivisRecuperados);
 
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -276,9 +275,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEstadoCivil(ArrayList<EstadoCivil> listaEstadosCivisRecuperados) {
+    private void configurarCampoEstadoCivil(ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados) {
 
-        ArrayAdapter<EstadoCivil> adapterEstadoCivil = new ArrayAdapter<EstadoCivil>(getActivity(),
+        ArrayAdapter<EstadoCivilEnum> adapterEstadoCivil = new ArrayAdapter<EstadoCivilEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosCivisRecuperados));
         autoCompleteTextViewEstadoCivil.setAdapter(adapterEstadoCivil);
@@ -291,29 +290,23 @@ public class AtendidoRegisterFragment1 extends Fragment {
     private void popularCampoUfNatalComDB() {
 
         EstadoController estadoController = new EstadoController();
-        estadoController.listarUfs(getActivity(), new VolleyCallback() {
+        estadoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            Estado estado = new Estado();
-                            estado.setId(Integer.valueOf(object.getString("id")));
-                            estado.setUf(object.getString("uf"));
+                            UfEnum estado = UfEnum.valueOf(object.getString("uf"));
 
-                            listaEstadosRecuperados.add(estado);
-                            configurarCampoEstadoNatal(listaEstadosRecuperados);
+                            listaUfsRecuperadas.add(estado);
+                            configurarCampoEstadoNatal(listaUfsRecuperadas);
 
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -324,9 +317,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEstadoNatal(ArrayList<Estado> listaEstadosRecuperados) {
+    private void configurarCampoEstadoNatal(ArrayList<UfEnum> listaEstadosRecuperados) {
 
-        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
+        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUfNatal.setAdapter(adapterUf);
@@ -339,9 +332,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
     private void popularCampoCidadeComDB() {
 
         MunicipioComBaseNaUF.mostrarMunicipioComBaseNaUf(getActivity(), autoCompleteTextViewUfNatal,
-                autoCompleteTextViewcidadeNatal, listaCidadesRecuperadas);
+                autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas);
 
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewcidadeNatal);
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidadeNatal);
     }
 
     private void popularCampoEscolaridadeComDB() {
@@ -353,24 +346,18 @@ public class AtendidoRegisterFragment1 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            Escolaridade escolaridade = new Escolaridade();
-                            escolaridade.setId(Integer.valueOf(object.getString("id")));
-                            escolaridade.setDescricao(object.getString("descricao"));
+                            EscolaridadeEnum escolaridade = EscolaridadeEnum.valueOf(object.getString("escolaridade"));
 
                             listaEscolaridadesRecuperadas.add(escolaridade);
                             configurarCampoEscolaridade(listaEscolaridadesRecuperadas);
 
                         }
-                    }
 
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -380,9 +367,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEscolaridade(ArrayList<Escolaridade> listaEscolaridadesRecuperadas) {
+    private void configurarCampoEscolaridade(ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas) {
 
-        ArrayAdapter<Escolaridade> adapterEscolaridade = new ArrayAdapter<Escolaridade>(getActivity(),
+        ArrayAdapter<EscolaridadeEnum> adapterEscolaridade = new ArrayAdapter<EscolaridadeEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEscolaridadesRecuperadas));
         autoCompleteTextViewEscolaridade.setAdapter(adapterEscolaridade);
@@ -394,31 +381,25 @@ public class AtendidoRegisterFragment1 extends Fragment {
 
     private void popularCampoTitularComDB() {
 
-        AtendidoController atendidoTitularController = new AtendidoController();
-        atendidoTitularController.listarAtendidos(getActivity(), new VolleyCallback() {
+        UsuarioController usuarioTitularController = new UsuarioController();
+        usuarioTitularController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                   JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            Atendido titular = new Atendido();
-                            titular.setId(Integer.valueOf(object.getString("id")));
-                            titular.setNomeCompleto(object.getString("nomeCompleto"));
-                            titular.setCpf(object.getString("cpf"));
+                            Usuario titular = new Usuario();
+                            titular = (Usuario) object.get("titular");
 
                             listaTitularesRecuperados.add(titular);
                             configurarCampoTitular(listaTitularesRecuperados);
 
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -429,9 +410,9 @@ public class AtendidoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoTitular(ArrayList<Atendido> listaTitularesRecuperados) {
+    private void configurarCampoTitular(ArrayList<Usuario> listaTitularesRecuperados) {
 
-        ArrayAdapter<Atendido> adapterAtendidoTitular = new ArrayAdapter<Atendido>(getActivity(),
+        ArrayAdapter<Usuario> adapterAtendidoTitular = new ArrayAdapter<Usuario>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaTitularesRecuperados));
         autoCompleteTextViewTitular.setAdapter(adapterAtendidoTitular);
@@ -444,30 +425,24 @@ public class AtendidoRegisterFragment1 extends Fragment {
     private void popularCampoVinculoComDB() {
 
         VinculoController vinculoController = new VinculoController();
-        vinculoController.listarVinculos(getActivity(), new VolleyCallback() {
+        vinculoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            Vinculo vinculo = new Vinculo();
-                            vinculo.setId(Integer.valueOf(object.getString("id")));
-                            vinculo.setDescricao(object.getString("descricao"));
+                            TipoVinculoEnum tipoVinculo = (TipoVinculoEnum) object.get("tipoVinculo");
 
-                            listaVinculosRecuperados.add(vinculo);
+                            listaVinculosRecuperados.add(vinculoEnum);
                             configurarCampoVinculo(listaVinculosRecuperados);
 
                         }
-                    }
 
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -477,12 +452,12 @@ public class AtendidoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoVinculo(ArrayList<Vinculo> listaVinculosRecuperados) {
+    private void configurarCampoVinculo(ArrayList<TipoVinculoEnum> listaVinculosRecuperados) {
 
-        ArrayAdapter<Vinculo> adapterEscolaridade = new ArrayAdapter<Vinculo>(getActivity(),
+        ArrayAdapter<TipoVinculoEnum> adapterTipoVinculo = new ArrayAdapter<TipoVinculoEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaVinculosRecuperados));
-        autoCompleteTextViewVinculo.setAdapter(adapterEscolaridade);
+        autoCompleteTextViewVinculo.setAdapter(adapterTipoVinculo);
         autoCompleteTextViewVinculo.setThreshold(1);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewVinculo);
@@ -490,58 +465,50 @@ public class AtendidoRegisterFragment1 extends Fragment {
     }
 
 
-    private void receberDadosUsuarioPreenchidos()
-    {
+    private void receberDadosUsuarioPreenchidos() throws ParseException {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
-        dataNascimento = textInputEditTextDataNascimento.getText().toString();
-        cpf = textInputEditTextCpf.getText().toString();
+        dataNascimento = DateFormater.StringToDate(textInputEditTextDataNascimento.getText().toString());
+        cpf = Mascaras.removerMascaras(textInputEditTextCpf.getText().toString());
         listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
         email = textInputEditTextEmail.getText().toString();
         for(int i = 0; i < listaEstadosCivisRecuperados.size(); i++) {
-            EstadoCivil estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
-            if(estadoCivilSelecionado.getDescricao().equals(autoCompleteTextViewEstadoCivil.getText().toString())) {
-                estadoCivil = String.valueOf(estadoCivilSelecionado.getId());
+            EstadoCivilEnum estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
+            if(estadoCivilSelecionado.getNome().equals(autoCompleteTextViewEstadoCivil.getText().toString())) {
+                estadoCivilEnum = estadoCivilSelecionado;
             }
         }
-        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
-            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
-            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUfNatal.getText().toString())) {
-                ufNatal = String.valueOf(estadoSelecionado.getId());
-            }
-        }
-
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewcidadeNatal.getText().toString())) {
-                cidadeNatal = String.valueOf(cidadeSelecionada.getId());
+            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
+                naturalidade = cidadeSelecionada;
             }
         }
         for(int i = 0; i < listaEscolaridadesRecuperadas.size(); i++) {
-            Escolaridade escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
-            if(escolaridadeSelecionada.getDescricao().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
-                escolaridade = String.valueOf(escolaridadeSelecionada.getId());
+            EscolaridadeEnum escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
+            if(escolaridadeSelecionada.getNome().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
+                escolaridadeEnum = escolaridadeSelecionada;
             }
         }
 
-        numeroFilhos = (textInputEditTextNumeroFilhos.getText().toString());
+        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString());
 
         for(int i = 0; i < listaTitularesRecuperados.size(); i++) {
-            Atendido titularSelecionado = listaTitularesRecuperados.get(i);
+            Usuario titularSelecionado = listaTitularesRecuperados.get(i);
             if(titularSelecionado.toString().equals(autoCompleteTextViewTitular.getText().toString())) {
-                titular = String.valueOf(titularSelecionado.getId());
+                titular = titularSelecionado;
             }
         }
 
         for(int i = 0; i < listaVinculosRecuperados.size(); i++) {
-            Vinculo vinculoSelecionado = listaVinculosRecuperados.get(i);
+            TipoVinculoEnum vinculoSelecionado = listaVinculosRecuperados.get(i);
             if(vinculoSelecionado.toString().equals(autoCompleteTextViewVinculo.getText().toString())) {
-                vinculo = String.valueOf(vinculoSelecionado.getId());
+                vinculoEnum = vinculoSelecionado;
             }
         }
 
     }
 
-    private boolean validarCadastroUsuario() {
+    private boolean validarCadastroUsuario() throws ParseException {
         receberDadosUsuarioPreenchidos();
         Boolean validarCPF = ValidarCPF.validarCPF(textInputEditTextCpf.getText().toString());
 
@@ -549,23 +516,23 @@ public class AtendidoRegisterFragment1 extends Fragment {
 
             if (!TextUtils.isEmpty(nomeCompleto)) {
 
-                if (!TextUtils.isEmpty(dataNascimento) || !tipoAtendido.equals("PM")) {
+                if (dataNascimento != null || !tipoAtendido.equals("PM")) {
 
-                    if (dataNascimento.replaceAll("[/]", "").length() == 8 || !tipoAtendido.equals("PM")) {
+//                    if (dataNascimento.replaceAll("[/]", "").length() == 8 || !tipoAtendido.equals("PM")) {
 
                         if (!TextUtils.isEmpty(cpf)) {
 
                             if (rbtnMasculino.isChecked() || rbtnFeminino.isChecked()) {
 
-                                if (!TextUtils.isEmpty(sexo)) {
+                                if (!TextUtils.isEmpty(sexoEnum.getNome())) {
 
                                     if (!listaDeTelefonesAdicionados.isEmpty()) {
 
                                         if (validarCPF.equals(true)) {
 
-                                            if(!TextUtils.isEmpty(titular) || !tipoAtendido.equals("Dependente")) {
+                                            if(titular != null || !tipoAtendido.equals("Dependente")) {
 
-                                                if (!TextUtils.isEmpty(vinculo) || !tipoAtendido.equals("Dependente")) {
+                                                if (!TextUtils.isEmpty(vinculoEnum.getNome()) || !tipoAtendido.equals("Dependente")) {
 
                                                     encapsularValoresParaEnvio();
                                                     return true;
@@ -616,11 +583,11 @@ public class AtendidoRegisterFragment1 extends Fragment {
                             textInputEditTextCpf.requestFocus();
                             return false; }
 
-                    }
-                    else {
-                        textInputEditTextDataNascimento.setError("Digite uma data válida.");
-                        textInputEditTextDataNascimento.requestFocus();
-                        return false; }
+//                    }
+//                    else {
+//                        textInputEditTextDataNascimento.setError("Digite uma data válida.");
+//                        textInputEditTextDataNascimento.requestFocus();
+//                        return false; }
 
                 }
                 else {
@@ -645,20 +612,19 @@ public class AtendidoRegisterFragment1 extends Fragment {
     {
         Bundle bundle = new Bundle();
 
-        bundle.putString("tipoAtendido", tipoAtendido);
+        bundle.putSerializable("tipoAtendido", tipoAtendido);
         bundle.putString("nomeCompleto", nomeCompleto);
-        bundle.putString("dataNascimento", DataEntreJavaEMysql.enviarDataParaMySqlComoString(dataNascimento));
-        bundle.putString("cpf", Mascaras.removerMascaras(cpf));
-        bundle.putString("sexo", sexo);
-        bundle.putStringArrayList("telefones", listaDeTelefonesAdicionados);
+        bundle.putString("dataNascimento", dataNascimento.toString());
+        bundle.putString("cpf", cpf);
+        bundle.putSerializable("sexo", sexoEnum);
+        bundle.putSerializable("telefones", listaDeTelefonesAdicionados);
         bundle.putString("email", email);
-        bundle.putString("estadoCivil", estadoCivil);
-        bundle.putString("ufNatal", ufNatal);
-        bundle.putString("cidadeNatal", cidadeNatal);
-        bundle.putString("escolaridade", escolaridade);
-        bundle.putString("numeroFilhos", numeroFilhos);
-        bundle.putString("titular", titular);
-        bundle.putString("vinculo", vinculo);
+        bundle.putSerializable("estadoCivil", estadoCivilEnum);
+        bundle.putSerializable("cidadeNatal", naturalidade);
+        bundle.putSerializable("escolaridade", escolaridadeEnum);
+        bundle.putInt("numeroFilhos", numeroFilhos);
+        bundle.putSerializable("titular", titular);
+        bundle.putSerializable("vinculo", vinculoEnum);
 
         return bundle;
     }
@@ -666,6 +632,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
     private void abrirProximaTela() {
 
         btnProxima.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
 
@@ -673,7 +640,7 @@ public class AtendidoRegisterFragment1 extends Fragment {
                 {
                     Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
-                    atendidoPmRegisterFragment2 = new AtendidoRegisterFragment2();
+                    atendidoPmRegisterFragment2 = new UsuarioRegisterFragment2();
                     atendidoPmRegisterFragment2.setArguments(valoresEncapsuladosParaEnvio);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -694,6 +661,5 @@ public class AtendidoRegisterFragment1 extends Fragment {
 
         super.onResume();
     }
-
 
 }

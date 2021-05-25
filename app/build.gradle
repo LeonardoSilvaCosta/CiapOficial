@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //biblioteca para requisições HTTP
-    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.volley:volley:1.2.0'
     //biblioteca para arredondamento de imagem
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     //biblioteca glide
@@ -57,4 +57,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     //Biblioteca SearchMaterialView
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    //Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }

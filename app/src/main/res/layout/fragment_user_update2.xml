@@ -82,12 +82,12 @@
                         android:fontFamily="@font/poppinsmedium"
                         android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/edtCidade"
+                        android:nextFocusDown="@id/edtCidadeNatal"
                         tools:targetApi="jelly_bean" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutCidade"
+                    android:id="@+id/textInputLayoutCidadeNatal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -99,7 +99,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUf">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/edtCidade"
+                        android:id="@+id/edtCidadeNatal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@mipmap/ic_seta_para_baixo"
@@ -117,7 +117,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:hint="@string/bairro_usuario"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCidade"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCidadeNatal"
                     tools:layout_editor_absoluteX="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText

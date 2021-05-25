@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
+import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 
 public class MedicacaoPsiquiatricaController {
@@ -18,7 +19,7 @@ public class MedicacaoPsiquiatricaController {
 
         String url = Constants.URLMedicacoesPsiquiatricas + "/listar_medicacoes_psiquiatricas.php";
 
-        RequestQueue queue = Volley.newRequestQueue(context);
+        RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

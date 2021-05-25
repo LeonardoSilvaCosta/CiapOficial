@@ -106,7 +106,7 @@
                 android:layout_marginStart="37dp"
                 android:layout_marginLeft="37dp"
                 android:paddingBottom="10dp"
-                android:text="atendido(a)"
+                android:text="usuario(a)"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

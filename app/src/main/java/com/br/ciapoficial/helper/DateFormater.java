@@ -1,8 +1,10 @@
 package com.br.ciapoficial.helper;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class DateCustom {
+public class DateFormater {
 
     public static String dataAtual() {
 
@@ -21,6 +23,12 @@ public class DateCustom {
 
         String mesAno = mes + ano;
         return mesAno;
+    }
+
+    public static Date StringToDate(String data) throws ParseException {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+        return date;
+
     }
 
 }

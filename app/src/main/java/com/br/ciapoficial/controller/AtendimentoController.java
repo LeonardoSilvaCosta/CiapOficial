@@ -12,6 +12,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
+import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendimento;
 
@@ -25,7 +26,7 @@ public class AtendimentoController {
 
         String url = Constants.URLAtendimentos + "/cadastrar.php";
 
-        RequestQueue queue = Volley.newRequestQueue(context);
+        RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

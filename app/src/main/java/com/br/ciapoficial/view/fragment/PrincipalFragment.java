@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
+import com.br.ciapoficial.controller.FuncionarioController;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.UserModel;
 import com.br.ciapoficial.view.PesquisarActivity;
@@ -32,7 +32,7 @@ import static com.br.ciapoficial.view.LoginActivity.fileName;
 public class PrincipalFragment extends Fragment {
 
     private UserUpdateFragment1 userUpdateFragment1;
-    private AtendidoRegisterFragment1 atendidoRegisterFragment1;
+    private UsuarioRegisterFragment1 usuarioRegisterFragment1;
     private AtendimentoRegisterFragment1 atendimentoRegisterFragment1;
     private SharedPreferences sharedPreferences;
     private CircleImageView fotoPerfil;
@@ -70,7 +70,7 @@ public class PrincipalFragment extends Fragment {
 
     private void configurarImagemAtualizarPerfil() {
         String sexoUsuarioLogado = sharedPreferences.getString("userSex", "");
-        if(sexoUsuarioLogado.equals("1"))
+        if(sexoUsuarioLogado.equals("Masculino"))
         {
             imageAtualizarPerfil.setImageResource(R.drawable.icon_man_police);
         }
@@ -82,10 +82,10 @@ public class PrincipalFragment extends Fragment {
 
     private void recuperarImagem() {
 
-        UsuarioController usuarioController = new UsuarioController();
+        FuncionarioController funcionarioController = new FuncionarioController();
         UserModel userModel = new UserModel();
         //
-        usuarioController.recuperarImagem(getActivity(), new VolleyCallback() {
+        funcionarioController.recuperarImagem(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -152,9 +152,9 @@ public class PrincipalFragment extends Fragment {
         btnNovoAtendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                atendidoRegisterFragment1 = new AtendidoRegisterFragment1();
+                usuarioRegisterFragment1 = new UsuarioRegisterFragment1();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameConteudo, atendidoRegisterFragment1);
+                transaction.replace(R.id.frameConteudo, usuarioRegisterFragment1);
                 transaction.addToBackStack(null).commit();
             }
         });

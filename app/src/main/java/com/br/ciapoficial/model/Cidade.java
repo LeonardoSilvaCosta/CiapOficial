@@ -1,6 +1,8 @@
 package com.br.ciapoficial.model;
 
-public class Cidade {
+import java.io.Serializable;
+
+public class Cidade implements Serializable {
     private int id;
     private String descricao;
 

@@ -1,6 +1,5 @@
 package com.br.ciapoficial.view.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +16,23 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.AtendidoController;
+import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.EstadoController;
+import com.br.ciapoficial.enums.EscolaridadeEnum;
+import com.br.ciapoficial.enums.EstadoCivilEnum;
+import com.br.ciapoficial.enums.SexoEnum;
+import com.br.ciapoficial.enums.TipoAtendido;
+import com.br.ciapoficial.enums.TipoVinculoEnum;
+import com.br.ciapoficial.enums.UfEnum;
+import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Atendido;
+import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Telefone;
+import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Cidade;
-import com.br.ciapoficial.model.Estado;
-import com.br.ciapoficial.model.Titular;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,31 +40,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class AtendidoRegisterFragment2 extends Fragment {
+import lombok.SneakyThrows;
+
+public class UsuarioRegisterFragment2 extends Fragment {
 
     private PrincipalFragment principalFragment;
-    private AtendidoRegisterFragment3 atendidoRegisterFragment3;
+    private UsuarioRegisterFragment3 usuarioRegisterFragment3;
     private TextInputLayout textInputLayoutUf, textInputLayoutCidade;
     private AutoCompleteTextView autoCompleteTextViewUf, autoCompleteTextViewCidade;
     private TextInputEditText textInputEditTextCep, textInputEditTextBairro, textInputEditTextLogradouro,
             textInputEditTextNumero;
     Button btnProxima;
 
-    private ArrayList<Estado> listaEstadosRecuperados = new ArrayList<>();
+    private ArrayList<UfEnum> listaEstadosRecuperados = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
 
-    private String cep;
-    private String uf;
-    private String cidade;
-    private String bairro;
-    private String logradouro;
-    private String numero;
+    private Endereco endereco;
 
     private String tipoAtendido;
 
-    public AtendidoRegisterFragment2() {
+    public UsuarioRegisterFragment2() {
         // Required empty public constructor
     }
     
@@ -79,10 +83,10 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
     private void configurarComponentes(View view) {
         textInputLayoutUf = view.findViewById(R.id.textInputLayoutUf);
-        textInputLayoutCidade = view.findViewById(R.id.textInputLayoutCidade);
+        textInputLayoutCidade = view.findViewById(R.id.textInputLayoutCidadeNatal);
         textInputEditTextCep = view.findViewById(R.id.edtCep);
         autoCompleteTextViewUf = view.findViewById(R.id.edtUf);
-        autoCompleteTextViewCidade = view.findViewById(R.id.edtCidade);
+        autoCompleteTextViewCidade = view.findViewById(R.id.edtCidadeNatal);
         textInputEditTextBairro = view.findViewById(R.id.edtBairro);
         textInputEditTextLogradouro = view.findViewById(R.id.edtLogradouro);
         textInputEditTextNumero = view.findViewById(R.id.edtNumero);
@@ -106,7 +110,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
     }
 
     private void alternarHintCampoUf() {
-        if (tipoAtendido.equals("PM")) {
+        if (tipoAtendido.equals(TipoAtendido.PM)) {
             textInputLayoutUf.setHint(getResources().getString(R.string.uf));
             textInputLayoutCidade.setHint(getResources().getString(R.string.cidade));
         } else {
@@ -122,30 +126,25 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
     private void popularCampoUfComDB() {
 
+
         EstadoController estadoController = new EstadoController();
-        estadoController.listarUfs(getActivity(), new VolleyCallback() {
+        estadoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray= new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Estado estado = new Estado();
-                            estado.setId(Integer.valueOf(object.getString("id")));
-                            estado.setUf(object.getString("uf"));
+                        UfEnum ufEnum = (UfEnum) object.get("uf");
 
-                            listaEstadosRecuperados.add(estado);
-                            configurarCampoEstado(listaEstadosRecuperados);
+                        listaEstadosRecuperados.add(ufEnum);
+                        configurarCampoEstado(listaEstadosRecuperados);
 
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -156,9 +155,9 @@ public class AtendidoRegisterFragment2 extends Fragment {
         });
     }
 
-    private void configurarCampoEstado(ArrayList<Estado> listaEstadosRecuperados) {
+    private void configurarCampoEstado(ArrayList<UfEnum> listaEstadosRecuperados) {
 
-        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
+        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUf.setAdapter(adapterUf);
@@ -176,47 +175,40 @@ public class AtendidoRegisterFragment2 extends Fragment {
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidade);
     }
 
-    private void receberDadosAtendidoPreenchidos() {
-        cep = textInputEditTextCep.getText().toString();
-
-        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
-            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
-            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUf.getText().toString())) {
-                uf = String.valueOf(estadoSelecionado.getId());
-            }
-        }
+    private void receberDadosAtendidoPreenchidos()
+    {
+        endereco = new Endereco();
+        endereco.setCep(Mascaras.removerMascaras(textInputEditTextCep.getText().toString()));
 
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
             if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
-                cidade = String.valueOf(cidadeSelecionada.getId());
+                endereco.setCidade(cidadeSelecionada);
             }
         }
 
-        bairro = textInputEditTextBairro.getText().toString();
-        logradouro = textInputEditTextLogradouro.getText().toString();
-        numero = textInputEditTextNumero.getText().toString();
+        endereco.setBairro(textInputEditTextBairro.getText().toString());
+        endereco.setLogradouro(textInputEditTextLogradouro.getText().toString());
+        endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString()));
     }
 
     private boolean validarAtendido() {
         receberDadosAtendidoPreenchidos();
 
-        if (!TextUtils.isEmpty(cep) || !tipoAtendido.equals("PM")) {
+        if (!TextUtils.isEmpty(endereco.getCep()) || !tipoAtendido.equals("PM")) {
 
-            if (!TextUtils.isEmpty(uf) || !tipoAtendido.equals("PM")) {
+                if (!TextUtils.isEmpty(endereco.getCidade().toString()) || !tipoAtendido.equals("PM")) {
 
-                if (!TextUtils.isEmpty(cidade) || !tipoAtendido.equals("PM")) {
+                    if (!TextUtils.isEmpty(endereco.getBairro()) || !tipoAtendido.equals("PM")) {
 
-                    if (!TextUtils.isEmpty(bairro) || !tipoAtendido.equals("PM")) {
+                        if (!TextUtils.isEmpty(endereco.getLogradouro()) || !tipoAtendido.equals("PM")) {
 
-                        if (!TextUtils.isEmpty(logradouro) || !tipoAtendido.equals("PM")) {
-
-                            if (!TextUtils.isEmpty(numero) || !tipoAtendido.equals("PM")) {
+                            if (!TextUtils.isEmpty(String.valueOf(endereco.getNumero())) || !tipoAtendido.equals("PM")) {
 
                                 return true;
                             }
                             else {
-                                textInputEditTextNumero.setError("O campo NUÚMERO é obrigatório!");
+                                textInputEditTextNumero.setError("O campo NÚMERO é obrigatório!");
                                 textInputEditTextNumero.requestFocus();
                                 return false; }
 
@@ -238,12 +230,6 @@ public class AtendidoRegisterFragment2 extends Fragment {
                     autoCompleteTextViewCidade.requestFocus();
                     return false; }
 
-            }
-            else {
-                autoCompleteTextViewUf.setError("O campo UF é obrigatório!");
-                autoCompleteTextViewUf.requestFocus();
-                return false; }
-
         }
         else {
             textInputEditTextCep.setError("O campo CEP é obrigatório!");
@@ -257,12 +243,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
         Bundle bundle = new Bundle();
 
         bundle.putBundle("valoresRecebidosFragment1", valoresRecebidosFragment1);
-        bundle.putString("cep", Mascaras.removerMascaras(cep));
-        bundle.putString("uf", uf);
-        bundle.putString("cidade", cidade);
-        bundle.putString("bairro", bairro);
-        bundle.putString("logradouro", logradouro);
-        bundle.putString("numero", numero);
+        bundle.putSerializable("cep", (endereco));
 
         return bundle;
     }
@@ -270,6 +251,7 @@ public class AtendidoRegisterFragment2 extends Fragment {
     private void abrirProximaTela() {
 
         btnProxima.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
             @Override
             public void onClick(View v) {
 
@@ -280,18 +262,18 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
                         Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
-                        atendidoRegisterFragment3 = new AtendidoRegisterFragment3();
-                        atendidoRegisterFragment3.setArguments(valoresEncapsuladosParaEnvio);
+                        usuarioRegisterFragment3 = new UsuarioRegisterFragment3();
+                        usuarioRegisterFragment3.setArguments(valoresEncapsuladosParaEnvio);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frameConteudo, atendidoRegisterFragment3);
+                        fragmentTransaction.replace(R.id.frameConteudo, usuarioRegisterFragment3);
                         fragmentTransaction.addToBackStack(null).commit();
                     }
                     else
                     {
-                        Atendido novoAtendido;
-                        novoAtendido = encapsularValoresParaCadastro();
-                        cadastrarAtendido(novoAtendido);
+                        Usuario novoUsuario;
+                        novoUsuario = encapsularValoresParaCadastro();
+                        cadastrarAtendido(novoUsuario);
 
                         principalFragment = new PrincipalFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -310,48 +292,39 @@ public class AtendidoRegisterFragment2 extends Fragment {
 
     }
 
-    private Atendido encapsularValoresParaCadastro()
-    {
+    private Usuario encapsularValoresParaCadastro() throws ParseException {
         Bundle valoresRecebidosFragment1 = recuperarDadosAtendidoRegisterFragment1();
 
-       Atendido atendido = new Atendido();
-       Titular titular = new Titular();
-       titular.setId((valoresRecebidosFragment1.getInt("titular")));
+       Usuario usuario = new Usuario();
+       Usuario titular = new Usuario();
 
-        atendido.setTipoAtendido(valoresRecebidosFragment1.getString("tipoAtendido"));
-        atendido.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
-        atendido.setDataNascimento(valoresRecebidosFragment1.getString("dataNascimento"));
-        atendido.setCpf(valoresRecebidosFragment1.getString("cpf"));
-        atendido.setSexo(valoresRecebidosFragment1.getString("sexo"));
-        atendido.setTelefones((valoresRecebidosFragment1.getStringArrayList("telefones")));
-        atendido.setEmail(valoresRecebidosFragment1.getString("email"));
-        atendido.setEstadoCivil(valoresRecebidosFragment1.getString("estadoCivil"));
-        atendido.setUfNatal(valoresRecebidosFragment1.getString("ufNatal"));
-        atendido.setCidadeNatal(valoresRecebidosFragment1.getString("cidadeNatal"));
-        atendido.setEscolaridade(valoresRecebidosFragment1.getString("escolaridade"));
-        atendido.setNumeroFilhos((valoresRecebidosFragment1.getString("numeroFilhos")));
-        atendido.setTitular(titular);
-        atendido.setVinculo(valoresRecebidosFragment1.getString("vinculo"));
-        atendido.setCep(Mascaras.removerMascaras(cep));
-        atendido.setUf(uf);
-        atendido.setCidade(cidade);
-        atendido.setBairro(bairro);
-        atendido.setLogradouro(logradouro);
-        atendido.setNumero(numero);
+       Date dataNascimento = DateFormater.StringToDate(valoresRecebidosFragment1.getString("dataNascimento"));
 
-        return atendido;
+        usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
+        usuario.setDataNascimento(dataNascimento);
+        usuario.setCpf(valoresRecebidosFragment1.getString("cpf"));
+        usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
+        usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
+        usuario.setEmail(valoresRecebidosFragment1.getString("email"));
+        usuario.setEstadoCivil((EstadoCivilEnum) valoresRecebidosFragment1.getSerializable("estadoCivil"));
+        usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("cidadeNatal"));
+        usuario.setEscolaridade((EscolaridadeEnum) valoresRecebidosFragment1.getSerializable("escolaridade"));
+        usuario.setNumeroFilhos((valoresRecebidosFragment1.getInt("numeroFilhos")));
+        usuario.setTitular(titular);
+        usuario.setTipoVinculo((TipoVinculoEnum) valoresRecebidosFragment1.getSerializable("vinculo"));
+        usuario.setEndereco(endereco);
+
+        return usuario;
     }
 
-    private void cadastrarAtendido(Atendido novoAtendido)
+    private void cadastrarAtendido(Usuario novoUsuario)
     {
-        new AtendidoController().cadastrarAtendido(
+        new UsuarioController().cadastrar(
                 getActivity(),
-                novoAtendido,
+                novoUsuario,
                 new VolleyCallback() {
                     @Override
                     public void onSucess(String response) {
-
-                        Log.e("Erro-cadastrarAtendido", response);
 
                         try{
 

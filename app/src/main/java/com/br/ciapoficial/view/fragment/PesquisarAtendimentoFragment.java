@@ -12,21 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.adapters.AtendidosAdapter;
 import com.br.ciapoficial.adapters.AtendimentosAdapter;
-import com.br.ciapoficial.controller.AtendidoController;
 import com.br.ciapoficial.controller.AtendimentoController;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
-import com.br.ciapoficial.helper.PadraoDeVisualizacao;
 import com.br.ciapoficial.helper.RecyclerItemClickListener;
 import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Atendido;
 import com.br.ciapoficial.model.Atendimento;
-import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.view.DetalhesAtendidoActivity;
 import com.br.ciapoficial.view.DetalhesAtendimentoActivity;
 
 import org.json.JSONArray;

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginRight="30dp"
+    android:layout_marginLeft="30dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.4"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/cadastrar_usuario"
+        android:textSize="30sp"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="@font/poppinsbold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="jelly_bean" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSpinPostoGrad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/posto_grad_ou_categoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitulo">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtSpinPostoGrad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:inputType="text"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtQuadro"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutQuadro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/quadro_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSpinPostoGrad"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtQuadro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtRgMilitar"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutRgMilitar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/rg_militar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutQuadro">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtRgMilitar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:fontFamily="@font/poppinsmedium"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtQuadro"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutNomeGuerra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nome_de_guerra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutRgMilitar">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtNomeGuerra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtUnidade"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutUnidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/unidade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutNomeGuerra">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtUnidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtDataInclusao"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutDataInclusao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/data_de_inclusao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUnidade">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtDataInclusao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:fontFamily="@font/poppinsmedium"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtFuncaoAdministrativa"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutFuncaoAdministrativa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/funcao_administrativa"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDataInclusao"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtFuncaoAdministrativa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtSitucaoFuncional"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSituacaoFuncional"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/situacao_funcional"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFuncaoAdministrativa"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtSitucaoFuncional"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEspecialidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/especialidade"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSituacaoFuncional"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtEspecialidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtRegistroConselho"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutRegistroConselho"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/registro_conselho"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEspecialidade"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtRegistroConselho"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:fontFamily="@font/poppinsmedium"
+            android:nextFocusDown="@id/edtFuncaoAdministrativa"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutRegistroConselho" />
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/cadastrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

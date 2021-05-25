@@ -20,10 +20,41 @@
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="Dados do atendido"
+            android:text="Dados do usuario"
             android:textSize="20sp" />
 
         <LinearLayout
+            android:id="@+id/linearLayoutTipoAtendido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaTipoAtendido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Tipo do usuario"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtTipoAtendido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="Tipo do usuario"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -53,6 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutDataNascimento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -82,6 +114,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutCpf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -111,6 +144,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutSexo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -140,6 +174,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -169,6 +204,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutEstadoCivil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -198,6 +234,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutNaturalidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -227,6 +264,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutEscolaridade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -256,6 +294,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutNumeroFilhos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -285,6 +324,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -314,6 +354,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutNomeGuerra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -343,6 +384,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutRgMilitar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -372,6 +414,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutPostoGradCat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -401,6 +444,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutUnidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -430,6 +474,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutQuadro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -459,6 +504,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutDataInclusao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -488,6 +534,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutSituacaoFuncional"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -517,6 +564,77 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutIdTitular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaIdTitular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Titular"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtTitular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:text="Titular"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtHyperlinkTitular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="@string/titular_hyperlink"
+                android:textColor="@color/blue"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutVinculo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+         <TextView
+                android:id="@+id/txtLegendaVinculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Vínculo"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtVinculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="Vínculo"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutDataHoraCadastro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -534,6 +652,37 @@
 
             <TextView
                 android:id="@+id/txtDataHoraCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
+                android:text="dd/MM/yyyy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutDataHoraAtualizacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/txtLegendaDataHoraAtualizacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Atualizado em"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtDataHoraAtualizacao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="37dp"

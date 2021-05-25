@@ -1,10 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,28 +13,34 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AtendimentoController;
 import com.br.ciapoficial.controller.DocumentoProduzidoController;
+import com.br.ciapoficial.controller.EncaminhamentoController;
 import com.br.ciapoficial.controller.MedicacaoPsiquiatricaController;
 import com.br.ciapoficial.controller.ProcedimentoController;
 import com.br.ciapoficial.controller.SinalSintomaController;
-import com.br.ciapoficial.controller.EncaminhamentoController;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Atendimento;
 import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
+import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
 import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
 import com.br.ciapoficial.model.in_atendimento.Procedimento;
 import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
-import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class AtendimentoRegisterFragment3 extends Fragment {
@@ -542,29 +544,29 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                                     textInputEditTextEvolucao.requestFocus();
                                     return false; }
 
-                                }
-                                else {
-                                    Toast.makeText(getActivity(), "Selecione alguma opção em AFASTAMENTO.",
-                                            Toast.LENGTH_SHORT).show();
-                                    rbtnAfastamentoSim.requestFocusFromTouch();
-                                    return false; }
-
                             }
                             else {
-                            Toast.makeText(getActivity(),
-                                    "É necessário adicionar ao menos um item em MEDICAÇÃO PSIQUIÁTRICA.",
-                                    Toast.LENGTH_SHORT).show();
-                                autoCompleteTextViewMedicacaoPsiquiatrica.requestFocus();
+                                Toast.makeText(getActivity(), "Selecione alguma opção em AFASTAMENTO.",
+                                        Toast.LENGTH_SHORT).show();
+                                rbtnAfastamentoSim.requestFocusFromTouch();
                                 return false; }
-
 
                         }
                         else {
+                            Toast.makeText(getActivity(),
+                                    "É necessário adicionar ao menos um item em MEDICAÇÃO PSIQUIÁTRICA.",
+                                    Toast.LENGTH_SHORT).show();
+                            autoCompleteTextViewMedicacaoPsiquiatrica.requestFocus();
+                            return false; }
+
+
+                    }
+                    else {
                         Toast.makeText(getActivity(),
                                 "É necessário adicionar ao menos um item em SINAIS/SINTOMAS.",
                                 Toast.LENGTH_SHORT).show();
-                            autoCompleteTextViewSinalSintoma.requestFocus();
-                            return false; }
+                        autoCompleteTextViewSinalSintoma.requestFocus();
+                        return false; }
 
                 }
                 else {

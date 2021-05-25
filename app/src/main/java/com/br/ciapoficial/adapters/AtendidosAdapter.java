@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.model.Atendido;
+import com.br.ciapoficial.model.Usuario;
 
 import java.util.List;
 
 public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyViewHolder> {
 
-    private List<Atendido> atendidos;
+    private List<Usuario> usuarios;
     private Context context;
 
-    public AtendidosAdapter(List<Atendido> lista, Context c) {
-        this.atendidos = lista;
+    public AtendidosAdapter(List<Usuario> lista, Context c) {
+        this.usuarios = lista;
         this.context = c;
     }
 
@@ -34,15 +34,15 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Atendido atendido = atendidos.get(position);
+        Usuario usuario = usuarios.get(position);
 
-        holder.nome.setText(atendido.getNomeCompleto());
-        holder.cpf.setText(atendido.getCpf());
+        holder.nome.setText(usuario.getNomeCompleto());
+        holder.cpf.setText(usuario.getCpf());
     }
 
     @Override
     public int getItemCount() {
-        return atendidos.size();
+        return usuarios.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

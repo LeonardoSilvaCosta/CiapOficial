@@ -1,25 +1,25 @@
 package com.br.ciapoficial.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
+import com.br.ciapoficial.controller.FuncionarioController;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains(userEmail)) {
-            Intent i = new Intent(this, NovaAtividadeMae.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
         }
@@ -109,36 +109,26 @@ public class LoginActivity extends AppCompatActivity {
                     usuario.setEmail(textInputEditTextEmail.getText().toString());
                     usuario.setSenha(textInputEditTextSenha.getText().toString());
 
-                    UsuarioController usuarioController = new UsuarioController();
-                    usuarioController.logarUsuario(getApplicationContext(), usuario, new VolleyCallback() {
+                    FuncionarioController funcionarioController = new FuncionarioController();
+                    funcionarioController.logarUsuario(getApplicationContext(), usuario, new VolleyCallback() {
                         @Override
                         public void onSucess(String response) {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
 
-                                boolean isErro = jsonObject.getBoolean("erro");
-
-                                if (isErro) {
-
-                                    Toast.makeText(LoginActivity.this,
-                                            "Usuário não encontrado!",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-
                                     int id = jsonObject.getInt("id");
-                                    int sexo = jsonObject.getInt("sexo");
+                                    String sexo = jsonObject.getString("sexo");
 
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString(userId, String.valueOf(id));
                                     editor.putString(userEmail, usuario.getEmail());
-                                    editor.putString(userSex, String.valueOf(sexo));
+                                    editor.putString(userSex, sexo);
                                     editor.putString(userPass, usuario.getSenha());
                                     editor.commit();
 
-                                    Intent i = new Intent(LoginActivity.this, NovaAtividadeMae.class);
+                                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(i);
                                     finish();
-                                }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -168,8 +158,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 String email = edtEnviarEmail.getText().toString();
 
-                UsuarioController usuarioController = new UsuarioController();
-                usuarioController.recuperarSenha(getApplicationContext(), email, new VolleyCallback() {
+                FuncionarioController funcionarioController = new FuncionarioController();
+                funcionarioController.recuperarSenha(getApplicationContext(), email, new VolleyCallback() {
                     @Override
                     public void onSucess(String response) {
 

@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -16,12 +15,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.EstadoController;
+import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
-import com.br.ciapoficial.model.Estado;
+import com.br.ciapoficial.model.Endereco;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -31,34 +31,29 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class UserRegisterFragment2 extends Fragment {
+public class FuncionarioRegisterFragment2 extends Fragment {
 
-    private UserRegisterFragment3 userRegisterFragment3;
+    private FuncionarioRegisterFragment3 funcionarioRegisterFragment3;
     private TextInputLayout tilUf;
     private AutoCompleteTextView autoCompleteTextViewUf, autoCompleteTextViewCidade;
     private TextInputEditText textInputEditTextCep, textInputEditTextBairro,
             textInputEditTextLogradouro, textInputEditTextNumero;
 
-    private ArrayList<Estado> listaEstadosRecuperados = new ArrayList<>();
+    private ArrayList<UfEnum> listaEstadosRecuperados = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
 
     Button btnProxima;
 
-    private String cep;
-    private String uf;
-    private String cidade;
-    private String bairro;
-    private String logradouro;
-    private String numero;
+    private Endereco endereco;
 
-    public UserRegisterFragment2() {
+    public FuncionarioRegisterFragment2() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_register2, container, false);
+        View view = inflater.inflate(R.layout.fragment_funcionario_register2, container, false);
 
         configurarComponentes(view);
         configurarMascaraCep();
@@ -72,7 +67,7 @@ public class UserRegisterFragment2 extends Fragment {
         tilUf = view.findViewById(R.id.textInputLayoutUf);
         textInputEditTextCep = view.findViewById(R.id.edtCep);
         autoCompleteTextViewUf = view.findViewById(R.id.edtUf);
-        autoCompleteTextViewCidade = view.findViewById(R.id.edtCidade);
+        autoCompleteTextViewCidade = view.findViewById(R.id.edtCidadeNatal);
         textInputEditTextBairro = view.findViewById(R.id.edtBairro);
         textInputEditTextLogradouro = view.findViewById(R.id.edtLogradouro);
         textInputEditTextNumero = view.findViewById(R.id.edtNumero);
@@ -98,29 +93,23 @@ public class UserRegisterFragment2 extends Fragment {
     private void popularCampoUfComDB() {
 
         EstadoController estadoController = new EstadoController();
-        estadoController.listarUfs(getActivity(), new VolleyCallback() {
+        estadoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray= new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Estado estado = new Estado();
-                            estado.setId(Integer.valueOf(object.getString("id")));
-                            estado.setUf(object.getString("uf"));
+                        UfEnum ufEnum = (UfEnum) object.get("uf");
 
-                            listaEstadosRecuperados.add(estado);
-                            configurarCampoEstado(listaEstadosRecuperados);
+                        listaEstadosRecuperados.add(ufEnum);
+                        configurarCampoEstado(listaEstadosRecuperados);
 
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -131,9 +120,9 @@ public class UserRegisterFragment2 extends Fragment {
         });
     }
 
-    private void configurarCampoEstado(ArrayList<Estado> listaEstadosRecuperados) {
+    private void configurarCampoEstado(ArrayList<UfEnum> listaEstadosRecuperados) {
 
-        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
+        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUf.setAdapter(adapterUf);
@@ -153,71 +142,57 @@ public class UserRegisterFragment2 extends Fragment {
     }
 
     private void receberDadosUsuarioPreenchidos() {
-        cep = textInputEditTextCep.getText().toString();
-
-        for(int i = 0; i < listaEstadosRecuperados.size(); i++) {
-            Estado estadoSelecionado = listaEstadosRecuperados.get(i);
-            if(estadoSelecionado.getUf().equals(autoCompleteTextViewUf.getText().toString())) {
-                uf = String.valueOf(estadoSelecionado.getId());
-            }
-        }
+        endereco = new Endereco();
+        endereco.setCep(Mascaras.removerMascaras(textInputEditTextCep.getText().toString()));
 
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
             if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
-                cidade = String.valueOf(cidadeSelecionada.getId());
+                endereco.setCidade(cidadeSelecionada);
             }
         }
 
-        bairro = textInputEditTextBairro.getText().toString();
-        logradouro = textInputEditTextLogradouro.getText().toString();
-        numero = textInputEditTextNumero.getText().toString();
+        endereco.setBairro(textInputEditTextBairro.getText().toString());
+        endereco.setLogradouro(textInputEditTextLogradouro.getText().toString());
+        endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString()));
     }
 
     private boolean validarCadastroUsuario() {
         receberDadosUsuarioPreenchidos();
 
-        if (!TextUtils.isEmpty(cep)) {
+        if (!TextUtils.isEmpty(endereco.getCep())) {
 
-            if (!TextUtils.isEmpty(uf)) {
+            if (!TextUtils.isEmpty(endereco.getCidade().getDescricao())) {
 
-                if (!TextUtils.isEmpty(cidade)) {
+                if (!TextUtils.isEmpty(endereco.getBairro())) {
 
-                    if (!TextUtils.isEmpty(bairro)) {
+                    if (!TextUtils.isEmpty(endereco.getLogradouro())) {
 
-                        if (!TextUtils.isEmpty(logradouro)) {
+                        if (!TextUtils.isEmpty(String.valueOf(endereco.getNumero()))) {
 
-                            if (!TextUtils.isEmpty(numero)) {
-
-                                return true;
-                            }
-                            else {
-                                textInputEditTextNumero.setError("O campo NUÚMERO é obrigatório!");
-                                textInputEditTextNumero.requestFocus();
-                                return false; }
-
+                            return true;
                         }
                         else {
-                            textInputEditTextLogradouro.setError("O campo LOGRADOURO é obrigatório!");
-                            textInputEditTextLogradouro.requestFocus();
+                            textInputEditTextNumero.setError("O campo NUÚMERO é obrigatório!");
+                            textInputEditTextNumero.requestFocus();
                             return false; }
 
                     }
                     else {
-                        textInputEditTextBairro.setError("O campo BAIRRO é obrigatório!");
-                        textInputEditTextBairro.requestFocus();
+                        textInputEditTextLogradouro.setError("O campo LOGRADOURO é obrigatório!");
+                        textInputEditTextLogradouro.requestFocus();
                         return false; }
 
                 }
                 else {
-                    autoCompleteTextViewCidade.setError("O campo CIDADE é obrigatório!.");
-                    autoCompleteTextViewCidade.requestFocus();
+                    textInputEditTextBairro.setError("O campo BAIRRO é obrigatório!");
+                    textInputEditTextBairro.requestFocus();
                     return false; }
 
             }
             else {
-                autoCompleteTextViewUf.setError("O campo UF é obrigatório!");
-                autoCompleteTextViewUf.requestFocus();
+                autoCompleteTextViewCidade.setError("O campo CIDADE é obrigatório!.");
+                autoCompleteTextViewCidade.requestFocus();
                 return false; }
 
         }
@@ -233,11 +208,7 @@ public class UserRegisterFragment2 extends Fragment {
         Bundle bundle = new Bundle();
 
         bundle.putBundle("valoresRecebidosFragment1", valoresRecebidosFragment1);
-        bundle.putString("cep", cep);
-        bundle.putString("cidade", cidade);
-        bundle.putString("bairro", bairro);
-        bundle.putString("logradouro", logradouro);
-        bundle.putString("numero", numero);
+        bundle.putSerializable("endereco", endereco);
 
         return bundle;
     }
@@ -252,11 +223,11 @@ public class UserRegisterFragment2 extends Fragment {
                 {
                     Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
-                    userRegisterFragment3 = new UserRegisterFragment3();
-                    userRegisterFragment3.setArguments(valoresEncapsuladosParaEnvio);
+                    funcionarioRegisterFragment3 = new FuncionarioRegisterFragment3();
+                    funcionarioRegisterFragment3.setArguments(valoresEncapsuladosParaEnvio);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frameConteudo, userRegisterFragment3);
+                    fragmentTransaction.replace(R.id.frameConteudo, funcionarioRegisterFragment3);
                     fragmentTransaction.addToBackStack(null).commit();
                 }
             }

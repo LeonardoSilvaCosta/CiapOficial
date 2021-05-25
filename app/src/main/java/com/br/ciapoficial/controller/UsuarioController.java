@@ -2,30 +2,36 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
-import com.br.ciapoficial.model.UserModel;
+import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Usuario;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UsuarioController {
+public class UsuarioController extends PessoaController {
     private static String TAG = UsuarioController.class.getName();
 
-    public void cadastrarUsuario(Context context, Usuario usuario, final VolleyCallback callback) {
+    String url = Constants.BASE_API_URL + "/usuarios";
 
-        String url = Constants.URLUsuarios + "/cadastrar.php";
+    public void cadastrar(Context context, Usuario usuario, final VolleyCallback callback) {
 
-        RequestQueue queue = Volley.newRequestQueue(context);
+        RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -36,9 +42,31 @@ public class UsuarioController {
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+            public void onErrorResponse(VolleyError error)
+            {
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
         }){
             @Override
@@ -46,27 +74,15 @@ public class UsuarioController {
 
                 Map<String, String> params = new HashMap<>();
 
-                params.put("nomeCompleto", usuario.getNomeCompleto());
-                params.put("dataNascimento", (usuario.getDataNascimento()));
-                params.put("cpf", usuario.getCpf());
-                params.put("sexo", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getSexo())));
-                params.put("telefones",Java2Json.converterJava2JsonArrayString(usuario.getTelefones()));
-                params.put("email", usuario.getEmail());
-                params.put("cep", usuario.getCep());
-                params.put("cidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getCidade())));
-                params.put("bairro", usuario.getBairro());
-                params.put("logradouro", usuario.getLogradouro());
-                params.put("numero", usuario.getNumero());
-                params.put("rgMilitar", usuario.getRgMilitar());
-                params.put("postoGradCat", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getPostoGradCat())));
                 params.put("nomeGuerra", usuario.getNomeGuerra());
-                params.put("unidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getUnidade())));
-                params.put("quadro", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getQuadro())));
-                params.put("especialidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getEspecialidade())));
-                params.put("registroConselho", usuario.getRegistroConselho());
-                params.put("funcaoAdministrativa", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getFuncaoAdministrativa())));
-                params.put("situacaoFuncional", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getSituacaoFuncional())));
-                params.put("senha", usuario.getCpf());
+                params.put("unidade", Java2Json.converterJava2JasonUnidade(usuario.getUnidade()));
+                params.put("situacaoFuncional", Java2Json.converterJava2JasonSituacaoFuncional(usuario.getSituacaoFuncional()));
+                params.put("rgMilitar", usuario.getRgMilitar());
+                params.put("postoGradCat", Java2Json.converterJava2JasonPostoGradCat((usuario.getPostoGradCat())));
+                params.put("quadro", Java2Json.converterJava2JasonQuadro(usuario.getQuadro()));
+                params.put("dataInclusao", Java2Json.converterJava2JasonDate(usuario.getDataInclusao()));
+                params.put("idTitular", Java2Json.converterJava2JasonUsuario(usuario.getTitular()));
+                params.put("vinculo", Java2Json.converterJava2JasonTipoVinculo((usuario.getTipoVinculo())));
 
                 return params;
             }
@@ -75,9 +91,7 @@ public class UsuarioController {
         queue.add(stringRequest);
     }
 
-    public void listarUsuarios(Context context, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/listar.php";
+    public void listar(Context context, final VolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -90,303 +104,34 @@ public class UsuarioController {
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+            public void onErrorResponse(VolleyError error)
+            {
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
         });
 
         queue.add(stringRequest);
     }
-
-    public void atualizarUsuario(Context context, final Usuario usuario, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/atualizar.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id", Java2Json.converterJava2JasonInt(usuario.getId()));
-                params.put("nomeCompleto", usuario.getNomeCompleto());
-                params.put("dataNascimento", usuario.getDataNascimento());
-                params.put("cpf", usuario.getCpf());
-                params.put("sexo", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getSexo())));
-                params.put("telefones",Java2Json.converterJava2JsonArrayString(usuario.getTelefones()));
-                params.put("email", usuario.getEmail());
-                params.put("cep", usuario.getCep());
-                params.put("uf", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getUf())));
-                params.put("cidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getCidade())));
-                params.put("bairro", usuario.getBairro());
-                params.put("logradouro", usuario.getLogradouro());
-                params.put("numero", usuario.getNumero());
-                params.put("rgMilitar", usuario.getRgMilitar());
-                params.put("postoGradCat", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getPostoGradCat())));
-                params.put("nomeGuerra", usuario.getNomeGuerra());
-                params.put("unidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getUnidade())));
-                params.put("quadro", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getQuadro())));
-                params.put("especialidade", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getEspecialidade())));
-                params.put("registroConselho", usuario.getRegistroConselho());
-                params.put("funcaoAdministrativa", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getFuncaoAdministrativa())));
-                params.put("situacaoFuncional", Java2Json.converterJava2JasonInt(Integer.parseInt(usuario.getSituacaoFuncional())));
-                params.put("senha", usuario.getSenha());
-                return params;
-            }
-        };
-        queue.add(stringRequest);
-
-    }
-
-    public void deletarUsuario(Context context, final String id, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/deletar.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id", id);
-                return params;
-
-        }
-        };
-        queue.add(stringRequest);
-    }
-
-    public void logarUsuario(Context context, UserModel user, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/logar.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", user.getEmail());
-                params.put("senha", user.getSenha());
-                return params;
-            }
-        };
-        queue.add(stringRequest);
-    }
-
-    public void recuperarSenha(Context context, String email, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/recuperar_senha.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work! ", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                return params;
-            }
-        };
-        queue.add(stringRequest);
-    }
-
-    public void carregarImagemUsuario(Context context, String imagem, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/carregar_imagem.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> params = new HashMap<>();
-
-                params.put("imagem", imagem);
-
-                return params;
-            }
-        };
-
-        queue.add(stringRequest);
-    }
-
-    public void recuperarImagem(Context context, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/recuperar_imagem.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        });
-
-        queue.add(stringRequest);
-    }
-
-    public void recuperarUsuarioLogado(Context context, final String email,  final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/recuperar_usuario_logado.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-            Map<String, String> params = new HashMap<>();
-            params.put("email", email);
-            return params;
-        }
-        };
-
-        queue.add(stringRequest);
-    }
-
-    public void recuperarTelefoneUsuarioLogado(Context context, final String id,  final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/recuperar_telefones_usuario_logado.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id", id);
-                return params;
-            }
-        };
-
-        queue.add(stringRequest);
-    }
-
-    public void listarOficiais(Context context, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/listar_oficiais.php";
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        callback.onSucess(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        });
-
-        queue.add(stringRequest);
-    }
-
 }
