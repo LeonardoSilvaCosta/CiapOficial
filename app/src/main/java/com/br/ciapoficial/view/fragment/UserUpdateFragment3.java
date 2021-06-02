@@ -1,53 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EspecialidadeController;
-import com.br.ciapoficial.controller.FuncaoAdministrativaController;
-import com.br.ciapoficial.controller.PostoGradCatController;
-import com.br.ciapoficial.controller.QuadroController;
-import com.br.ciapoficial.controller.SituacaoFuncionalController;
-import com.br.ciapoficial.controller.TelefoneController;
-import com.br.ciapoficial.controller.UnidadeController;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
-import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Especialidade;
-import com.br.ciapoficial.model.FuncaoAdministrativa;
-import com.br.ciapoficial.model.PostoGradCat;
-import com.br.ciapoficial.model.Quadro;
-import com.br.ciapoficial.model.SituacaoFuncional;
-import com.br.ciapoficial.model.Telefone;
-import com.br.ciapoficial.model.Unidade;
-import com.br.ciapoficial.model.Funcionario;
-import com.google.android.material.textfield.TextInputEditText;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import static com.br.ciapoficial.view.LoginActivity.fileName;
 
 public class UserUpdateFragment3 extends Fragment {
 

@@ -2,7 +2,7 @@ package com.br.ciapoficial.model;
 
 public class Quadro {
     private int id;
-    private String descricao;
+    private String nome;
 
     public int getId() {
         return id;
@@ -12,16 +12,16 @@ public class Quadro {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getNome() {
+        return nome;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override
     public String toString() {
-        return descricao;
+        return nome;
     }
 }

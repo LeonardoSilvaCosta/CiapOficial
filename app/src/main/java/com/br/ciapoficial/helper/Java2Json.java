@@ -1,24 +1,25 @@
 package com.br.ciapoficial.helper;
 
 import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EspecialidadeEnum;
 import com.br.ciapoficial.enums.EstadoCivilEnum;
-import com.br.ciapoficial.enums.FuncaoAdministrativaEnum;
-import com.br.ciapoficial.enums.PostoGradCatEnum;
-import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SexoEnum;
-import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
 import com.br.ciapoficial.enums.TipoVinculoEnum;
-import com.br.ciapoficial.enums.UnidadeEnum;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Especialidade;
+import com.br.ciapoficial.model.FuncaoAdministrativa;
 import com.br.ciapoficial.model.Funcionario;
+import com.br.ciapoficial.model.Pessoa;
+import com.br.ciapoficial.model.PostoGradCat;
+import com.br.ciapoficial.model.Quadro;
+import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
+import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
 import com.google.gson.Gson;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Java2Json {
 
@@ -29,11 +30,11 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JsonArrayTelefone(ArrayList<Telefone> telefone)
+    public static String converterJava2JsonArrayTelefone(ArrayList<Telefone> telefones)
     {
         Gson gson = new Gson();
 
-        String jsonObj = gson.toJson(telefone);
+        String jsonObj = gson.toJson(telefones);
         return jsonObj;
     }
 
@@ -49,7 +50,7 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JasonDate(Date date)
+    public static String converterJava2JasonLocalDate(LocalDate date)
     {
         String data = new Gson().toJson(date);
         return data;
@@ -67,7 +68,7 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JasonEspecialidade(EspecialidadeEnum especialidade)
+    public static String converterJava2JasonEspecialidade(Especialidade especialidade)
     {
         String data = new Gson().toJson(especialidade);
         return data;
@@ -85,7 +86,7 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JasonFuncaoAdministrativa(FuncaoAdministrativaEnum funcaoAdministrativa)
+    public static String converterJava2JasonFuncaoAdministrativa(FuncaoAdministrativa funcaoAdministrativa)
     {
         String data = new Gson().toJson(funcaoAdministrativa);
         return data;
@@ -97,13 +98,19 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JasonPostoGradCat(PostoGradCatEnum postoGradCat)
+    public static String converterJava2JsonPessoa(Pessoa pessoa)
+    {
+        String data = new Gson().toJson(pessoa);
+        return data;
+    }
+
+    public static String converterJava2JasonPostoGradCat(PostoGradCat postoGradCat)
     {
         String data = new Gson().toJson(postoGradCat);
         return data;
     }
 
-    public static String converterJava2JasonQuadro(QuadroEnum quadro)
+    public static String converterJava2JasonQuadro(Quadro quadro)
     {
         String data = new Gson().toJson(quadro);
         return data;
@@ -121,13 +128,13 @@ public class Java2Json {
         return data;
     }
 
-    public static String converterJava2JasonSituacaoFuncional(SituacaoFuncionalEnum situacaoFuncional)
+    public static String converterJava2JasonSituacaoFuncional(SituacaoFuncional situacaoFuncional)
     {
         String data = new Gson().toJson(situacaoFuncional);
         return data;
     }
 
-    public static String converterJava2JasonUnidade(UnidadeEnum unidade)
+    public static String converterJava2JasonUnidade(Unidade unidade)
     {
         String data = new Gson().toJson(unidade);
         return data;

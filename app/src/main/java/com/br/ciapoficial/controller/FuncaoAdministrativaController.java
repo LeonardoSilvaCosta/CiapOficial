@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -19,11 +20,14 @@ import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FuncaoAdministrativaController {
 
     public void listar(Context context, final VolleyCallback callback) {
 
-        String url = Constants.BASE_API_URL + "/funcoes_administrativas";
+        String url = Constants.BASE_API_URL + "/funcoes+administrativas";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
@@ -62,7 +66,15 @@ public class FuncaoAdministrativaController {
 
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }

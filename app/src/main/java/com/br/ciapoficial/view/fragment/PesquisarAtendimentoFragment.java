@@ -118,7 +118,7 @@ public class PesquisarAtendimentoFragment extends Fragment {
     public void recuperarAtendimentos()
     {
         AtendimentoController atendimentoController = new AtendimentoController();
-        atendimentoController.listarAtendimentos(getActivity(), new VolleyCallback() {
+        atendimentoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 

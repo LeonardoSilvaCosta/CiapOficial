@@ -1,36 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EstadoController;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Cidade;
-import com.br.ciapoficial.model.Estado;
-import com.br.ciapoficial.model.Funcionario;
-import com.google.android.material.textfield.TextInputEditText;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import static com.br.ciapoficial.view.LoginActivity.fileName;
 
 public class UserUpdateFragment2 extends Fragment {
 //

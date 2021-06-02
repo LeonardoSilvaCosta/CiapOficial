@@ -80,7 +80,7 @@ public class UsuarioController extends PessoaController {
                 params.put("rgMilitar", usuario.getRgMilitar());
                 params.put("postoGradCat", Java2Json.converterJava2JasonPostoGradCat((usuario.getPostoGradCat())));
                 params.put("quadro", Java2Json.converterJava2JasonQuadro(usuario.getQuadro()));
-                params.put("dataInclusao", Java2Json.converterJava2JasonDate(usuario.getDataInclusao()));
+                params.put("dataInclusao", Java2Json.converterJava2JasonLocalDate(usuario.getDataInclusao()));
                 params.put("idTitular", Java2Json.converterJava2JasonUsuario(usuario.getTitular()));
                 params.put("vinculo", Java2Json.converterJava2JasonTipoVinculo((usuario.getTipoVinculo())));
 
@@ -130,7 +130,15 @@ public class UsuarioController extends PessoaController {
 
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }

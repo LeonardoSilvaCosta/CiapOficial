@@ -2,35 +2,26 @@ package com.br.ciapoficial.model;
 
 import java.io.Serializable;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Telefone implements Serializable {
-    int id;
-    String telefone;
+
+    private PessoaTelefoneId pessoaTelefoneId;
 
     public Telefone() {
     }
 
-    public Telefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public Telefone(PessoaTelefoneId pessoaTelefoneId) {
+        this.pessoaTelefoneId = pessoaTelefoneId;
     }
 
     @Override
     public String toString() {
-        return this.telefone;
+        return this.pessoaTelefoneId.telefone;
     }
 }

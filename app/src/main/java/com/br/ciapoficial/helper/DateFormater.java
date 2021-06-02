@@ -1,7 +1,13 @@
 package com.br.ciapoficial.helper;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateFormater {
@@ -25,9 +31,18 @@ public class DateFormater {
         return mesAno;
     }
 
-    public static Date StringToDate(String data) throws ParseException {
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-        return date;
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String localDateToString(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedString = date.format(formatter);
+        return formattedString;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static LocalDate StringToLocalDate(String data) throws ParseException {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(data, df);
+        return localDate;
 
     }
 

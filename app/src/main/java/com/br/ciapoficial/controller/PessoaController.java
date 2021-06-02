@@ -4,9 +4,14 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.br.ciapoficial.Constants;
@@ -38,8 +43,29 @@ public abstract class PessoaController {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
         }){
             @Override
@@ -47,19 +73,20 @@ public abstract class PessoaController {
 
                 Map<String, String> params = new HashMap<>();
 
-                params.put("nomeCompleto", pessoa.getNomeCompleto());
-                params.put("dataNascimento", (Java2Json.converterJava2JasonDate(pessoa.getDataNascimento())));
-                params.put("cpf", pessoa.getCpf());
-                params.put("sexo", Java2Json.converterJava2JasonSexo(pessoa.getSexo()));
-                params.put("naturalidade", Java2Json.converterJava2JasonCidade(pessoa.getNaturalidade()));
-                params.put("estadoCivil", Java2Json.converterJava2JasonEstadoCivil(pessoa.getEstadoCivil()));
-                params.put("numeroFilhos", Java2Json.converterJava2JasonInt(pessoa.getNumeroFilhos()));
-                params.put("escolaridade", Java2Json.converterJava2JasonEscolaridade(pessoa.getEscolaridade()));
-                params.put("telefones",Java2Json.converterJava2JsonArrayTelefone(pessoa.getTelefones()));
-                params.put("email", pessoa.getEmail());
-                params.put("endereco", Java2Json.converterJava2JasonEndereco(pessoa.getEndereco()));
-                params.put("responsavelCadastro", Java2Json.converterJava2JasonFuncionario(pessoa.getResponsavelCadastro()));
+//                params.put("nomeCompleto", pessoa.getNomeCompleto());
+//                params.put("dataNascimento", (Java2Json.converterJava2JasonLocalDate(pessoa.getDataNascimento())));
+//                params.put("cpf", pessoa.getCpf());
+//                params.put("sexo", Java2Json.converterJava2JasonSexo(pessoa.getSexo()));
+//                params.put("naturalidade", Java2Json.converterJava2JasonCidade(pessoa.getNaturalidade()));
+//                params.put("estadoCivil", Java2Json.converterJava2JasonEstadoCivil(pessoa.getEstadoCivil()));
+//                params.put("numeroFilhos", Java2Json.converterJava2JasonInt(pessoa.getNumeroFilhos()));
+//                params.put("escolaridade", Java2Json.converterJava2JasonEscolaridade(pessoa.getEscolaridade()));
+//                params.put("telefones",Java2Json.converterJava2JsonArrayTelefone(pessoa.getTelefones()));
+//                params.put("email", pessoa.getEmail());
+//                params.put("endereco", Java2Json.converterJava2JasonEndereco(pessoa.getEndereco()));
+//                params.put("responsavelCadastro", Java2Json.converterJava2JasonFuncionario(pessoa.getResponsavelCadastro()));
 
+                params.put("pessoa", Java2Json.converterJava2JsonPessoa(pessoa));
                 return params;
             }
         };

@@ -1,6 +1,7 @@
 package com.br.ciapoficial.helper;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -8,6 +9,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.br.ciapoficial.controller.CidadeController;
+import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 
@@ -31,7 +33,7 @@ public class MunicipioComBaseNaUF {
 
                 String estado = (String) ((TextView) view).getText();
 
-                if(estado.equals("AC"))
+                if(estado.equals(UfEnum.AC.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -44,23 +46,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -75,7 +70,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("AL"))
+                if(estado.equals(UfEnum.AL.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -88,23 +83,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -119,7 +107,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("AM"))
+                if(estado.equals(UfEnum.AM.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -132,23 +120,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -163,7 +144,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("AP"))
+                if(estado.equals(UfEnum.AP.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -176,23 +157,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -206,7 +180,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
                 }
-                if(estado.equals("BA"))
+                if(estado.equals(UfEnum.BA.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -219,23 +193,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -250,7 +217,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("CE"))
+                if(estado.equals(UfEnum.CE.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -260,25 +227,17 @@ public class MunicipioComBaseNaUF {
                     cidadeController.listarCidadeCeara(context, new VolleyCallback() {
                         @Override
                         public void onSucess(String response) {
-
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -292,7 +251,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("DF"))
+                }if(estado.equals(UfEnum.DF.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -305,23 +264,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -336,7 +288,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("ES"))
+                if(estado.equals(UfEnum.ES.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -349,23 +301,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -379,7 +324,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("GO"))
+                }if(estado.equals(UfEnum.GO.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -392,23 +337,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -423,7 +361,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("MA"))
+                if(estado.equals(UfEnum.MA.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -436,23 +374,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -467,7 +398,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("MG"))
+                if(estado.equals(UfEnum.MG.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -478,25 +409,17 @@ public class MunicipioComBaseNaUF {
                     cidadeController.listarCidadeMinasGerais(context, new VolleyCallback() {
                         @Override
                         public void onSucess(String response) {
-
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -510,7 +433,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("MS"))
+                }if(estado.equals(UfEnum.MS.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -523,23 +446,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -554,7 +470,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("MT"))
+                if(estado.equals(UfEnum.MT.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -567,23 +483,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -598,7 +507,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("PA"))
+                if(estado.equals(UfEnum.PA.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -609,25 +518,17 @@ public class MunicipioComBaseNaUF {
                     cidadeController.listarCidadePara(context, new VolleyCallback() {
                         @Override
                         public void onSucess(String response) {
-
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -642,7 +543,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("PB"))
+                if(estado.equals(UfEnum.PB.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -655,23 +556,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -686,7 +580,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("PE"))
+                if(estado.equals(UfEnum.PE.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -699,23 +593,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -730,7 +617,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("PI"))
+                if(estado.equals(UfEnum.PI.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -741,25 +628,17 @@ public class MunicipioComBaseNaUF {
                     cidadeController.listarCidadePiaui(context, new VolleyCallback() {
                         @Override
                         public void onSucess(String response) {
-
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -774,7 +653,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("PR"))
+                if(estado.equals(UfEnum.PR.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -787,23 +666,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -818,7 +690,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("RJ"))
+                if(estado.equals(UfEnum.RJ.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -831,23 +703,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -861,7 +726,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("RN"))
+                }if(estado.equals(UfEnum.RN.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -874,23 +739,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -905,7 +763,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("RO"))
+                if(estado.equals(UfEnum.RO.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -918,23 +776,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -949,7 +800,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("RR"))
+                if(estado.equals(UfEnum.RR.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -962,23 +813,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -993,7 +837,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("RS"))
+                if(estado.equals(UfEnum.RS.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1006,23 +850,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -1037,7 +874,7 @@ public class MunicipioComBaseNaUF {
                             (listaCidadesRecuperadas));
                 }
 
-                if(estado.equals("SC"))
+                if(estado.equals(UfEnum.SC.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1050,23 +887,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -1080,7 +910,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("SE"))
+                }if(estado.equals(UfEnum.SE.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1093,23 +923,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -1123,7 +946,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("SP"))
+                }if(estado.equals(UfEnum.SP.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1136,23 +959,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {
@@ -1166,7 +982,7 @@ public class MunicipioComBaseNaUF {
                             android.R.layout.simple_dropdown_item_1line,
                             (listaCidadesRecuperadas));
 
-                }if(estado.equals("TO"))
+                }if(estado.equals(UfEnum.TO.getNome()))
                 {
                     if(arrayAdapterChild != null)
                     {
@@ -1179,23 +995,16 @@ public class MunicipioComBaseNaUF {
                         public void onSucess(String response) {
 
                             try {
+                                JSONArray jsonArray = new JSONArray(response);
 
-                                JSONObject jsonObject = new JSONObject(response);
-                                String success = jsonObject.getString("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                for(int i = 0; i < jsonArray.length(); i++) {
 
-                                if(success.equals("1")){
-                                    for(int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
 
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        Cidade cidade = new Cidade();
-                                        cidade.setId(Integer.valueOf(object.getString("id")));
-                                        cidade.setDescricao(object.getString("descricao"));
-
-                                        listaCidadesRecuperadas.add(cidade);
-
-                                    }
+                                    Cidade cidade = new Cidade();
+                                    cidade.setId(Integer.parseInt(object.getString("id")));
+                                    cidade.setNome(object.getString("nome"));
+                                    listaCidadesRecuperadas.add(cidade);
                                 }
 
                             }catch (JSONException e) {

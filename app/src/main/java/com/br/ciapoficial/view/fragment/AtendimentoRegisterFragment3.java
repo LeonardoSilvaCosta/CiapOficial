@@ -134,7 +134,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoProcedimentoComDB() {
 
         ProcedimentoController procedimentoController = new ProcedimentoController();
-        procedimentoController.listarProcedimentos(getActivity(), new VolleyCallback() {
+        procedimentoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -184,7 +184,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoDocumentoProduzidoComDB() {
 
         DocumentoProduzidoController documentoProduzidoController = new DocumentoProduzidoController();
-        documentoProduzidoController.listarDocumentosProduzidos(getActivity(), new VolleyCallback() {
+        documentoProduzidoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -257,7 +257,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoEncaminhamentoComDB() {
 
         EncaminhamentoController encaminhamentoController = new EncaminhamentoController();
-        encaminhamentoController.listarEncaminhamentos(getActivity(), new VolleyCallback() {
+        encaminhamentoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -330,7 +330,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoSinalSintomaComDB() {
 
         SinalSintomaController sinalSintomaController = new SinalSintomaController();
-        sinalSintomaController.listarSinaisSintomas(getActivity(), new VolleyCallback() {
+        sinalSintomaController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -400,7 +400,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoMedicacaoPsiquiatricaComDB() {
 
         MedicacaoPsiquiatricaController medicacaoPsiquiatricaController = new MedicacaoPsiquiatricaController();
-        medicacaoPsiquiatricaController.listarMedicacoesPsiquiatricas(getActivity(), new VolleyCallback() {
+        medicacaoPsiquiatricaController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 

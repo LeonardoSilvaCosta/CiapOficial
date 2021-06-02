@@ -6,6 +6,8 @@ import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
 import com.br.ciapoficial.enums.TipoVinculoEnum;
 import com.br.ciapoficial.enums.UnidadeEnum;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Getter;
@@ -16,12 +18,12 @@ import lombok.Setter;
 public class Usuario extends Pessoa {
 
     private String nomeGuerra;
-    private UnidadeEnum unidade;
-    private SituacaoFuncionalEnum situacaoFuncional;
+    private Unidade unidade;
+    private SituacaoFuncional situacaoFuncional;
     private String rgMilitar;
-    private PostoGradCatEnum postoGradCat;
-    private QuadroEnum quadro;
-    private Date dataInclusao;
+    private PostoGradCat postoGradCat;
+    private Quadro quadro;
+    private LocalDate dataInclusao;
     private Usuario titular;
     private TipoVinculoEnum tipoVinculo;
 

@@ -1,7 +1,9 @@
 package com.br.ciapoficial.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,7 +19,7 @@ import android.widget.Toast;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.UsuarioController;
-import com.br.ciapoficial.controller.EstadoController;
+import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.enums.EscolaridadeEnum;
 import com.br.ciapoficial.enums.EstadoCivilEnum;
 import com.br.ciapoficial.enums.SexoEnum;
@@ -41,8 +43,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import lombok.SneakyThrows;
 
@@ -121,14 +123,14 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     private void configurarMascaraCep() {
         Mascaras mascaras = new Mascaras();
-        mascaras.criarMascaraCep(textInputEditTextCep);
+        mascaras.criarMascaraParaCep(textInputEditTextCep);
     }
 
     private void popularCampoUfComDB() {
 
 
-        EstadoController estadoController = new EstadoController();
-        estadoController.listar(getActivity(), new VolleyCallback() {
+        UfController ufController = new UfController();
+        ufController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -182,7 +184,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
+            if(cidadeSelecionada.getNome().equals(autoCompleteTextViewCidade.getText().toString())) {
                 endereco.setCidade(cidadeSelecionada);
             }
         }
@@ -251,6 +253,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
     private void abrirProximaTela() {
 
         btnProxima.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @SneakyThrows
             @Override
             public void onClick(View v) {
@@ -292,13 +295,14 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private Usuario encapsularValoresParaCadastro() throws ParseException {
         Bundle valoresRecebidosFragment1 = recuperarDadosAtendidoRegisterFragment1();
 
        Usuario usuario = new Usuario();
        Usuario titular = new Usuario();
 
-       Date dataNascimento = DateFormater.StringToDate(valoresRecebidosFragment1.getString("dataNascimento"));
+       LocalDate dataNascimento = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataNascimento"));
 
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);

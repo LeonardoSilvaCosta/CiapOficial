@@ -1,7 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,11 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.EscolaridadeController;
 import com.br.ciapoficial.controller.EstadoCivilController;
-import com.br.ciapoficial.controller.EstadoController;
-import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EstadoCivilEnum;
+import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.enums.SexoEnum;
-import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
@@ -35,7 +32,10 @@ import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.helper.ValidarCPF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
+import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
+import com.br.ciapoficial.model.Uf;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -43,41 +43,38 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import lombok.SneakyThrows;
 
-import static com.br.ciapoficial.view.LoginActivity.fileName;
-
 public class FuncionarioRegisterFragment1 extends Fragment {
+
+    private FuncionarioRegisterFragment2 funcionarioRegisterFragment2;
 
     private LinearLayout linearLayoutTelefone;
     private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
-            textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone, textInputEditTextEmail;
+            textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone,
+            textInputEditTextEmail;
     private AutoCompleteTextView autoCompleteTextViewUfNatal, autoCompleteTextViewCidadeNatal,
             autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade;
-
     private RadioGroup radioGroupSexo;
     private RadioButton rbtnMasculino, rbtnFeminino;
     private Button btnAdicionarTelefone, btnProxima;
 
-    private FuncionarioRegisterFragment2 funcionarioRegisterFragment2;
-    private SharedPreferences sharedPreferences;
-
-    private ArrayList<Telefone> arrayListTelefonesAdicionados = new ArrayList<>();
-    private ArrayList<Telefone> listaDeTelefonesAdicionados = new ArrayList<>();
-    private ArrayList<UfEnum> listaUfsRecuperadas = new ArrayList<>();
+    private ArrayList<Telefone> arrayListTelefoneAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> listaDeTelefoneAdicionados = new ArrayList<>();
+    private ArrayList<Uf> listaUfsRecuperadas = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
-    private ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados = new ArrayList<>();
-    private ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas = new ArrayList<>();
+    private ArrayList<EstadoCivil> listaEstadosCivisRecuperados = new ArrayList<>();
+    private ArrayList<Escolaridade> listaEscolaridadesRecuperadas = new ArrayList<>();
 
     private String nomeCompleto, cpf, email;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Cidade naturalidade;
-    private EstadoCivilEnum estadoCivilEnum;
+    private EstadoCivil estadoCivil = new EstadoCivil();
     private int numeroFilhos;
-    private EscolaridadeEnum escolaridadeEnum;
+    private Escolaridade escolaridade = new Escolaridade();
     private SexoEnum sexo;
 
     public FuncionarioRegisterFragment1() {
@@ -90,14 +87,12 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_funcionario_register1, container, false);
 
-        sharedPreferences = getActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
-
         configurarComponentes(view);
-        configurarMascaraData();
-        configurarMascaraCpf();
-        configurarMascaraTelefone();
-        configurarCampoTelefone();
-        definirComportamentoRadioButtons();
+        configurarMascaraParaData();
+        configurarMascaraParaCpf();
+        configurarMascaraParaTelefone();
+        configurarCampoDeTelefone();
+        definirComportamentoDosRadioButtons();
         popularCampoUfNatalComDB();
         popularCampoCidadeComDB();
         popularCampoEstadoCivilComDB();
@@ -127,25 +122,16 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         btnProxima = view.findViewById(R.id.btnProxima);
     }
 
-    private void configurarMascaraData()
-    {
-        Mascaras mascara = new Mascaras();
-        mascara.mascaraData(textInputEditTextDataNascimento);
-    }
+    private void configurarMascaraParaData()
+    {Mascaras.criarMascaraParaData(textInputEditTextDataNascimento);}
 
-    private void configurarMascaraCpf()
-    {
-        Mascaras mascara = new Mascaras();
-        mascara.criarMascaraCpf(textInputEditTextCpf);
-    }
+    private void configurarMascaraParaCpf()
+    {Mascaras.criarMascaraParaCpf(textInputEditTextCpf);}
 
-    private void configurarMascaraTelefone()
-    {
-        Mascaras mascara = new Mascaras();
-        mascara.criarMascaraTelefone(textInputEditTextTelefone);
-    }
+    private void configurarMascaraParaTelefone()
+    {Mascaras.criarMascaraParaTelefone(textInputEditTextTelefone);}
 
-    private void configurarCampoTelefone()
+    private void configurarCampoDeTelefone()
     {
         linearLayoutTelefone.removeAllViews();
 
@@ -154,12 +140,12 @@ public class FuncionarioRegisterFragment1 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewTelefoneUsuarioString(getActivity(), textInputEditTextTelefone,
-                        arrayListTelefonesAdicionados, linearLayoutTelefone);
+                        arrayListTelefoneAdicionados, linearLayoutTelefone);
             }
         });
     }
 
-    private void definirComportamentoRadioButtons() {
+    private void definirComportamentoDosRadioButtons() {
 
         radioGroupSexo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -175,8 +161,8 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     private void popularCampoUfNatalComDB() {
 
-        EstadoController estadoController = new EstadoController();
-        estadoController.listar(getActivity(), new VolleyCallback() {
+        UfController ufController = new UfController();
+        ufController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -188,9 +174,10 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        UfEnum estado = UfEnum.valueOf(object.getString("uf"));
-
-                        listaUfsRecuperadas.add(estado);
+                        Uf uf = new Uf();
+                        uf.setId(Integer.parseInt(object.getString("id")));
+                        uf.setNome(object.getString("nome"));
+                        listaUfsRecuperadas.add(uf);
                         configurarCampoEstadoNatal(listaUfsRecuperadas);
 
                     }
@@ -203,9 +190,9 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEstadoNatal(ArrayList<UfEnum> listaEstadosRecuperados) {
+    private void configurarCampoEstadoNatal(ArrayList<Uf> listaEstadosRecuperados) {
 
-        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
+        ArrayAdapter<Uf> adapterUf = new ArrayAdapter<Uf>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUfNatal.setAdapter(adapterUf);
@@ -229,16 +216,16 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         estadoCivilController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
-
                 try {
-
                     JSONArray jsonArray = new JSONArray(response);
 
                     for(int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        EstadoCivilEnum estadoCivil = EstadoCivilEnum.valueOf(object.getString("estadoCivil"));
+                        EstadoCivil estadoCivil = new EstadoCivil();
+                        estadoCivil.setId(Integer.parseInt(object.getString("id")));
+                        estadoCivil.setNome(object.getString("nome"));
 
                         listaEstadosCivisRecuperados.add(estadoCivil);
                         configurarCampoEstadoCivil(listaEstadosCivisRecuperados);
@@ -253,9 +240,9 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEstadoCivil(ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados) {
+    private void configurarCampoEstadoCivil(ArrayList<EstadoCivil> listaEstadosCivisRecuperados) {
 
-        ArrayAdapter<EstadoCivilEnum> adapterEstadoCivil = new ArrayAdapter<EstadoCivilEnum>(getActivity(),
+        ArrayAdapter<EstadoCivil> adapterEstadoCivil = new ArrayAdapter<EstadoCivil>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosCivisRecuperados));
         autoCompleteTextViewEstadoCivil.setAdapter(adapterEstadoCivil);
@@ -268,19 +255,20 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     private void popularCampoEscolaridadeComDB() {
 
         EscolaridadeController escolaridadeController = new EscolaridadeController();
-        escolaridadeController.listarEscolaridades(getActivity(), new VolleyCallback() {
+        escolaridadeController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(response);
 
                     for(int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        EscolaridadeEnum escolaridade = EscolaridadeEnum.valueOf(object.getString("escolaridade"));
+                        Escolaridade escolaridade = new Escolaridade();
+                        escolaridade.setId(Integer.parseInt(object.getString("id")));
+                        escolaridade.setNome(object.getString("nome"));
 
                         listaEscolaridadesRecuperadas.add(escolaridade);
                         configurarCampoEscolaridade(listaEscolaridadesRecuperadas);
@@ -295,9 +283,9 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEscolaridade(ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas) {
+    private void configurarCampoEscolaridade(ArrayList<Escolaridade> listaEscolaridadesRecuperadas) {
 
-        ArrayAdapter<EscolaridadeEnum> adapterEscolaridade = new ArrayAdapter<EscolaridadeEnum>(getActivity(),
+        ArrayAdapter<Escolaridade> adapterEscolaridade = new ArrayAdapter<Escolaridade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEscolaridadesRecuperadas));
         autoCompleteTextViewEscolaridade.setAdapter(adapterEscolaridade);
@@ -307,36 +295,42 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     }
 
-    private void receberDadosUsuarioPreenchidos() throws ParseException {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void receberDadosFuncionarioPreenchidos() throws ParseException {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
-        dataNascimento = DateFormater.StringToDate(textInputEditTextDataNascimento.getText().toString());
+        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString());
+
         cpf = textInputEditTextCpf.getText().toString();
         for(int i = 0; i < listaEstadosCivisRecuperados.size(); i++) {
-            EstadoCivilEnum estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
+            EstadoCivil estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
             if(estadoCivilSelecionado.getNome().equals(autoCompleteTextViewEstadoCivil.getText().toString())) {
-                estadoCivilEnum = estadoCivilSelecionado;
+
+                estadoCivil.setId(estadoCivilSelecionado.getId());
+                estadoCivil.setNome(estadoCivilSelecionado.getNome());
             }
         }
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
+            if(cidadeSelecionada.getNome().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
                 naturalidade = cidadeSelecionada;
             }
         }
         numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString());
         for(int i = 0; i < listaEscolaridadesRecuperadas.size(); i++) {
-            EscolaridadeEnum escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
+            Escolaridade escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
             if(escolaridadeSelecionada.getNome().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
-                escolaridadeEnum = escolaridadeSelecionada;
+                escolaridade.setId(escolaridadeSelecionada.getId());
+                escolaridade.setNome(escolaridadeSelecionada.getNome());
             }
         }
-        listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
+        listaDeTelefoneAdicionados = arrayListTelefoneAdicionados;
         email = textInputEditTextEmail.getText().toString();
 
     }
 
-    private boolean validarCadastroUsuario() throws ParseException {
-        receberDadosUsuarioPreenchidos();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean validarCadastroFuncionario() throws ParseException {
+        receberDadosFuncionarioPreenchidos();
         Boolean validarCPF = ValidarCPF.validarCPF(textInputEditTextCpf.getText().toString());
 
         if (!TextUtils.isEmpty(nomeCompleto)) {
@@ -353,13 +347,13 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
                                 if(!TextUtils.isEmpty(naturalidade.toString())) {
 
-                                    if(!TextUtils.isEmpty(estadoCivilEnum.getNome())) {
+                                    if(!TextUtils.isEmpty(estadoCivil.toString())) {
 
                                         if(!TextUtils.isEmpty(String.valueOf(numeroFilhos))) {
 
-                                            if(!TextUtils.isEmpty(escolaridadeEnum.getNome())) {
+                                            if(!TextUtils.isEmpty(escolaridade.toString())) {
 
-                                                if (!listaDeTelefonesAdicionados.isEmpty()) {
+                                                if (!listaDeTelefoneAdicionados.isEmpty()) {
 
                                                     if (!TextUtils.isEmpty(email)) {
 
@@ -444,65 +438,67 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
             }
             else {
-                    textInputEditTextDataNascimento.setError("O campo DATA DE NASCIMENTO é obrigatório!");
-                    textInputEditTextDataNascimento.requestFocus();
-                    return false; }
+                textInputEditTextDataNascimento.setError("O campo DATA DE NASCIMENTO é obrigatório!");
+                textInputEditTextDataNascimento.requestFocus();
+                return false; }
+
+        }
+        else {
+            textInputEditTextNomeCompleto.setError("O campo NOME COMPLETO é obrigatório!");
+            textInputEditTextNomeCompleto.requestFocus();
+            return false; }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bundle encapsularValoresParaEnvio()
+    {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("nomeCompleto", nomeCompleto);
+        bundle.putString("dataNascimento", DateFormater.localDateToString(dataNascimento));
+        bundle.putString("cpf", cpf);
+        bundle.putSerializable("sexo", sexo);
+        bundle.putSerializable("naturalidade", naturalidade);
+        bundle.putSerializable("estado_civil", estadoCivil);
+        bundle.putInt("numeroFilhos", numeroFilhos);
+        bundle.putSerializable("escolaridade", escolaridade);
+        bundle.putSerializable("telefones", listaDeTelefoneAdicionados);
+        bundle.putString("email", email);
+
+        return bundle;
+    }
+
+    private void abrirProximaTela() {
+
+        btnProxima.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SneakyThrows
+            @Override
+            public void onClick(View v) {
+
+                if(validarCadastroFuncionario())
+                {
+                    Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
+
+                    funcionarioRegisterFragment2 = new FuncionarioRegisterFragment2();
+                    funcionarioRegisterFragment2.setArguments(valoresEncapsuladosParaEnvio);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frameConteudo, funcionarioRegisterFragment2);
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
 
             }
-            else {
-                textInputEditTextNomeCompleto.setError("O campo NOME COMPLETO é obrigatório!");
-                textInputEditTextNomeCompleto.requestFocus();
-                return false; }
-        }
+        });
 
-        public Bundle encapsularValoresParaEnvio()
-        {
-            Bundle bundle = new Bundle();
-
-            bundle.putString("nomeCompleto", nomeCompleto);
-            bundle.putString("dataNascimento", dataNascimento.toString());
-            bundle.putString("cpf", cpf);
-            bundle.putSerializable("sexo", sexo);
-            bundle.putSerializable("naturalidade", naturalidade);
-            bundle.putSerializable("estado_civil", estadoCivilEnum);
-            bundle.putInt("numeroFilhos", numeroFilhos);
-            bundle.putSerializable("escolaridade", escolaridadeEnum);
-            bundle.putSerializable("telefones", listaDeTelefonesAdicionados);
-            bundle.putString("email", email);
-
-            return bundle;
-        }
-
-        private void abrirProximaTela() {
-
-            btnProxima.setOnClickListener(new View.OnClickListener() {
-                @SneakyThrows
-                @Override
-                public void onClick(View v) {
-
-                    if(validarCadastroUsuario())
-                    {
-                        Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
-
-                        funcionarioRegisterFragment2 = new FuncionarioRegisterFragment2();
-                        funcionarioRegisterFragment2.setArguments(valoresEncapsuladosParaEnvio);
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frameConteudo, funcionarioRegisterFragment2);
-                        fragmentTransaction.addToBackStack(null).commit();
-                    }
-
-                }
-            });
-
-        }
-
-        @Override
-        public void onResume() {
-
-            arrayListTelefonesAdicionados.clear();
-            listaDeTelefonesAdicionados.clear();
-
-            super.onResume();
-        }
     }
+
+    @Override
+    public void onResume() {
+
+        arrayListTelefoneAdicionados.clear();
+        listaDeTelefoneAdicionados.clear();
+
+        super.onResume();
+    }
+}

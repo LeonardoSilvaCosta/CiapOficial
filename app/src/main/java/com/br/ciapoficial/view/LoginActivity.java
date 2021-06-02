@@ -16,12 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.FuncionarioController;
+import com.br.ciapoficial.helper.PersistentCookieStore;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,11 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnEntrar;
 
     private SharedPreferences sharedPreferences;
-    public static final String fileName = "login";
-    public static final String userId = "userId";
-    public static final String userSex = "userSex";
-    public static final String userEmail = "userEmail";
-    public static final String userPass = "userPass";
+    public static final String FILE_NAME = "login";
+    public static final String USER_ID = "userId";
+    public static final String USER_SEX = "userSex";
+    public static final String USER_EMAIL = "userEmail";
+    public static final String USER_PASS = "userPass";
 
     private Dialog dialog;
 
@@ -43,15 +48,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this),
+                CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+        CookieHandler.setDefault(cookieManager);
+
         txtRecuperarSenha = findViewById(R.id.txtRecuperarSenha);
         textViewLogin = findViewById(R.id.txtLogin);
         textInputEditTextEmail = findViewById(R.id.txtInputEdtEmail);
         textInputEditTextSenha = findViewById(R.id.txtInputedtSenha);
         btnEntrar = findViewById(R.id.btnEntrar);
 
-        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(userEmail)) {
+        if(sharedPreferences.contains(USER_EMAIL)) {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
@@ -120,10 +129,10 @@ public class LoginActivity extends AppCompatActivity {
                                     String sexo = jsonObject.getString("sexo");
 
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString(userId, String.valueOf(id));
-                                    editor.putString(userEmail, usuario.getEmail());
-                                    editor.putString(userSex, sexo);
-                                    editor.putString(userPass, usuario.getSenha());
+                                    editor.putString(USER_ID, String.valueOf(id));
+                                    editor.putString(USER_EMAIL, usuario.getEmail());
+                                    editor.putString(USER_SEX, sexo);
+                                    editor.putString(USER_PASS, usuario.getSenha());
                                     editor.commit();
 
                                     Intent i = new Intent(LoginActivity.this, MainActivity.class);

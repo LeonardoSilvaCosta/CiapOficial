@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textTitulo">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/edtSpinPostoGrad"
+            android:id="@+id/edtPostoGradCat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppinsmedium"
@@ -98,13 +98,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutRgMilitar">
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtNomeGuerra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:fontFamily="@font/poppinsmedium"
-            android:drawableRight="@mipmap/ic_seta_para_baixo"
             android:imeOptions="actionNext"
             android:nextFocusDown="@id/edtUnidade"
             tools:targetApi="jelly_bean" />
@@ -188,6 +187,8 @@
             android:inputType="text"
             android:fontFamily="@font/poppinsmedium"
             android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtEspecialidade"
             tools:targetApi="jelly_bean" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -225,7 +226,6 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:fontFamily="@font/poppinsmedium"
-            android:nextFocusDown="@id/edtFuncaoAdministrativa"
             tools:targetApi="jelly_bean" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -6,6 +6,7 @@ import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
 import com.br.ciapoficial.enums.UnidadeEnum;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.Getter;
@@ -16,14 +17,14 @@ import lombok.Setter;
 public class Funcionario extends Pessoa {
 
 
-    private PostoGradCatEnum postoGradCat;
-    private QuadroEnum quadro;
+    private PostoGradCat postoGradCat;
+    private Quadro quadro;
     private String rgMilitar;
     private String nomeGuerra;
-    private UnidadeEnum unidade;
-    private Date dataInclusao;
-    private FuncaoAdministrativaEnum funcaoAdministrativa;
-    private SituacaoFuncionalEnum situacaoFuncional;
+    private Unidade unidade;
+    private LocalDate dataInclusao;
+    private FuncaoAdministrativa funcaoAdministrativa;
+    private SituacaoFuncional situacaoFuncional;
     private String senha;
 
     @Override

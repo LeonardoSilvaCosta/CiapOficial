@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.br.ciapoficial.view.LoginActivity.fileName;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 public class PrincipalFragment extends Fragment {
 
@@ -48,7 +48,7 @@ public class PrincipalFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_principal, container, false);
 
-        sharedPreferences = getActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         fotoPerfil = view.findViewById(R.id.imgUsuario);
         imageAtualizarPerfil = view.findViewById(R.id.imgAtualizarPerfil);
@@ -56,6 +56,7 @@ public class PrincipalFragment extends Fragment {
         btnNovoAtendido = view.findViewById(R.id.btnNovoAtendido);
         btnNovoAtendimento = view.findViewById(R.id.btnNovoAtendimento);
         btnPesquisar = view.findViewById(R.id.btnPesquisar);
+
 
 
         configurarImagemAtualizarPerfil();

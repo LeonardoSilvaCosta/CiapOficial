@@ -1,8 +1,10 @@
 package com.br.ciapoficial.model;
 
-public class Especialidade {
+import java.io.Serializable;
+
+public class Especialidade implements Serializable {
     private int id;
-    private String descricao;
+    private String nome;
 
     public int getId() {
         return id;
@@ -12,17 +14,17 @@ public class Especialidade {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getNome() {
+        return nome;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override
     public String
     toString() {
-        return descricao;
+        return nome;
     }
 }

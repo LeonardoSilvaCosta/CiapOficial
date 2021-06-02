@@ -1,7 +1,6 @@
 package com.br.ciapoficial.controller;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,11 +18,14 @@ import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PostoGradCatController {
 
     public void listar(Context context, final VolleyCallback callback) {
 
-        String url = Constants.BASE_API_URL + "/postos_graduacoes_categorias";
+        String url = Constants.BASE_API_URL + "/postos+graduacoes+categorias";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
@@ -45,7 +47,7 @@ public class PostoGradCatController {
                     Toast.makeText(context,
                             "500 Internal Server Error",
                             Toast.LENGTH_SHORT).show();
-               } else if( error instanceof ParseError) {
+                } else if( error instanceof ParseError) {
                     Toast.makeText(context,
                             "ParseError",
                             Toast.LENGTH_SHORT).show();
@@ -61,7 +63,15 @@ public class PostoGradCatController {
 
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }

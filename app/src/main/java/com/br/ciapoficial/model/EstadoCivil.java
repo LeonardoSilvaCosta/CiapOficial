@@ -1,27 +1,21 @@
 package com.br.ciapoficial.model;
 
-public class EstadoCivil {
+import java.io.Serializable;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class EstadoCivil implements Serializable {
+    @EqualsAndHashCode.Include
     private int id;
-    private String descricao;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    private String nome;
 
     @Override
     public String toString() {
-        return descricao;
+        return nome;
     }
 }

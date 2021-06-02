@@ -1,6 +1,7 @@
 package com.br.ciapoficial.controller;
 
 import android.content.Context;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -15,10 +16,14 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.br.ciapoficial.Constants;
+import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 
-public class EstadoController {
+import java.util.HashMap;
+import java.util.Map;
+
+public class UfController {
 
     public void listar(Context context, final VolleyCallback callback) {
 
@@ -62,7 +67,15 @@ public class EstadoController {
 
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }

@@ -1,7 +1,9 @@
 package com.br.ciapoficial.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,7 +31,6 @@ import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
 import com.br.ciapoficial.enums.UnidadeEnum;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
@@ -45,8 +46,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import lombok.SneakyThrows;
 
@@ -70,7 +71,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private String nomeGuerra;
     private UnidadeEnum unidadeEnum;
     private QuadroEnum quadroEnum;
-    private Date dataInclusao;
+    private LocalDate dataInclusao;
     private SituacaoFuncionalEnum situacaoFuncionalEnum;
 
     public UsuarioRegisterFragment3() {
@@ -91,7 +92,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void configurarComponentes(View view)
     {
         textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
-        autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtSpinPostoGrad);
+        autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtPostoGradCat);
         textInputEditTextNomeGuerra = view.findViewById(R.id.edtNomeGuerra);
         autoCompleteTextViewUnidade = view.findViewById(R.id.edtUnidade);
         autoCompleteTextViewQuadro = view.findViewById(R.id.edtQuadro);
@@ -279,7 +280,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void configurarMascaraData()
     {
         Mascaras mascara = new Mascaras();
-        mascara.mascaraData(textInputEditTextDataInclusao);
+        mascara.criarMascaraParaData(textInputEditTextDataInclusao);
     }
 
     private Bundle recuperarDadosAtendidoRegisterFragment2() {
@@ -289,6 +290,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void receberDadosUsuarioPreenchidos() throws ParseException {
         rgMilitar = textInputEditTextRgMilitar.getText().toString();
 
@@ -313,7 +315,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
             }
         }
 
-        dataInclusao = DateFormater.StringToDate(textInputEditTextDataInclusao.getText().toString());
+        dataInclusao = DateFormater.StringToLocalDate(textInputEditTextDataInclusao.getText().toString());
 
         for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
             SituacaoFuncionalEnum situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
@@ -323,6 +325,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroAtendido() throws ParseException {
         receberDadosUsuarioPreenchidos();
 
@@ -385,12 +388,13 @@ public class UsuarioRegisterFragment3 extends Fragment {
             return false; }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private Usuario encapsularValoresParaCadastro() throws ParseException {
         Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendidoRegisterFragment2();
         Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
 
-        Date dataNascimento = DateFormater.StringToDate(valoresRecebidosFragment1.getString("dataNascimento"));
-        Date dataInclusao = DateFormater.StringToDate(valoresRecebidosFragment1.getString("dataInclusao"));
+        LocalDate dataNascimento = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataNascimento"));
+        LocalDate dataInclusao = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataInclusao"));
 
         usuario = new Usuario();
 
@@ -406,12 +410,12 @@ public class UsuarioRegisterFragment3 extends Fragment {
         usuario.setNumeroFilhos(valoresRecebidosFragment1.getInt("numeroFilhos"));
         usuario.setEndereco((Endereco) valoresRecebidosFragment1e2.getSerializable("endereco"));
         usuario.setRgMilitar(rgMilitar);
-        usuario.setPostoGradCat(postoGradCatEnum);
-        usuario.setNomeGuerra(nomeGuerra);
-        usuario.setUnidade(unidadeEnum);
-        usuario.setQuadro(quadroEnum);
-        usuario.setDataInclusao(dataInclusao);
-        usuario.setSituacaoFuncional(situacaoFuncionalEnum);
+//        usuario.setPostoGradCat(postoGradCatEnum);
+//        usuario.setNomeGuerra(nomeGuerra);
+//        usuario.setUnidade(unidadeEnum);
+//        usuario.setQuadro(quadroEnum);
+//        usuario.setDataInclusao(dataInclusao);
+//        usuario.setSituacaoFuncional(situacaoFuncionalEnum);
 
         return usuario;
     }
@@ -456,6 +460,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void enviarFormulario() {
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @SneakyThrows
             @Override
             public void onClick(View v) {

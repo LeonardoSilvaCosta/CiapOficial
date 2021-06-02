@@ -1,8 +1,8 @@
 package com.br.ciapoficial.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,20 +26,22 @@ import com.br.ciapoficial.controller.QuadroController;
 import com.br.ciapoficial.controller.SituacaoFuncionalController;
 import com.br.ciapoficial.controller.UnidadeController;
 import com.br.ciapoficial.enums.EspecialidadeEnum;
-import com.br.ciapoficial.enums.FuncaoAdministrativaEnum;
-import com.br.ciapoficial.enums.PostoGradCatEnum;
 import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SexoEnum;
-import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
-import com.br.ciapoficial.enums.UnidadeEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Especialidade;
 import com.br.ciapoficial.model.Especialista;
+import com.br.ciapoficial.model.FuncaoAdministrativa;
 import com.br.ciapoficial.model.Funcionario;
+import com.br.ciapoficial.model.PostoGradCat;
+import com.br.ciapoficial.model.Quadro;
+import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
+import com.br.ciapoficial.model.Unidade;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -47,8 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,33 +60,34 @@ import lombok.SneakyThrows;
 public class FuncionarioRegisterFragment3 extends Fragment {
 
     private PrincipalFragment principalFragment;
+
     private TextInputLayout textInputLayoutRegistroConselho;
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra,
             textInputEditTextDataInclusao, textInputEditTextRegistroConselho;
-    private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewUnidade, autoCompleteTextViewQuadro,
-            autoCompleteTextViewEspecialidade, autoCompleteTextViewFuncaoAdministrativa,
-            autoCompleteTextViewSituacaoFuncional;
-    Button btnCadastrar;
+    private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewQuadro,
+            autoCompleteTextViewUnidade, autoCompleteTextViewFuncaoAdministrativa,
+            autoCompleteTextViewSituacaoFuncional, autoCompleteTextViewEspecialidade;
+    private Button btnCadastrar;
 
-    Funcionario funcionario;
-    Especialista especialista;
+    private ArrayList<PostoGradCat> listaPostoGradCatRecuperados = new ArrayList<>();
+    private ArrayList<Quadro> listaQuadrosRecuperados = new ArrayList<>();
+    private ArrayList<Unidade> listaUnidadesRecuperadas = new ArrayList<>();
+    private ArrayList<FuncaoAdministrativa> listaFuncoesAdministrativasRecuperadas = new ArrayList<>();
+    private ArrayList<SituacaoFuncional> listaSituacoesFuncionaisRecuperadas = new ArrayList<>();
+    private ArrayList<Especialidade> listaEspecialidadesRecuperadas = new ArrayList<>();
 
-    private ArrayList<PostoGradCatEnum> listaPostoGradCatRecuperados = new ArrayList<>();
-    private ArrayList<UnidadeEnum> listaUnidadesRecuperadas = new ArrayList<>();
-    private ArrayList<QuadroEnum> listaQuadrosRecuperados = new ArrayList<>();
-    private ArrayList<EspecialidadeEnum> listaEspecialidadesRecuperadas = new ArrayList<>();
-    private ArrayList<FuncaoAdministrativaEnum> listaFuncoesAdministrativasRecuperadas = new ArrayList<>();
-    private ArrayList<SituacaoFuncionalEnum> listaSituacoesFuncionaisRecuperadas = new ArrayList<>();
+    private Funcionario funcionario;
+    private Especialista especialista;
 
-    private PostoGradCatEnum postoGradCatEnum;
-    private QuadroEnum quadroEnum;
+    private PostoGradCat postoGradCat;
+    private Quadro quadro;
     private String rgMilitar;
     private String nomeGuerra;
-    private UnidadeEnum unidadeEnum;
-    private Date dataInclusao;
-    private FuncaoAdministrativaEnum funcaoAdministrativaEnum;
-    private SituacaoFuncionalEnum situacaoFuncionalEnum;
-    private EspecialidadeEnum especialidadeEnum;
+    private Unidade unidade;
+    private LocalDate dataInclusao;
+    private FuncaoAdministrativa funcaoAdministrativa;
+    private SituacaoFuncional situacaoFuncional;
+    private Especialidade especialidade;
     private String registroConselho;
 
     public FuncionarioRegisterFragment3() {
@@ -95,27 +99,8 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_funcionario_register3, container, false) ;
 
-
         configurarComponentes(view);
-        enviarFormulario();
-        return view;
-    }
-
-    private void configurarComponentes(View view)
-    {
-        textInputLayoutRegistroConselho = view.findViewById(R.id.textInputLayoutRegistroConselho);
-        textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
-        autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtSpinPostoGrad);
-        textInputEditTextNomeGuerra = view.findViewById(R.id.edtNomeGuerra);
-        autoCompleteTextViewUnidade = view.findViewById(R.id.edtUnidade);
-        textInputEditTextDataInclusao = view.findViewById(R.id.edtDataInclusao);
-        autoCompleteTextViewQuadro = view.findViewById(R.id.edtQuadro);
-        autoCompleteTextViewEspecialidade = view.findViewById(R.id.edtEspecialidade);
-        textInputEditTextRegistroConselho = view.findViewById(R.id.edtRegistroConselho);
-        autoCompleteTextViewFuncaoAdministrativa = view.findViewById(R.id.edtFuncaoAdministrativa);
-        autoCompleteTextViewSituacaoFuncional = view.findViewById(R.id.edtSitucaoFuncional);
-        btnCadastrar = view.findViewById(R.id.btnRegistrar);
-
+        configurarMascaraParaDataDeInclusao();
         popularCampoPostoGradCatComDB();
         popularCampoUnidadeComDB();
         popularCampoQuadroComDB();
@@ -123,7 +108,28 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         configurarCampoRegistroConselhoComBaseNaEspecialidade();
         popularCampoFuncaoAdministrativaComDB();
         popularCampoSituacaoFuncionalComDB();
+        enviarFormulario();
+        return view;
     }
+
+    private void configurarComponentes(View view)
+    {
+        autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtPostoGradCat);
+        autoCompleteTextViewQuadro = view.findViewById(R.id.edtQuadro);
+        textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
+        textInputEditTextNomeGuerra = view.findViewById(R.id.edtNomeGuerra);
+        autoCompleteTextViewUnidade = view.findViewById(R.id.edtUnidade);
+        textInputEditTextDataInclusao = view.findViewById(R.id.edtDataInclusao);
+        autoCompleteTextViewFuncaoAdministrativa = view.findViewById(R.id.edtFuncaoAdministrativa);
+        autoCompleteTextViewSituacaoFuncional = view.findViewById(R.id.edtSitucaoFuncional);
+        autoCompleteTextViewEspecialidade = view.findViewById(R.id.edtEspecialidade);
+        textInputLayoutRegistroConselho = view.findViewById(R.id.textInputLayoutRegistroConselho);
+        textInputEditTextRegistroConselho = view.findViewById(R.id.edtRegistroConselho);
+        btnCadastrar = view.findViewById(R.id.btnRegistrar);
+    }
+
+    private void configurarMascaraParaDataDeInclusao()
+    {Mascaras.criarMascaraParaData(textInputEditTextDataInclusao);}
 
     private void popularCampoPostoGradCatComDB() {
 
@@ -140,10 +146,11 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
+                        PostoGradCat postoGradCat = new PostoGradCat();
+                        postoGradCat.setId(Integer.parseInt(object.getString("id")));
+                        postoGradCat.setNome(object.getString("nome"));
 
-                        PostoGradCatEnum postoGradCatEnum = PostoGradCatEnum.valueOf(object.getString("postoGradCat"));
-
-                        listaPostoGradCatRecuperados.add(postoGradCatEnum);
+                        listaPostoGradCatRecuperados.add(postoGradCat);
                         configurarCampoPostoGradCat(listaPostoGradCatRecuperados);
 
                     }
@@ -156,9 +163,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoPostoGradCat(ArrayList<PostoGradCatEnum> listaPostoGradCatRecuperados) {
+    private void configurarCampoPostoGradCat(ArrayList<PostoGradCat> listaPostoGradCatRecuperados) {
 
-        ArrayAdapter<PostoGradCatEnum> adapterPostoGradCat = new ArrayAdapter<PostoGradCatEnum>(getActivity(),
+        ArrayAdapter<PostoGradCat> adapterPostoGradCat = new ArrayAdapter<PostoGradCat>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaPostoGradCatRecuperados));
         autoCompleteTextViewPostGradCat.setAdapter(adapterPostoGradCat);
@@ -183,7 +190,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        QuadroEnum quadro = QuadroEnum.valueOf(object.getString("quadro"));
+                        Quadro quadro = new Quadro();
+                        quadro.setId(Integer.parseInt(object.getString("id")));
+                        quadro.setNome(object.getString("nome"));
 
                         listaQuadrosRecuperados.add(quadro);
                         configurarCampoQuadro(listaQuadrosRecuperados);
@@ -198,9 +207,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoQuadro(ArrayList<QuadroEnum> listaQuadrosRecuperados) {
+    private void configurarCampoQuadro(ArrayList<Quadro> listaQuadrosRecuperados) {
 
-        ArrayAdapter<QuadroEnum> adapterQuadro = new ArrayAdapter<QuadroEnum>(getActivity(),
+        ArrayAdapter<Quadro> adapterQuadro = new ArrayAdapter<Quadro>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaQuadrosRecuperados));
         autoCompleteTextViewQuadro.setAdapter(adapterQuadro);
@@ -225,7 +234,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        UnidadeEnum unidade = UnidadeEnum.valueOf(object.getString("unidade"));
+                        Unidade unidade = new Unidade();
+                        unidade.setId(Integer.parseInt(object.getString("id")));
+                        unidade.setNome(object.getString("nome"));
 
                         listaUnidadesRecuperadas.add(unidade);
                         configurarCampoUnidade(listaUnidadesRecuperadas);
@@ -240,9 +251,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoUnidade(ArrayList<UnidadeEnum> listaUnidadesRecuperadas) {
+    private void configurarCampoUnidade(ArrayList<Unidade> listaUnidadesRecuperadas) {
 
-        ArrayAdapter<UnidadeEnum> adapterUnidade = new ArrayAdapter<UnidadeEnum>(getActivity(),
+        ArrayAdapter<Unidade> adapterUnidade = new ArrayAdapter<Unidade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaUnidadesRecuperadas));
         autoCompleteTextViewUnidade.setAdapter(adapterUnidade);
@@ -250,35 +261,6 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewUnidade);
 
-    }
-
-    private void popularCampoEspecialidadeComDB()
-    {
-        EspecialidadeController especialidadeController = new EspecialidadeController();
-        especialidadeController.listar(getActivity(), new VolleyCallback() {
-            @Override
-            public void onSucess(String response) {
-
-                try {
-
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for(int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject object = jsonArray.getJSONObject(i);
-
-                        EspecialidadeEnum especialidade = EspecialidadeEnum.valueOf(object.getString("especialidade"));
-                        listaEspecialidadesRecuperadas.add(especialidade);
-                        configurarCampoEspecialidade(listaEspecialidadesRecuperadas);
-
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
     }
 
     private void popularCampoFuncaoAdministrativaComDB()
@@ -292,15 +274,16 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
                     JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            FuncaoAdministrativaEnum funcaoAdministrativa =
-                                    FuncaoAdministrativaEnum.valueOf(object.getString("funcaoAdministrativa"));
+                        FuncaoAdministrativa funcaoAdministrativa = new FuncaoAdministrativa();
+                        funcaoAdministrativa.setId(object.getInt("id"));
+                        funcaoAdministrativa.setNome(object.getString("nome"));
 
-                            listaFuncoesAdministrativasRecuperadas.add(funcaoAdministrativa);
-                            configurarCampoFuncaoAdministrativa(listaFuncoesAdministrativasRecuperadas);
+                        listaFuncoesAdministrativasRecuperadas.add(funcaoAdministrativa);
+                        configurarCampoFuncaoAdministrativa(listaFuncoesAdministrativasRecuperadas);
 
                     }
 
@@ -312,9 +295,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoFuncaoAdministrativa(ArrayList<FuncaoAdministrativaEnum> listaFuncoesAdministrativasRecuperadas) {
+    private void configurarCampoFuncaoAdministrativa(ArrayList<FuncaoAdministrativa> listaFuncoesAdministrativasRecuperadas) {
 
-        ArrayAdapter<FuncaoAdministrativaEnum> adapterFuncaoAdministrativa = new ArrayAdapter<FuncaoAdministrativaEnum>(getActivity(),
+        ArrayAdapter<FuncaoAdministrativa> adapterFuncaoAdministrativa = new ArrayAdapter<FuncaoAdministrativa>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaFuncoesAdministrativasRecuperadas));
         autoCompleteTextViewFuncaoAdministrativa.setAdapter(adapterFuncaoAdministrativa);
@@ -335,17 +318,18 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
                     JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            SituacaoFuncionalEnum situacaoFuncional = SituacaoFuncionalEnum.valueOf(
-                                    object.getString("situacaoFuncional"));
+                        SituacaoFuncional situacaoFuncional = new SituacaoFuncional();
+                        situacaoFuncional.setId(object.getInt("id"));
+                        situacaoFuncional.setNome(object.getString("nome"));
 
-                            listaSituacoesFuncionaisRecuperadas.add(situacaoFuncional);
-                            configurarCampoSituacaoFuncional(listaSituacoesFuncionaisRecuperadas);
+                        listaSituacoesFuncionaisRecuperadas.add(situacaoFuncional);
+                        configurarCampoSituacaoFuncional(listaSituacoesFuncionaisRecuperadas);
 
-                        }
+                    }
 
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -355,9 +339,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoSituacaoFuncional(ArrayList<SituacaoFuncionalEnum> listaSituacoesFuncionaisRecuperadas) {
+    private void configurarCampoSituacaoFuncional(ArrayList<SituacaoFuncional> listaSituacoesFuncionaisRecuperadas) {
 
-        ArrayAdapter<SituacaoFuncionalEnum> adapterSituacaoFuncional = new ArrayAdapter<SituacaoFuncionalEnum>(getActivity(),
+        ArrayAdapter<SituacaoFuncional> adapterSituacaoFuncional = new ArrayAdapter<SituacaoFuncional>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaSituacoesFuncionaisRecuperadas));
         autoCompleteTextViewSituacaoFuncional.setAdapter(adapterSituacaoFuncional);
@@ -367,9 +351,41 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
     }
 
-    private void configurarCampoEspecialidade(ArrayList<EspecialidadeEnum> listaEspecialidadesRecuperadas) {
+    private void popularCampoEspecialidadeComDB()
+    {
+        EspecialidadeController especialidadeController = new EspecialidadeController();
+        especialidadeController.listar(getActivity(), new VolleyCallback() {
+            @Override
+            public void onSucess(String response) {
 
-        ArrayAdapter<EspecialidadeEnum> adapterEspecialidade = new ArrayAdapter<EspecialidadeEnum>(getActivity(),
+                try {
+
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for(int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        Especialidade especialidade = new Especialidade();
+                        especialidade.setId(object.getInt("id"));
+                        especialidade.setNome(object.getString("nome"));
+
+                        listaEspecialidadesRecuperadas.add(especialidade);
+                        configurarCampoEspecialidade(listaEspecialidadesRecuperadas);
+
+                    }
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+    }
+
+    private void configurarCampoEspecialidade(ArrayList<Especialidade> listaEspecialidadesRecuperadas) {
+
+        ArrayAdapter<Especialidade> adapterEspecialidade = new ArrayAdapter<Especialidade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEspecialidadesRecuperadas));
         autoCompleteTextViewEspecialidade.setAdapter(adapterEspecialidade);
@@ -385,7 +401,8 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (EspecialidadeEnum.PSICOLOGO.equals(position) || EspecialidadeEnum.ASSISTENTE_SOCIAL.equals(position)) {
+                if (EspecialidadeEnum.PSICOLOGO.ordinal() == position ||
+                        EspecialidadeEnum.ASSISTENTE_SOCIAL.ordinal() == (position)) {
                     textInputLayoutRegistroConselho.setVisibility(View.VISIBLE);
                     textInputEditTextRegistroConselho.setVisibility(View.VISIBLE);
                 } else {
@@ -396,24 +413,35 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private Bundle recuperarDadosUserRegisterFragment2() {
+    private Bundle recuperarDadosDoFuncionarioDoRegisterFragment2() {
         Bundle valoresRecebidosFragment1e2 = this.getArguments();
 
         return valoresRecebidosFragment1e2;
 
     }
 
-    private void receberDadosUsuarioPreenchidos() throws ParseException {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void receberDadosDoFuncionarioPreenchidos() throws ParseException {
+
+        postoGradCat = new PostoGradCat();
+        quadro = new Quadro();
+        unidade = new Unidade();
+        funcaoAdministrativa = new FuncaoAdministrativa();
+        situacaoFuncional = new SituacaoFuncional();
+        especialidade = new Especialidade();
+
         for(int i = 0; i < listaPostoGradCatRecuperados.size(); i++) {
-            PostoGradCatEnum postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
+            PostoGradCat postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
             if(postoGradCatSelecionado.getNome().equals(autoCompleteTextViewPostGradCat.getText().toString())) {
-                postoGradCatEnum = postoGradCatSelecionado;
+                postoGradCat.setId(postoGradCatSelecionado.getId());
+                postoGradCat.setNome(postoGradCatSelecionado.getNome());
             }
         }
         for(int i = 0; i < listaQuadrosRecuperados.size(); i++) {
-            QuadroEnum quadroSelecionado = listaQuadrosRecuperados.get(i);
+            Quadro quadroSelecionado = listaQuadrosRecuperados.get(i);
             if(quadroSelecionado.getNome().equals(autoCompleteTextViewQuadro.getText().toString())) {
-                quadroEnum = quadroSelecionado;
+                quadro.setId(quadroSelecionado.getId());
+                quadro.setNome(quadroSelecionado.getNome());
             }
         }
 
@@ -421,32 +449,36 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         nomeGuerra = textInputEditTextNomeGuerra.getText().toString();
 
         for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
-            UnidadeEnum unidadeSelecionada = listaUnidadesRecuperadas.get(i);
+            Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
             if(unidadeSelecionada.getNome().equals(autoCompleteTextViewUnidade.getText().toString())) {
-                unidadeEnum = unidadeSelecionada;
+                unidade.setId(unidadeSelecionada.getId());
+                unidade.setNome(unidadeSelecionada.getNome());
             }
         }
 
-        dataInclusao = DateFormater.StringToDate(textInputEditTextDataInclusao.getText().toString());
+        dataInclusao = DateFormater.StringToLocalDate(textInputEditTextDataInclusao.getText().toString());
 
         for(int i = 0; i < listaFuncoesAdministrativasRecuperadas.size(); i++) {
-            FuncaoAdministrativaEnum funcaoAdministrativaSelecionada = listaFuncoesAdministrativasRecuperadas.get(i);
+            FuncaoAdministrativa funcaoAdministrativaSelecionada = listaFuncoesAdministrativasRecuperadas.get(i);
             if(funcaoAdministrativaSelecionada.getNome().equals(autoCompleteTextViewFuncaoAdministrativa.getText().toString())) {
-                funcaoAdministrativaEnum = funcaoAdministrativaSelecionada;
+                funcaoAdministrativa.setId(funcaoAdministrativaSelecionada.getId());
+                funcaoAdministrativa.setNome(funcaoAdministrativaSelecionada.getNome());
             }
         }
 
         for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
-            SituacaoFuncionalEnum situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
+            SituacaoFuncional situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
             if(situacaoFuncionalSelecionada.getNome().equals(autoCompleteTextViewSituacaoFuncional.getText().toString())) {
-                situacaoFuncionalEnum = situacaoFuncionalSelecionada;
+                situacaoFuncional.setId(situacaoFuncionalSelecionada.getId());
+                situacaoFuncional.setNome(situacaoFuncionalSelecionada.getNome());
             }
         }
 
         for(int i = 0; i < listaEspecialidadesRecuperadas.size(); i++) {
-            EspecialidadeEnum especialidadeSelecionada = listaEspecialidadesRecuperadas.get(i);
+            Especialidade especialidadeSelecionada = listaEspecialidadesRecuperadas.get(i);
             if(especialidadeSelecionada.getNome().equals(autoCompleteTextViewEspecialidade.getText().toString())) {
-                especialidadeEnum = especialidadeSelecionada;
+                especialidade.setId(especialidadeSelecionada.getId());
+                especialidade.setNome(especialidadeSelecionada.getNome());
             }
         }
 
@@ -454,61 +486,62 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
     }
 
-    private boolean validarCadastroUsuario() throws ParseException {
-        receberDadosUsuarioPreenchidos();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean validarCadastroDoFuncionario() throws ParseException {
+        receberDadosDoFuncionarioPreenchidos();
 
         if (!TextUtils.isEmpty(rgMilitar)) {
 
-            if (!TextUtils.isEmpty(postoGradCatEnum.getNome())) {
+            if (!TextUtils.isEmpty(postoGradCat.getNome())) {
 
                 if (!TextUtils.isEmpty(nomeGuerra)) {
 
-                    if (!TextUtils.isEmpty(unidadeEnum.getNome())) {
+                    if (!TextUtils.isEmpty(unidade.getNome())) {
 
                         if(!TextUtils.isEmpty(dataInclusao.toString())) {
 
-                        if (!TextUtils.isEmpty(quadroEnum.getNome())) {
+                            if (!TextUtils.isEmpty(quadro.getNome())) {
 
-                            if (!TextUtils.isEmpty(especialidadeEnum.getNome())) {
+                                if (!TextUtils.isEmpty(especialidade.getNome())) {
 
-                                if (!TextUtils.isEmpty(registroConselho) ||
-                                        especialidadeEnum.equals(String.valueOf(listaEspecialidadesRecuperadas.size()))) {
+                                    if (!TextUtils.isEmpty(registroConselho) ||
+                                            especialidade.equals(String.valueOf(listaEspecialidadesRecuperadas.size()))) {
 
-                                    if (!TextUtils.isEmpty(funcaoAdministrativaEnum.getNome())) {
+                                        if (!TextUtils.isEmpty(funcaoAdministrativa.getNome())) {
 
-                                        if (!TextUtils.isEmpty(funcaoAdministrativaEnum.getNome())) {
+                                            if (!TextUtils.isEmpty(funcaoAdministrativa.getNome())) {
 
-                                            return true;
+                                                return true;
+
+                                            }
+                                            else {
+                                                autoCompleteTextViewSituacaoFuncional.setError("O campo SITUAÇÃO FUNCIONAL é obrigatório!");
+                                                autoCompleteTextViewSituacaoFuncional.requestFocus();
+                                                return false; }
 
                                         }
                                         else {
-                                            autoCompleteTextViewSituacaoFuncional.setError("O campo SITUAÇÃO FUNCIONAL é obrigatório!");
-                                            autoCompleteTextViewSituacaoFuncional.requestFocus();
+                                            autoCompleteTextViewFuncaoAdministrativa.setError("O campo FUNÇÃO ADMINISTRATIVA é obrigatório!");
+                                            autoCompleteTextViewFuncaoAdministrativa.requestFocus();
                                             return false; }
 
                                     }
                                     else {
-                                        autoCompleteTextViewFuncaoAdministrativa.setError("O campo FUNÇÃO ADMINISTRATIVA é obrigatório!");
-                                        autoCompleteTextViewFuncaoAdministrativa.requestFocus();
+                                        textInputEditTextRegistroConselho.setError("O campo REGISTRO CONSELHO é obrigatório!");
+                                        textInputEditTextRegistroConselho.requestFocus();
                                         return false; }
 
                                 }
                                 else {
-                                    textInputEditTextRegistroConselho.setError("O campo REGISTRO CONSELHO é obrigatório!");
-                                    textInputEditTextRegistroConselho.requestFocus();
+                                    autoCompleteTextViewEspecialidade.setError("O campo ESPECIALIDADE é obrigatório!");
+                                    autoCompleteTextViewEspecialidade.requestFocus();
                                     return false; }
 
                             }
                             else {
-                                autoCompleteTextViewEspecialidade.setError("O campo ESPECIALIDADE é obrigatório!");
-                                autoCompleteTextViewEspecialidade.requestFocus();
+                                autoCompleteTextViewQuadro.setError("O campo QUADRO é obrigatório!");
+                                autoCompleteTextViewQuadro.requestFocus();
                                 return false; }
-
-                        }
-                        else {
-                            autoCompleteTextViewQuadro.setError("O campo QUADRO é obrigatório!");
-                            autoCompleteTextViewQuadro.requestFocus();
-                            return false; }
 
                         }
                         else {
@@ -541,11 +574,12 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             return false; }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private Funcionario encapsularValoresParaCadastroDeFuncionario() throws ParseException {
-        Bundle valoresRecebidosFragment1e2 =  recuperarDadosUserRegisterFragment2();
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosDoFuncionarioDoRegisterFragment2();
         Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
 
-        Date dataNascimento = DateFormater.StringToDate(valoresRecebidosFragment1.getString("dataNascimento"));
+        LocalDate dataNascimento = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataNascimento"));
 
         funcionario = new Funcionario();
 
@@ -557,28 +591,29 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         funcionario.setEmail(valoresRecebidosFragment1.getString("email"));
         funcionario.setEndereco((Endereco) valoresRecebidosFragment1e2.getSerializable("endereco"));
         funcionario.setRgMilitar(rgMilitar);
-        funcionario.setPostoGradCat((postoGradCatEnum));
+        funcionario.setPostoGradCat((postoGradCat));
         funcionario.setNomeGuerra(nomeGuerra);
-        funcionario.setUnidade((unidadeEnum));
+        funcionario.setUnidade((unidade));
         funcionario.setDataInclusao((dataInclusao));
-        funcionario.setQuadro((quadroEnum));
-        funcionario.setFuncaoAdministrativa((funcaoAdministrativaEnum));
-        funcionario.setSituacaoFuncional((situacaoFuncionalEnum));
+        funcionario.setQuadro((quadro));
+        funcionario.setFuncaoAdministrativa((funcaoAdministrativa));
+        funcionario.setSituacaoFuncional((situacaoFuncional));
+        funcionario.setSenha(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
 
         Map<String, Funcionario> funcionarioMap = new HashMap<>();
 
         funcionarioMap.put("Funcionário", funcionario);
 
-        if(quadroEnum.equals(QuadroEnum.QCOPM))
+        if(quadro.equals(QuadroEnum.QCOPM))
         {
             especialista = new Especialista();
 
-            especialista.setEspecialidade((especialidadeEnum));
-            if(especialidadeEnum.equals(EspecialidadeEnum.PSICOLOGO))
+            especialista.setEspecialidade((especialidade));
+            if(especialidade.equals(EspecialidadeEnum.PSICOLOGO))
             {
                 especialista.setRegistroConselho("10/" + registroConselho);
             }
-            else if(especialidadeEnum.equals(EspecialidadeEnum.ASSISTENTE_SOCIAL))
+            else if(especialidade.equals(EspecialidadeEnum.ASSISTENTE_SOCIAL))
             {
                 especialista.setRegistroConselho("1/" + registroConselho);
             }else {
@@ -591,7 +626,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         return funcionario;
     }
 
-    private void cadastrarUsuario(Funcionario novoFuncionario)
+    private void cadastrarFuncionario(Funcionario novoFuncionario)
     {
         new FuncionarioController().cadastrar(
                 getActivity(),
@@ -600,26 +635,13 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                     @Override
                     public void onSucess(String response) {
 
-                        Log.e("CadUsuario", response);
-
                         try{
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            boolean isErro = jsonObject.getBoolean("erro");
-
-                            String mensagem = jsonObject.getString("mensagem");
-
-                            if(isErro) {
-                                Toast.makeText(principalFragment.getContext(),
-                                        mensagem,
-                                        Toast.LENGTH_SHORT).show();
-                            }else {
-
-                                Toast.makeText(principalFragment.getContext(),
-                                        "Cadastro realizado com sucesso!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
                             e.printStackTrace();
@@ -631,16 +653,17 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     private void enviarFormulario() {
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @SneakyThrows
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroUsuario())
+                if(validarCadastroDoFuncionario())
                 {
                     Funcionario novoFuncionario;
                     novoFuncionario = encapsularValoresParaCadastroDeFuncionario();
 
-                    cadastrarUsuario(novoFuncionario);
+                    cadastrarFuncionario(novoFuncionario);
 
                     principalFragment = new PrincipalFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

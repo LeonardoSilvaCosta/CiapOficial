@@ -152,7 +152,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoTipoAtendimentoComDB() {
 
         TipoAtendimentoController tipoServicoController = new TipoAtendimentoController();
-        tipoServicoController.listarTiposDeAtendimento(getActivity(), new VolleyCallback() {
+        tipoServicoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -201,7 +201,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoTipoAvaliacaoComDB() {
 
         TipoAvaliacaoController tipoAvaliacaoController = new TipoAvaliacaoController();
-        tipoAvaliacaoController.listarTiposDeAvaliacao(getActivity(), new VolleyCallback() {
+        tipoAvaliacaoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -250,7 +250,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoProgramaComDB() {
 
         ProgramaController programaController = new ProgramaController();
-        programaController.listarProgramas(getActivity(), new VolleyCallback() {
+        programaController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -299,7 +299,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDeslocamentoComDB() {
 
         DeslocamentoController deslocamentoController = new DeslocamentoController();
-        deslocamentoController.listarDeslocamentos(getActivity(), new VolleyCallback() {
+        deslocamentoController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -365,7 +365,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDemandaGeralComDB() {
 
         DemandaGeralController demandaGeralController = new DemandaGeralController();
-        demandaGeralController.listarDemandasGerais(getActivity(), new VolleyCallback() {
+        demandaGeralController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -413,7 +413,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDemandaEspecificaComDB() {
 
         DemandaEspecificaController demandaEspecificaController = new DemandaEspecificaController();
-        demandaEspecificaController.listarDemandasEspecificas(getActivity(), new VolleyCallback() {
+        demandaEspecificaController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -549,7 +549,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoCondicaoLaboralComDB() {
 
         CondicaoLaboralController condicaoLaboralController = new CondicaoLaboralController();
-        condicaoLaboralController.listarCondicoesLaborais(getActivity(), new VolleyCallback() {
+        condicaoLaboralController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 

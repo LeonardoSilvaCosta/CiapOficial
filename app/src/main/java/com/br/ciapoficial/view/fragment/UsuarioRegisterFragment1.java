@@ -1,6 +1,9 @@
 package com.br.ciapoficial.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,7 +22,7 @@ import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.EscolaridadeController;
 import com.br.ciapoficial.controller.EstadoCivilController;
-import com.br.ciapoficial.controller.EstadoController;
+import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.controller.VinculoController;
 import com.br.ciapoficial.enums.EscolaridadeEnum;
 import com.br.ciapoficial.enums.EstadoCivilEnum;
@@ -34,9 +37,9 @@ import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.helper.ValidarCPF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Cidade;
-import com.br.ciapoficial.model.Telefone;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -45,8 +48,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import lombok.SneakyThrows;
 
@@ -64,8 +67,8 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
     private Button btnAdicionarTelefone, btnProxima;
 
-    private ArrayList<Telefone> arrayListTelefonesAdicionados = new ArrayList<>();
-    private ArrayList<Telefone> listaDeTelefonesAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> arrayListTelefoneAdicionados = new ArrayList<>();
+    private ArrayList<Telefone> listaDeTelefoneAdicionados = new ArrayList<>();
 
     private UsuarioRegisterFragment2 atendidoPmRegisterFragment2;
 
@@ -78,7 +81,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
     private TipoAtendido tipoAtendido;
     private String nomeCompleto;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private String cpf;
     private SexoEnum sexoEnum;
     private String email;
@@ -162,19 +165,19 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void configurarMascaraData()
     {
         Mascaras mascara = new Mascaras();
-        mascara.mascaraData(textInputEditTextDataNascimento);
+        mascara.criarMascaraParaData(textInputEditTextDataNascimento);
     }
 
     private void configurarMascaraCpf()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraCpf(textInputEditTextCpf);
+        mascara.criarMascaraParaCpf(textInputEditTextCpf);
     }
 
     private void configurarMascaraTelefone()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraTelefone(textInputEditTextTelefone);
+        mascara.criarMascaraParaTelefone(textInputEditTextTelefone);
     }
 
     private void configurarCampoTelefone()
@@ -186,7 +189,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewTelefoneUsuarioString(getActivity(), textInputEditTextTelefone,
-                        arrayListTelefonesAdicionados, linearLayoutTelefone);
+                        arrayListTelefoneAdicionados, linearLayoutTelefone);
             }
         });
     }
@@ -289,8 +292,8 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
     private void popularCampoUfNatalComDB() {
 
-        EstadoController estadoController = new EstadoController();
-        estadoController.listar(getActivity(), new VolleyCallback() {
+        UfController ufController = new UfController();
+        ufController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -340,7 +343,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoEscolaridadeComDB() {
 
         EscolaridadeController escolaridadeController = new EscolaridadeController();
-        escolaridadeController.listarEscolaridades(getActivity(), new VolleyCallback() {
+        escolaridadeController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -465,11 +468,12 @@ public class UsuarioRegisterFragment1 extends Fragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void receberDadosUsuarioPreenchidos() throws ParseException {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
-        dataNascimento = DateFormater.StringToDate(textInputEditTextDataNascimento.getText().toString());
+        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString());
         cpf = Mascaras.removerMascaras(textInputEditTextCpf.getText().toString());
-        listaDeTelefonesAdicionados = arrayListTelefonesAdicionados;
+        listaDeTelefoneAdicionados = arrayListTelefoneAdicionados;
         email = textInputEditTextEmail.getText().toString();
         for(int i = 0; i < listaEstadosCivisRecuperados.size(); i++) {
             EstadoCivilEnum estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
@@ -479,7 +483,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
         }
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
+            if(cidadeSelecionada.getNome().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
                 naturalidade = cidadeSelecionada;
             }
         }
@@ -508,6 +512,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroUsuario() throws ParseException {
         receberDadosUsuarioPreenchidos();
         Boolean validarCPF = ValidarCPF.validarCPF(textInputEditTextCpf.getText().toString());
@@ -526,7 +531,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                                 if (!TextUtils.isEmpty(sexoEnum.getNome())) {
 
-                                    if (!listaDeTelefonesAdicionados.isEmpty()) {
+                                    if (!listaDeTelefoneAdicionados.isEmpty()) {
 
                                         if (validarCPF.equals(true)) {
 
@@ -617,7 +622,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
         bundle.putString("dataNascimento", dataNascimento.toString());
         bundle.putString("cpf", cpf);
         bundle.putSerializable("sexo", sexoEnum);
-        bundle.putSerializable("telefones", listaDeTelefonesAdicionados);
+        bundle.putSerializable("telefones", listaDeTelefoneAdicionados);
         bundle.putString("email", email);
         bundle.putSerializable("estadoCivil", estadoCivilEnum);
         bundle.putSerializable("cidadeNatal", naturalidade);
@@ -632,6 +637,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void abrirProximaTela() {
 
         btnProxima.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @SneakyThrows
             @Override
             public void onClick(View v) {
@@ -656,8 +662,8 @@ public class UsuarioRegisterFragment1 extends Fragment {
     @Override
     public void onResume() {
 
-        arrayListTelefonesAdicionados.clear();
-        listaDeTelefonesAdicionados.clear();
+        arrayListTelefoneAdicionados.clear();
+        listaDeTelefoneAdicionados.clear();
 
         super.onResume();
     }

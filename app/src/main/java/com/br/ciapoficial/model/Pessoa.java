@@ -5,8 +5,10 @@ import com.br.ciapoficial.enums.EstadoCivilEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +21,7 @@ public abstract class Pessoa implements Serializable {
     @EqualsAndHashCode.Include
     private Integer id;
     private String nomeCompleto;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private String cpf;
     private SexoEnum sexo;
     private Cidade naturalidade;
@@ -29,9 +31,9 @@ public abstract class Pessoa implements Serializable {
     private ArrayList<Telefone> telefones;
     private String email;
     private Endereco endereco;
-    private Date dataCadastro;
+    private LocalDateTime dataCadastro;
     private Funcionario responsavelCadastro;
-    private Date dataEdicao;
+    private LocalDateTime dataEdicao;
     private Funcionario responsavelEdicao;
 
 }

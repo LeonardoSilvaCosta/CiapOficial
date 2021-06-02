@@ -1,17 +1,22 @@
 package com.br.ciapoficial.model;
 
-import java.io.Serializable;
-
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
-@Setter@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Escolaridade implements Serializable {
+@Setter
+public class Uf {
     @EqualsAndHashCode.Include
     private int id;
     private String nome;
+    private String uf;
+
+    public Uf() {
+    }
 
     @Override
     public String toString() {

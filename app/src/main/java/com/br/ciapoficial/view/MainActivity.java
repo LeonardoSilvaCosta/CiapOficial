@@ -17,11 +17,11 @@ import com.br.ciapoficial.R;
 import com.br.ciapoficial.view.fragment.PrincipalFragment;
 import com.br.ciapoficial.view.fragment.FuncionarioRegisterFragment1;
 
-import static com.br.ciapoficial.view.LoginActivity.fileName;
-import static com.br.ciapoficial.view.LoginActivity.userEmail;
-import static com.br.ciapoficial.view.LoginActivity.userId;
-import static com.br.ciapoficial.view.LoginActivity.userPass;
-import static com.br.ciapoficial.view.LoginActivity.userSex;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+import static com.br.ciapoficial.view.LoginActivity.USER_EMAIL;
+import static com.br.ciapoficial.view.LoginActivity.USER_ID;
+import static com.br.ciapoficial.view.LoginActivity.USER_PASS;
+import static com.br.ciapoficial.view.LoginActivity.USER_SEX;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         ciapToolbar =  findViewById(R.id.includedToolbar);
         setSupportActionBar(ciapToolbar);
 
-        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         principalFragment = new PrincipalFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
     private void desconectarUsuario() {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(fileName);
-        editor.remove(userId);
-        editor.remove(userEmail);
-        editor.remove(userSex);
-        editor.remove(userPass);
+        editor.remove(FILE_NAME);
+        editor.remove(USER_ID);
+        editor.remove(USER_EMAIL);
+        editor.remove(USER_SEX);
+        editor.remove(USER_PASS);
         editor.commit();
 
         abrirTelaLogin();

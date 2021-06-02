@@ -4,9 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -76,13 +81,13 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentos(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final VolleyCallback callback) {
 
-        String url = Constants.URLAtendimentos + "/listar_atendimentos.php";
+        String url = Constants.BASE_API_URL + "/atendimentos";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -92,10 +97,40 @@ public class AtendimentoController {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }

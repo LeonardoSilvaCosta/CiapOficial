@@ -1,63 +1,6 @@
 package com.br.ciapoficial.view.fragment;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.br.ciapoficial.Constants;
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.AddRemoveTextView;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
-import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.helper.Permissao;
-import com.br.ciapoficial.helper.ValidarCPF;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Funcionario;
-import com.br.ciapoficial.model.Telefone;
-import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputEditText;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.app.Activity.RESULT_OK;
-import static com.br.ciapoficial.view.LoginActivity.fileName;
 
 public class UserUpdateFragment1 extends Fragment {
 

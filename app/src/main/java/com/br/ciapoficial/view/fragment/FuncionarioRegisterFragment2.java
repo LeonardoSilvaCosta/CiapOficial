@@ -14,16 +14,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EstadoController;
-import com.br.ciapoficial.enums.UfEnum;
+import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Uf;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,15 +33,14 @@ import java.util.ArrayList;
 public class FuncionarioRegisterFragment2 extends Fragment {
 
     private FuncionarioRegisterFragment3 funcionarioRegisterFragment3;
-    private TextInputLayout tilUf;
+
     private AutoCompleteTextView autoCompleteTextViewUf, autoCompleteTextViewCidade;
     private TextInputEditText textInputEditTextCep, textInputEditTextBairro,
             textInputEditTextLogradouro, textInputEditTextNumero;
+    private Button btnProxima;
 
-    private ArrayList<UfEnum> listaEstadosRecuperados = new ArrayList<>();
+    private ArrayList<Uf> listaEstadosRecuperados = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
-
-    Button btnProxima;
 
     private Endereco endereco;
 
@@ -56,7 +54,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_funcionario_register2, container, false);
 
         configurarComponentes(view);
-        configurarMascaraCep();
+        configurarMascaraParaCep();
         popularCampoUfComDB();
         popularCampoCidadeComDB();
         abrirProximaTela();
@@ -64,7 +62,6 @@ public class FuncionarioRegisterFragment2 extends Fragment {
     }
 
     private void configurarComponentes(View view) {
-        tilUf = view.findViewById(R.id.textInputLayoutUf);
         textInputEditTextCep = view.findViewById(R.id.edtCep);
         autoCompleteTextViewUf = view.findViewById(R.id.edtUf);
         autoCompleteTextViewCidade = view.findViewById(R.id.edtCidadeNatal);
@@ -78,36 +75,34 @@ public class FuncionarioRegisterFragment2 extends Fragment {
 
     }
 
-    private Bundle recuperarDadosUserRegisterFragment1() {
+    private Bundle recuperarDadosFuncionarioRegisterFragment1() {
         Bundle valoresRecebidosFragment1 = this.getArguments();
 
         return valoresRecebidosFragment1;
 
     }
 
-    private void configurarMascaraCep() {
-        Mascaras mascaras = new Mascaras();
-        mascaras.criarMascaraCep(textInputEditTextCep);
-    }
+    private void configurarMascaraParaCep() {Mascaras.criarMascaraParaCep(textInputEditTextCep);}
 
     private void popularCampoUfComDB() {
 
-        EstadoController estadoController = new EstadoController();
-        estadoController.listar(getActivity(), new VolleyCallback() {
+        UfController ufController = new UfController();
+        ufController.listar(getActivity(), new VolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
-
-                    JSONArray jsonArray= new JSONArray(response);
+                    JSONArray jsonArray = new JSONArray(response);
 
                     for(int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        UfEnum ufEnum = (UfEnum) object.get("uf");
+                        Uf uf = new Uf();
+                        uf.setId(Integer.parseInt(object.getString("id")));
+                        uf.setNome(object.getString("nome"));
 
-                        listaEstadosRecuperados.add(ufEnum);
+                        listaEstadosRecuperados.add(uf);
                         configurarCampoEstado(listaEstadosRecuperados);
 
                     }
@@ -120,9 +115,9 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         });
     }
 
-    private void configurarCampoEstado(ArrayList<UfEnum> listaEstadosRecuperados) {
+    private void configurarCampoEstado(ArrayList<Uf> listaEstadosRecuperados) {
 
-        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
+        ArrayAdapter<Uf> adapterUf = new ArrayAdapter<Uf>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUf.setAdapter(adapterUf);
@@ -141,13 +136,13 @@ public class FuncionarioRegisterFragment2 extends Fragment {
 
     }
 
-    private void receberDadosUsuarioPreenchidos() {
+    private void receberDadosFuncionarioPreenchidos() {
         endereco = new Endereco();
         endereco.setCep(Mascaras.removerMascaras(textInputEditTextCep.getText().toString()));
 
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
             Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getDescricao().equals(autoCompleteTextViewCidade.getText().toString())) {
+            if(cidadeSelecionada.getNome().equals(autoCompleteTextViewCidade.getText().toString())) {
                 endereco.setCidade(cidadeSelecionada);
             }
         }
@@ -157,12 +152,12 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString()));
     }
 
-    private boolean validarCadastroUsuario() {
-        receberDadosUsuarioPreenchidos();
+    private boolean validarCadastroFuncionario() {
+        receberDadosFuncionarioPreenchidos();
 
         if (!TextUtils.isEmpty(endereco.getCep())) {
 
-            if (!TextUtils.isEmpty(endereco.getCidade().getDescricao())) {
+            if (!TextUtils.isEmpty(endereco.getCidade().getNome())) {
 
                 if (!TextUtils.isEmpty(endereco.getBairro())) {
 
@@ -204,7 +199,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
 
     private Bundle encapsularValoresParaEnvio()
     {
-        Bundle valoresRecebidosFragment1 =  recuperarDadosUserRegisterFragment1();
+        Bundle valoresRecebidosFragment1 =  recuperarDadosFuncionarioRegisterFragment1();
         Bundle bundle = new Bundle();
 
         bundle.putBundle("valoresRecebidosFragment1", valoresRecebidosFragment1);
@@ -219,7 +214,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroUsuario())
+                if(validarCadastroFuncionario())
                 {
                     Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
