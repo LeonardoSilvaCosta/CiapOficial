@@ -147,9 +147,9 @@ public class FuncionarioRegisterFragment2 extends Fragment {
             }
         }
 
-        endereco.setBairro(textInputEditTextBairro.getText().toString());
-        endereco.setLogradouro(textInputEditTextLogradouro.getText().toString());
-        endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString()));
+        endereco.setBairro(textInputEditTextBairro.getText().toString().trim());
+        endereco.setLogradouro(textInputEditTextLogradouro.getText().toString().trim());
+        endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString().trim()));
     }
 
     private boolean validarCadastroFuncionario() {

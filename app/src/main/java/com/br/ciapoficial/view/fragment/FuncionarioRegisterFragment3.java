@@ -445,8 +445,8 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             }
         }
 
-        rgMilitar = textInputEditTextRgMilitar.getText().toString();
-        nomeGuerra = textInputEditTextNomeGuerra.getText().toString();
+        rgMilitar = textInputEditTextRgMilitar.getText().toString().trim();
+        nomeGuerra = textInputEditTextNomeGuerra.getText().toString().trim();
 
         for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
             Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
@@ -482,7 +482,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             }
         }
 
-        registroConselho = textInputEditTextRegistroConselho.getText().toString();
+        registroConselho = textInputEditTextRegistroConselho.getText().toString().trim();
 
     }
 

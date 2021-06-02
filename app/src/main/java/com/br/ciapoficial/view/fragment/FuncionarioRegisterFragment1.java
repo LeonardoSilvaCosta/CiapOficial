@@ -77,6 +77,10 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     private Escolaridade escolaridade = new Escolaridade();
     private SexoEnum sexo;
 
+    //Ajustar os valores recebidos (eliminar espaços, se for o caso settar como uper ou lowercase
+    //Data de nascimento ter boa regra para validação de data
+    //Resgatar Uf no campo naturalidade e cidade de residência
+
     public FuncionarioRegisterFragment1() {
         // Required empty public constructor
     }
@@ -297,7 +301,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void receberDadosFuncionarioPreenchidos() throws ParseException {
-        nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
+        nomeCompleto = textInputEditTextNomeCompleto.getText().toString().trim();
         dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString());
 
         cpf = textInputEditTextCpf.getText().toString();
@@ -315,7 +319,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
                 naturalidade = cidadeSelecionada;
             }
         }
-        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString());
+        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString().trim());
         for(int i = 0; i < listaEscolaridadesRecuperadas.size(); i++) {
             Escolaridade escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
             if(escolaridadeSelecionada.getNome().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
@@ -324,7 +328,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
             }
         }
         listaDeTelefoneAdicionados = arrayListTelefoneAdicionados;
-        email = textInputEditTextEmail.getText().toString();
+        email = textInputEditTextEmail.getText().toString().trim();
 
     }
 
