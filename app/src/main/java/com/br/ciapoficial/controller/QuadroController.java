@@ -16,14 +16,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuadroController {
 
-    public void listar(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/quadros";
 

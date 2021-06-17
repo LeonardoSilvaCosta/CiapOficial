@@ -9,12 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.br.ciapoficial.Constants;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 
 public class ViaCep {
 
-    public void buscarCep(Context context, String cep,  VolleyCallback callback) {
+    public void buscarCep(Context context, String cep,  IVolleyCallback callback) {
 
         String url = "http://viacep.com.br/ws/" + cep + "/json/";
 

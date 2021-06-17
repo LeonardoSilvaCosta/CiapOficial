@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -30,8 +30,10 @@ import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Cidade;
@@ -130,7 +132,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
 
         UfController ufController = new UfController();
-        ufController.listar(getActivity(), new VolleyCallback() {
+        ufController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -310,9 +312,9 @@ public class UsuarioRegisterFragment2 extends Fragment {
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
-        usuario.setEstadoCivil((EstadoCivilEnum) valoresRecebidosFragment1.getSerializable("estadoCivil"));
+        usuario.setEstadoCivil((EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));
         usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("cidadeNatal"));
-        usuario.setEscolaridade((EscolaridadeEnum) valoresRecebidosFragment1.getSerializable("escolaridade"));
+        usuario.setEscolaridade((Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setNumeroFilhos((valoresRecebidosFragment1.getInt("numeroFilhos")));
         usuario.setTitular(titular);
         usuario.setTipoVinculo((TipoVinculoEnum) valoresRecebidosFragment1.getSerializable("vinculo"));
@@ -326,7 +328,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
         new UsuarioController().cadastrar(
                 getActivity(),
                 novoUsuario,
-                new VolleyCallback() {
+                new IVolleyCallback() {
                     @Override
                     public void onSucess(String response) {
 

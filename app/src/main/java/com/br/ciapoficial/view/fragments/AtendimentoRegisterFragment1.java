@@ -1,43 +1,6 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
-import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.AcessoAtendimentoController;
-import com.br.ciapoficial.controller.UsuarioController;
-import com.br.ciapoficial.controller.ModalidadeController;
-import com.br.ciapoficial.controller.UnidadeController;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.AddRemoveTextView;
-import com.br.ciapoficial.helper.Calendar;
-import com.br.ciapoficial.helper.DateFormater;
-import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.in_atendimento.Acesso;
-import com.br.ciapoficial.model.in_atendimento.Modalidade;
-import com.br.ciapoficial.model.Unidade;
-import com.br.ciapoficial.model.Funcionario;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class AtendimentoRegisterFragment1 extends Fragment {
 //

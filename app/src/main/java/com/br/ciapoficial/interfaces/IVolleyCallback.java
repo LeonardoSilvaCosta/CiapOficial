@@ -1,6 +1,6 @@
 package com.br.ciapoficial.interfaces;
 
-public interface VolleyCallback {
+public interface IVolleyCallback {
     void onSucess(String response);
 
 }

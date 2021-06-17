@@ -1,7 +1,5 @@
 package com.br.ciapoficial.model;
 
-import com.br.ciapoficial.enums.EspecialidadeEnum;
-
 import lombok.Getter;
 import lombok.Setter;
 

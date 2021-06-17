@@ -1,7 +1,5 @@
 package com.br.ciapoficial.helper;
 
-import android.widget.AutoCompleteTextView;
-
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.material.textfield.TextInputEditText;
@@ -10,9 +8,9 @@ public class Mascaras {
 
     public static void criarMascaraParaData(TextInputEditText campoDeTexto)
     {
-            SimpleMaskFormatter smfData = new SimpleMaskFormatter("NN/NN/NNNN");
-            MaskTextWatcher mtwData = new MaskTextWatcher(campoDeTexto, smfData);
-            campoDeTexto.addTextChangedListener(mtwData);
+        SimpleMaskFormatter smfData = new SimpleMaskFormatter("NN/NN/NNNN");
+        MaskTextWatcher mtwData = new MaskTextWatcher(campoDeTexto, smfData);
+        campoDeTexto.addTextChangedListener(mtwData);
     }
 
     public static void criarMascaraParaCpf(TextInputEditText campoDeTexto)
@@ -24,7 +22,7 @@ public class Mascaras {
 
     public static void criarMascaraParaTelefone(TextInputEditText campoDeTexto)
     {
-        SimpleMaskFormatter smfTelefone = new SimpleMaskFormatter("(NN)NNNNN-NNNN");
+        SimpleMaskFormatter smfTelefone = new SimpleMaskFormatter("(NN) NNNNN-NNNN");
         MaskTextWatcher mtwTelefone = new MaskTextWatcher(campoDeTexto, smfTelefone);
         campoDeTexto.addTextChangedListener(mtwTelefone);
     }

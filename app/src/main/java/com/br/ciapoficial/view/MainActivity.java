@@ -14,8 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.view.fragment.PrincipalFragment;
-import com.br.ciapoficial.view.fragment.FuncionarioRegisterFragment1;
+import com.br.ciapoficial.view.fragments.PrincipalFragment;
+import com.br.ciapoficial.view.fragments.FuncionarioRegisterFragment1;
 
 import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 import static com.br.ciapoficial.view.LoginActivity.USER_EMAIL;

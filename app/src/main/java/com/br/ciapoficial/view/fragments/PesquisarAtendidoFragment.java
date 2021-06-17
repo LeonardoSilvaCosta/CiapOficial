@@ -1,35 +1,6 @@
-package com.br.ciapoficial.view.fragment;
-
-import android.content.Intent;
-import android.os.Bundle;
+package com.br.ciapoficial.view.fragments;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.adapters.AtendidosAdapter;
-import com.br.ciapoficial.controller.UsuarioController;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
-import com.br.ciapoficial.helper.RecyclerItemClickListener;
-import com.br.ciapoficial.helper.PadraoDeVisualizacao;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.Titular;
-import com.br.ciapoficial.view.DetalhesAtendidoActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PesquisarAtendidoFragment extends Fragment {
 

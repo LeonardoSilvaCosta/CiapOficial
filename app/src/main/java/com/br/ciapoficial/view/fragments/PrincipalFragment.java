@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.UserModel;
 import com.br.ciapoficial.view.PesquisarActivity;
 import com.bumptech.glide.Glide;
@@ -86,7 +86,7 @@ public class PrincipalFragment extends Fragment {
         FuncionarioController funcionarioController = new FuncionarioController();
         UserModel userModel = new UserModel();
         //
-        funcionarioController.recuperarImagem(getActivity(), new VolleyCallback() {
+        funcionarioController.recuperarImagem(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 

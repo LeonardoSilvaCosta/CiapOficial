@@ -1,28 +1,6 @@
 package com.br.ciapoficial.view;
 
-import android.os.Bundle;
-
-import com.br.ciapoficial.controller.AtendimentoController;
-import com.br.ciapoficial.interfaces.VolleyCallback;
-import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.Atendimento;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.widget.TextView;
-
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.model.Funcionario;
-import com.br.ciapoficial.model.in_atendimento.DemandaEspecifica;
-import com.br.ciapoficial.model.in_atendimento.Deslocamento;
-import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class DetalhesAtendimentoActivity extends AppCompatActivity {
 

@@ -16,7 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import static com.br.ciapoficial.Constants.BASE_API_URL;
 
 public class CidadeController {
 
-    public void listar(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades";
 
@@ -80,7 +80,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadesAcre(Context context, final VolleyCallback callback) {
+    public void listarCidadesAcre(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/1";
 
@@ -135,7 +135,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeAlagoas(Context context, final VolleyCallback callback) {
+    public void listarCidadeAlagoas(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/2";
 
@@ -190,7 +190,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeAmazonas(Context context, final VolleyCallback callback) {
+    public void listarCidadeAmazonas(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/3";
 
@@ -244,7 +244,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeAmapa(Context context, final VolleyCallback callback) {
+    public void listarCidadeAmapa(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/4";
 
@@ -298,7 +298,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeBahia(Context context, final VolleyCallback callback) {
+    public void listarCidadeBahia(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/5";
 
@@ -352,7 +352,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeCeara(Context context, final VolleyCallback callback) {
+    public void listarCidadeCeara(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/6";
 
@@ -406,7 +406,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeDistritoFederal(Context context, final VolleyCallback callback) {
+    public void listarCidadeDistritoFederal(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/7";
 
@@ -460,7 +460,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeEspiritoSanto(Context context, final VolleyCallback callback) {
+    public void listarCidadeEspiritoSanto(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/8";
 
@@ -514,7 +514,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeGoias(Context context, final VolleyCallback callback) {
+    public void listarCidadeGoias(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/9";
 
@@ -568,7 +568,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeMaranhao(Context context, final VolleyCallback callback) {
+    public void listarCidadeMaranhao(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/10";
 
@@ -622,7 +622,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeMinasGerais(Context context, final VolleyCallback callback) {
+    public void listarCidadeMinasGerais(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/11";
 
@@ -676,7 +676,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeMatoGrossoDoSul(Context context, final VolleyCallback callback) {
+    public void listarCidadeMatoGrossoDoSul(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/12";
 
@@ -730,7 +730,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeMatoGrosso(Context context, final VolleyCallback callback) {
+    public void listarCidadeMatoGrosso(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/13";
 
@@ -784,7 +784,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadePara(Context context, final VolleyCallback callback) {
+    public void listarCidadePara(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/14";
 
@@ -838,7 +838,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeParaiba(Context context, final VolleyCallback callback) {
+    public void listarCidadeParaiba(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/15";
 
@@ -892,7 +892,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadePernambuco(Context context, final VolleyCallback callback) {
+    public void listarCidadePernambuco(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/16";
 
@@ -946,7 +946,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadePiaui(Context context, final VolleyCallback callback) {
+    public void listarCidadePiaui(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/17";
 
@@ -1000,7 +1000,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeParana(Context context, final VolleyCallback callback) {
+    public void listarCidadeParana(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/18";
 
@@ -1054,7 +1054,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeRioDeJaneiro(Context context, final VolleyCallback callback) {
+    public void listarCidadeRioDeJaneiro(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/19";
 
@@ -1108,7 +1108,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeRioGrandeDoNorte(Context context, final VolleyCallback callback) {
+    public void listarCidadeRioGrandeDoNorte(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/20";
 
@@ -1162,7 +1162,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeRondonia(Context context, final VolleyCallback callback) {
+    public void listarCidadeRondonia(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/21";
 
@@ -1216,7 +1216,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeRoraima(Context context, final VolleyCallback callback) {
+    public void listarCidadeRoraima(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/22";
 
@@ -1270,7 +1270,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeRioGrandeDoSul(Context context, final VolleyCallback callback) {
+    public void listarCidadeRioGrandeDoSul(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/23";
 
@@ -1324,7 +1324,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeSantaCatarina(Context context, final VolleyCallback callback) {
+    public void listarCidadeSantaCatarina(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/24";
 
@@ -1378,7 +1378,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeSergipe(Context context, final VolleyCallback callback) {
+    public void listarCidadeSergipe(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/25";
 
@@ -1432,7 +1432,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeSaoPaulo(Context context, final VolleyCallback callback) {
+    public void listarCidadeSaoPaulo(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/26";
 
@@ -1486,7 +1486,7 @@ public class CidadeController {
         queue.add(stringRequest);
     }
 
-    public void listarCidadeTocantins(Context context, final VolleyCallback callback) {
+    public void listarCidadeTocantins(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades/27";
 

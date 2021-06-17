@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Usuario;
 
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class UsuarioController extends PessoaController {
 
     String url = Constants.BASE_API_URL + "/usuarios";
 
-    public void cadastrar(Context context, Usuario usuario, final VolleyCallback callback) {
+    public void cadastrar(Context context, Usuario usuario, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
@@ -91,7 +91,7 @@ public class UsuarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void listar(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 

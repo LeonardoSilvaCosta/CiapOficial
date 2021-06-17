@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import androidx.fragment.app.Fragment;
 

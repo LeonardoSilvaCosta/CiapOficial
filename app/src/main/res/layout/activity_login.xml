@@ -10,7 +10,7 @@
         android:id="@+id/txtLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/poppinsbold"
         android:gravity="center"
         android:text="@string/login"
@@ -22,9 +22,21 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="jelly_bean" />
 
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:contentDescription="Imagem de teste"
+        android:src="@drawable/brasao_ciap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLogin" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.426"
@@ -49,6 +61,8 @@
                 android:drawableEnd="@drawable/ic_user"
                 android:drawableRight="@drawable/ic_user"
                 android:fontFamily="@font/poppinsmedium"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/txtInputedtSenha"
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,8 +83,8 @@
                 android:drawableEnd="@drawable/ic_senha"
                 android:drawableRight="@drawable/ic_senha"
                 android:fontFamily="@font/poppinsmedium"
-                tools:targetApi="jelly_bean"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ProgressBar
@@ -88,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
             android:text="@string/login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

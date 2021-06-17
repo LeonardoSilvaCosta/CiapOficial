@@ -1,7 +1,7 @@
 package com.br.ciapoficial.enums;
 
 public enum QuadroEnum {
-    NONE("Valor desconhecido"), QOPM("QOPM"), QCOPM("QCOPM"), QOSPM("QOSPM"), QOAPM("QOAPM"),
+    NAO_SE_APLICA("Não se aplica"), QOPM("QOPM"), QCOPM("QCOPM"), QOSPM("QOSPM"), QOAPM("QOAPM"),
     QPMP("QPMP");
 
     private String nome;

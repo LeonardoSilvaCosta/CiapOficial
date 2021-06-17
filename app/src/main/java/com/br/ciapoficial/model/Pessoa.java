@@ -1,7 +1,5 @@
 package com.br.ciapoficial.model;
 
-import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EstadoCivilEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 
 import java.io.Serializable;
@@ -25,9 +23,9 @@ public abstract class Pessoa implements Serializable {
     private String cpf;
     private SexoEnum sexo;
     private Cidade naturalidade;
-    private EstadoCivilEnum estadoCivil;
+    private EstadoCivil estadoCivil;
     private int numeroFilhos;
-    private EscolaridadeEnum escolaridade;
+    private Escolaridade escolaridade;
     private ArrayList<Telefone> telefones;
     private String email;
     private Endereco endereco;

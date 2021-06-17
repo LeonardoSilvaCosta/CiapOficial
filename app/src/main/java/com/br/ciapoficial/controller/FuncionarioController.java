@@ -3,7 +3,6 @@ package com.br.ciapoficial.controller;
 import android.content.Context;
 import android.os.Build;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -23,9 +22,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.GsonLocalDateSerializer;
-import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Funcionario;
 import com.br.ciapoficial.model.UserModel;
 import com.google.gson.Gson;
@@ -35,16 +33,17 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.br.ciapoficial.Constants.BASE_API_URL;
+
 public class FuncionarioController extends PessoaController {
     private static String TAG = FuncionarioController.class.getName();
+    private String urlFuncionarios = BASE_API_URL + "/funcionarios";
 
-    public void cadastrar(Context context, Funcionario funcionario, final VolleyCallback callback) {
-
-        String url = Constants.BASE_API_URL + "/funcionarios";
+    public void cadastrar(Context context, Funcionario funcionario, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlFuncionarios,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -88,9 +87,7 @@ public class FuncionarioController extends PessoaController {
             }
 
             @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
+            public String getBodyContentType() { return "application/json; charset=utf-8"; }
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -107,13 +104,11 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void listar(Context context, final VolleyCallback callback) {
-
-        String url = Constants.BASE_API_URL + "/funcionarios";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlFuncionarios,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -212,13 +207,11 @@ public class FuncionarioController extends PessoaController {
 //
 //    }
 
-    public void deletarUsuario(Context context, final String id, final VolleyCallback callback) {
-
-        String url = Constants.URLUsuarios + "/deletar.php";
+    public void deletarUsuario(Context context, final String id, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, urlFuncionarios,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -243,9 +236,9 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void logarUsuario(Context context, UserModel user, final VolleyCallback callback) {
+    public void logarUsuario(Context context, UserModel user, final IVolleyCallback callback) {
 
-        String url = Constants.BASE_API_URL + "/login";
+        String url = BASE_API_URL + "/login";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -313,7 +306,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void recuperarSenha(Context context, String email, final VolleyCallback callback) {
+    public void recuperarSenha(Context context, String email, final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/recuperar_senha.php";
 
@@ -343,7 +336,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void carregarImagemUsuario(Context context, String imagem, final VolleyCallback callback) {
+    public void carregarImagemUsuario(Context context, String imagem, final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/carregar_imagem.php";
 
@@ -377,7 +370,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void recuperarImagem(Context context, final VolleyCallback callback) {
+    public void recuperarImagem(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/recuperar_imagem.php";
 
@@ -401,7 +394,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void recuperarUsuarioLogado(Context context, final String email,  final VolleyCallback callback) {
+    public void recuperarUsuarioLogado(Context context, final String email,  final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/recuperar_usuario_logado.php";
 
@@ -433,7 +426,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void recuperarTelefoneUsuarioLogado(Context context, final String id,  final VolleyCallback callback) {
+    public void recuperarTelefoneUsuarioLogado(Context context, final String id,  final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/recuperar_telefones_usuario_logado.php";
 
@@ -465,7 +458,7 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-    public void listarOficiais(Context context, final VolleyCallback callback) {
+    public void listarOficiais(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLUsuarios + "/listar_oficiais.php";
 

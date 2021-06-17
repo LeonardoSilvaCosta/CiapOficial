@@ -1,6 +1,6 @@
 package com.br.ciapoficial.helper;
 
-public class ValidarCPF {
+public class CPFValidator {
 
         public static boolean validarCPF(String cpf) {
 

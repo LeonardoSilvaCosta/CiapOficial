@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -35,8 +35,8 @@ import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
-import com.br.ciapoficial.helper.ValidarCPF;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.helper.CPFValidator;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Cidade;
@@ -251,7 +251,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoEstadoCivilComDB() {
 
         EstadoCivilController estadoCivilController = new EstadoCivilController();
-        estadoCivilController.listar(getActivity(), new VolleyCallback() {
+        estadoCivilController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -293,7 +293,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoUfNatalComDB() {
 
         UfController ufController = new UfController();
-        ufController.listar(getActivity(), new VolleyCallback() {
+        ufController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -343,7 +343,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoEscolaridadeComDB() {
 
         EscolaridadeController escolaridadeController = new EscolaridadeController();
-        escolaridadeController.listar(getActivity(), new VolleyCallback() {
+        escolaridadeController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -385,7 +385,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoTitularComDB() {
 
         UsuarioController usuarioTitularController = new UsuarioController();
-        usuarioTitularController.listar(getActivity(), new VolleyCallback() {
+        usuarioTitularController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -428,7 +428,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoVinculoComDB() {
 
         VinculoController vinculoController = new VinculoController();
-        vinculoController.listar(getActivity(), new VolleyCallback() {
+        vinculoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -515,7 +515,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroUsuario() throws ParseException {
         receberDadosUsuarioPreenchidos();
-        Boolean validarCPF = ValidarCPF.validarCPF(textInputEditTextCpf.getText().toString());
+        Boolean validarCPF = CPFValidator.validarCPF(textInputEditTextCpf.getText().toString());
 
         if(rbtnPm.isChecked() || rbtnDependente.isChecked() || rbtnCivil.isChecked()) {
 

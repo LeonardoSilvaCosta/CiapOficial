@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Escolaridade implements Serializable {
     @EqualsAndHashCode.Include
     private int id;

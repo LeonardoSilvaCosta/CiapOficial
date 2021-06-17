@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.UserUpdateFragment2">
+    tools:context=".view.fragments.UserUpdateFragment2">
 
     <ScrollView
         android:layout_width="match_parent"

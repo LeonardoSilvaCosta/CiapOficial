@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Telefone;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class TelefoneController {
 
-    public void listar(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/telefones";
 
@@ -80,7 +80,7 @@ public class TelefoneController {
         queue.add(stringRequest);
     }
 
-    public void deletarTelefone(Context context, final ArrayList<Telefone> dadosTelefones, final VolleyCallback callback) {
+    public void deletarTelefone(Context context, final ArrayList<Telefone> dadosTelefones, final IVolleyCallback callback) {
 
         String url = Constants.URLTelefones + "/deletar.php";
 

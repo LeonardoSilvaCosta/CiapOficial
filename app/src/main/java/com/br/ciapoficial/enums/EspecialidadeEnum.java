@@ -1,7 +1,7 @@
 package com.br.ciapoficial.enums;
 
 public enum EspecialidadeEnum {
-    NONE("Valor desconhecido"), PSICOLOGO("Psicólogo(a)"), ASSISTENTE_SOCIAL("Assistente Social");
+    NAO_SE_APLICA("Não se aplica"), PSICOLOGO("Psicólogo(a)"), ASSISTENTE_SOCIAL("Assistente Social");
 
     private String nome;
 

@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -34,9 +34,11 @@ import com.br.ciapoficial.enums.UnidadeEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
+import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.google.android.material.textfield.TextInputEditText;
@@ -110,7 +112,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void popularCampoPostoGradCatComDB() {
 
         PostoGradCatController postoGradCatController = new PostoGradCatController();
-        postoGradCatController.listar(getActivity(), new VolleyCallback() {
+        postoGradCatController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -153,7 +155,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void popularCampoUnidadeComDB() {
 
         UnidadeController unidadeController = new UnidadeController();
-        unidadeController.listar(getActivity(), new VolleyCallback() {
+        unidadeController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -195,7 +197,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void popularCampoQuadroComDB()
     {
         QuadroController quadroController = new QuadroController();
-        quadroController.listar(getActivity(), new VolleyCallback() {
+        quadroController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -237,7 +239,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private void popularCampoSituacaoFuncionalComDB()
     {
         SituacaoFuncionalController situacaoFuncionalController = new SituacaoFuncionalController();
-        situacaoFuncionalController.listar(getActivity(), new VolleyCallback() {
+        situacaoFuncionalController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -404,9 +406,9 @@ public class UsuarioRegisterFragment3 extends Fragment {
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
-        usuario.setEstadoCivil((EstadoCivilEnum) valoresRecebidosFragment1.getSerializable("estadoCivil"));
+        usuario.setEstadoCivil((EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));
         usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("cidadeNatal"));
-        usuario.setEscolaridade((EscolaridadeEnum) valoresRecebidosFragment1.getSerializable("escolaridade"));
+        usuario.setEscolaridade((Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setNumeroFilhos(valoresRecebidosFragment1.getInt("numeroFilhos"));
         usuario.setEndereco((Endereco) valoresRecebidosFragment1e2.getSerializable("endereco"));
         usuario.setRgMilitar(rgMilitar);
@@ -425,7 +427,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
         new UsuarioController().cadastrar(
                 getActivity(),
                 novoUsuario,
-                new VolleyCallback() {
+                new IVolleyCallback() {
                     @Override
                     public void onSucess(String response) {
 

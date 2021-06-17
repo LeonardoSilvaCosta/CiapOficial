@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Cidade implements Serializable {
 
     @EqualsAndHashCode.Include
-    private int id;
+    private Integer id;
     private String nome;
 
     @Override

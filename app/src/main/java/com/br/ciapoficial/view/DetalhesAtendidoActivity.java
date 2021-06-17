@@ -2,22 +2,12 @@ package com.br.ciapoficial.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
-import com.br.ciapoficial.helper.PadraoDeVisualizacao;
-import com.br.ciapoficial.interfaces.VolleyCallback;
 import com.br.ciapoficial.model.Usuario;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class DetalhesAtendidoActivity extends AppCompatActivity {
 

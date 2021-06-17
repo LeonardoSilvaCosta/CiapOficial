@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -26,8 +26,8 @@ import com.br.ciapoficial.controller.TipoAvaliacaoController;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.TextChangedListener;
-import com.br.ciapoficial.interfaces.TextWatcherCallback;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.ITextWatcherCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.in_atendimento.CondicaoLaboral;
 import com.br.ciapoficial.model.in_atendimento.DemandaEspecifica;
 import com.br.ciapoficial.model.in_atendimento.DemandaGeral;
@@ -125,7 +125,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
 
     private void definirVisibilidadeCondicionalDosComponentes()
     {
-        TextChangedListener.textChangedListener(autoCompleteTextViewTipoAtendimento, new TextWatcherCallback() {
+        TextChangedListener.textChangedListener(autoCompleteTextViewTipoAtendimento, new ITextWatcherCallback() {
             @Override
             public void afterTextChanged(Editable s) {
                 if(autoCompleteTextViewTipoAtendimento.getText().toString().contains("Avaliação")) {
@@ -152,7 +152,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoTipoAtendimentoComDB() {
 
         TipoAtendimentoController tipoServicoController = new TipoAtendimentoController();
-        tipoServicoController.listar(getActivity(), new VolleyCallback() {
+        tipoServicoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -201,7 +201,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoTipoAvaliacaoComDB() {
 
         TipoAvaliacaoController tipoAvaliacaoController = new TipoAvaliacaoController();
-        tipoAvaliacaoController.listar(getActivity(), new VolleyCallback() {
+        tipoAvaliacaoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -250,7 +250,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoProgramaComDB() {
 
         ProgramaController programaController = new ProgramaController();
-        programaController.listar(getActivity(), new VolleyCallback() {
+        programaController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -299,7 +299,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDeslocamentoComDB() {
 
         DeslocamentoController deslocamentoController = new DeslocamentoController();
-        deslocamentoController.listar(getActivity(), new VolleyCallback() {
+        deslocamentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -365,7 +365,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDemandaGeralComDB() {
 
         DemandaGeralController demandaGeralController = new DemandaGeralController();
-        demandaGeralController.listar(getActivity(), new VolleyCallback() {
+        demandaGeralController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -413,7 +413,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoDemandaEspecificaComDB() {
 
         DemandaEspecificaController demandaEspecificaController = new DemandaEspecificaController();
-        demandaEspecificaController.listar(getActivity(), new VolleyCallback() {
+        demandaEspecificaController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -549,7 +549,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private void popularCampoCondicaoLaboralComDB() {
 
         CondicaoLaboralController condicaoLaboralController = new CondicaoLaboralController();
-        condicaoLaboralController.listar(getActivity(), new VolleyCallback() {
+        condicaoLaboralController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 

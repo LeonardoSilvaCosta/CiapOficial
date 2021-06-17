@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.Java2Json;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Atendimento;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class AtendimentoController {
     private static String TAG = AtendimentoController.class.getName();
 
-    public void registrarAtendimento(Context context, Atendimento atendimento, final VolleyCallback callback) {
+    public void registrarAtendimento(Context context, Atendimento atendimento, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/cadastrar.php";
 
@@ -81,7 +81,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listar(Context context, final VolleyCallback callback) {
+    public void listar(Context context, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/atendimentos";
 
@@ -135,7 +135,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentosOficiais(Context context, final VolleyCallback callback) {
+    public void listarAtendimentosOficiais(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/listar_atendimentos_oficiais.php";
 
@@ -159,7 +159,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentosAtendidos(Context context, final VolleyCallback callback) {
+    public void listarAtendimentosAtendidos(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/listar_atendimentos_atendidos.php";
 
@@ -183,7 +183,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentosDeslocamentos(Context context, final VolleyCallback callback) {
+    public void listarAtendimentosDeslocamentos(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/listar_atendimentos_deslocamentos.php";
 
@@ -207,7 +207,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentosDocumentosProduzidos(Context context, final VolleyCallback callback) {
+    public void listarAtendimentosDocumentosProduzidos(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/listar_atendimentos_documentos_produzidos.php";
 
@@ -231,7 +231,7 @@ public class AtendimentoController {
         queue.add(stringRequest);
     }
 
-    public void listarAtendimentosDemandasEspecificas(Context context, final VolleyCallback callback) {
+    public void listarAtendimentosDemandasEspecificas(Context context, final IVolleyCallback callback) {
 
         String url = Constants.URLAtendimentos + "/listar_atendimentos_demandas_especificas.php";
 

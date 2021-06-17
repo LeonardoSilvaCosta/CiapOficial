@@ -201,6 +201,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="titular_hyperlink"><a href=""></a><u>ver prontuário</u></string>
-    <string name="numero_filhos">Número filhos</string>
+    <string name="numero_filhos">Número de filhos</string>
     <string name="cadastrar_usuario">Cadastrar Usuário</string>
 </resources>

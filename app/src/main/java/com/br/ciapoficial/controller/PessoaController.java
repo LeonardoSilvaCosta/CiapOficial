@@ -1,7 +1,10 @@
 package com.br.ciapoficial.controller;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -15,11 +18,14 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.br.ciapoficial.Constants;
-import com.br.ciapoficial.helper.Java2Json;
+import com.br.ciapoficial.helper.GsonLocalDateSerializer;
 import com.br.ciapoficial.helper.VolleySingleton;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Pessoa;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +33,7 @@ public abstract class PessoaController {
 
     private static String TAG = PessoaController.class.getName();
 
-    public void cadastrar(Context context, Pessoa pessoa, final VolleyCallback callback) {
+    public void cadastrar(Context context, Pessoa pessoa, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/pessoas";
 
@@ -68,26 +74,27 @@ public abstract class PessoaController {
                 }
             }
         }){
+
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json; charset=utf8");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
 
-                Map<String, String> params = new HashMap<>();
+            @Override
+            public String getBodyContentType() { return "application/json; charset=utf-8"; }
 
-//                params.put("nomeCompleto", pessoa.getNomeCompleto());
-//                params.put("dataNascimento", (Java2Json.converterJava2JasonLocalDate(pessoa.getDataNascimento())));
-//                params.put("cpf", pessoa.getCpf());
-//                params.put("sexo", Java2Json.converterJava2JasonSexo(pessoa.getSexo()));
-//                params.put("naturalidade", Java2Json.converterJava2JasonCidade(pessoa.getNaturalidade()));
-//                params.put("estadoCivil", Java2Json.converterJava2JasonEstadoCivil(pessoa.getEstadoCivil()));
-//                params.put("numeroFilhos", Java2Json.converterJava2JasonInt(pessoa.getNumeroFilhos()));
-//                params.put("escolaridade", Java2Json.converterJava2JasonEscolaridade(pessoa.getEscolaridade()));
-//                params.put("telefones",Java2Json.converterJava2JsonArrayTelefone(pessoa.getTelefones()));
-//                params.put("email", pessoa.getEmail());
-//                params.put("endereco", Java2Json.converterJava2JasonEndereco(pessoa.getEndereco()));
-//                params.put("responsavelCadastro", Java2Json.converterJava2JasonFuncionario(pessoa.getResponsavelCadastro()));
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public byte[] getBody() throws AuthFailureError {
 
-                params.put("pessoa", Java2Json.converterJava2JsonPessoa(pessoa));
-                return params;
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+                Gson gson = gsonBuilder.setPrettyPrinting().create();
+
+                return gson.toJson(pessoa).getBytes();
             }
         };
 

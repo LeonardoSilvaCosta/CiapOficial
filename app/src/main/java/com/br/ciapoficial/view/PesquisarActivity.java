@@ -1,24 +1,6 @@
 package com.br.ciapoficial.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import com.br.ciapoficial.R;
-import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.view.fragment.PesquisarAtendidoFragment;
-import com.br.ciapoficial.view.fragment.PesquisarAtendimentoFragment;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
-
-import java.util.ArrayList;
 
 public class PesquisarActivity extends AppCompatActivity {
 

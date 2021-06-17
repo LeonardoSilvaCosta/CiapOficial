@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,7 +28,7 @@ import com.br.ciapoficial.controller.SinalSintomaController;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Atendimento;
 import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
 import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
@@ -134,7 +134,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoProcedimentoComDB() {
 
         ProcedimentoController procedimentoController = new ProcedimentoController();
-        procedimentoController.listar(getActivity(), new VolleyCallback() {
+        procedimentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -184,7 +184,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoDocumentoProduzidoComDB() {
 
         DocumentoProduzidoController documentoProduzidoController = new DocumentoProduzidoController();
-        documentoProduzidoController.listar(getActivity(), new VolleyCallback() {
+        documentoProduzidoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -257,7 +257,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoEncaminhamentoComDB() {
 
         EncaminhamentoController encaminhamentoController = new EncaminhamentoController();
-        encaminhamentoController.listar(getActivity(), new VolleyCallback() {
+        encaminhamentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -330,7 +330,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoSinalSintomaComDB() {
 
         SinalSintomaController sinalSintomaController = new SinalSintomaController();
-        sinalSintomaController.listar(getActivity(), new VolleyCallback() {
+        sinalSintomaController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -400,7 +400,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     private void popularCampoMedicacaoPsiquiatricaComDB() {
 
         MedicacaoPsiquiatricaController medicacaoPsiquiatricaController = new MedicacaoPsiquiatricaController();
-        medicacaoPsiquiatricaController.listar(getActivity(), new VolleyCallback() {
+        medicacaoPsiquiatricaController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
@@ -629,7 +629,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         new AtendimentoController().registrarAtendimento(
                 getActivity(),
                 novoAtendimento,
-                new VolleyCallback() {
+                new IVolleyCallback() {
                     @Override
                     public void onSucess(String response) {
 

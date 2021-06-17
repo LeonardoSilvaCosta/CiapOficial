@@ -4,6 +4,6 @@ import com.br.ciapoficial.model.Usuario;
 
 import java.util.List;
 
-public interface AtendidosCallback {
+public interface IAtendidosCallback {
     void onCallback(List<Usuario> usuarios);
 }

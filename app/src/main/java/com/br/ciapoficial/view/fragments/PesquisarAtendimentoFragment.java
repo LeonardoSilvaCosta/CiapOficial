@@ -1,4 +1,4 @@
-package com.br.ciapoficial.view.fragment;
+package com.br.ciapoficial.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.br.ciapoficial.adapters.AtendimentosAdapter;
 import com.br.ciapoficial.controller.AtendimentoController;
 import com.br.ciapoficial.helper.DataEntreJavaEMysql;
 import com.br.ciapoficial.helper.RecyclerItemClickListener;
-import com.br.ciapoficial.interfaces.VolleyCallback;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Atendimento;
 import com.br.ciapoficial.view.DetalhesAtendimentoActivity;
 
@@ -118,7 +118,7 @@ public class PesquisarAtendimentoFragment extends Fragment {
     public void recuperarAtendimentos()
     {
         AtendimentoController atendimentoController = new AtendimentoController();
-        atendimentoController.listar(getActivity(), new VolleyCallback() {
+        atendimentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 

@@ -8,7 +8,7 @@ public enum PostoGradCatEnum implements Serializable {
     ASP("Aspirante"), AL_OF("Aluno-Oficial"), AL_CHO("Aluno-CHO"),
     SUBTEN("Subtenente"), _1SGT("1° Sargento"), _2SGT("2° Sargento"),
     _3SGT("3° Sargento"), CB("Cabo"), SD("Soldado"),
-    AL_CFP("Aluno-CFP"), VC("Voluntário Civil");
+    AL_CFP("Aluno-CFP"), VC("VC");
 
     private String nome;
 
