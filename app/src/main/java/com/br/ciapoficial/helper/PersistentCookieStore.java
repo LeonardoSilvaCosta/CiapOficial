@@ -2,6 +2,9 @@ package com.br.ciapoficial.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 
@@ -25,52 +28,42 @@ public class PersistentCookieStore implements CookieStore {
      * Created by lukas on 17-11-14.
      */
 
-    /**
-     * The default preferences string.
-     */
     private final static String PREF_DEFAULT_STRING = "";
 
-    /**
-     * The preferences name.
-     */
-    private final static String PREFS_NAME = PersistentCookieStore.class.getName();
 
-    /**
-     * The preferences session cookie key.
-     */
-    private final static String PREF_SESSION_COOKIE = "session_cookie";
+    public final static String PREFS_NAME = PersistentCookieStore.class.getName();
+
+    private final static String PREF_JWT_TOKEN = "Authorization";
 
     private CookieStore mStore;
     private Context mContext;
 
-    /**
-     * @param context The application context
-     */
     public PersistentCookieStore(Context context) {
-        // prevent context leaking by getting the application context
         mContext = context.getApplicationContext();
 
-        // get the default in memory store and if there is a cookie stored in shared preferences,
-        // we added it to the cookie store
         mStore = new CookieManager().getCookieStore();
-        String jsonSessionCookie = getJsonSessionCookieString();
-        if (!jsonSessionCookie.equals(PREF_DEFAULT_STRING)) {
+        String jwtTokenCookie = getJwtTokenCookie();
+
+        if (!jwtTokenCookie.equals(PREF_DEFAULT_STRING)) {
             Gson gson = new Gson();
-            HttpCookie cookie = gson.fromJson(jsonSessionCookie, HttpCookie.class);
-            mStore.add(URI.create(cookie.getDomain()), cookie);
+            HttpCookie jwtCookie = gson.fromJson(jwtTokenCookie, HttpCookie.class);
+            mStore.add(URI.create(jwtCookie.getDomain()), jwtCookie);
         }
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void add(URI uri, HttpCookie cookie) {
-        if (cookie.getName().equals("sessionid")) {
-            // if the cookie that the cookie store attempt to add is a session cookie,
-            // we remove the older cookie and save the new one in shared preferences
+
+        if (cookie.getName().equals("Authorization")) {
+
             remove(URI.create(cookie.getDomain()), cookie);
-            saveSessionCookie(cookie);
+            saveJwtToken(cookie);
         }
 
         mStore.add(URI.create(cookie.getDomain()), cookie);
+
     }
 
 
@@ -99,24 +92,24 @@ public class PersistentCookieStore implements CookieStore {
         return mStore.removeAll();
     }
 
-        private String getJsonSessionCookieString() {
-            return getPrefs().getString(PREF_SESSION_COOKIE, PREF_DEFAULT_STRING);
-        }
+    private String getJwtTokenCookie() {
+        return getPrefs().getString(PREF_JWT_TOKEN, PREF_DEFAULT_STRING);
+    }
+    /**
+     * Saves the HttpCookie to SharedPreferences as a json string.
+     *
+     * @param cookie The cookie to save in SharedPreferences.
+     */
 
-        /**
-         * Saves the HttpCookie to SharedPreferences as a json string.
-         *
-         * @param cookie The cookie to save in SharedPreferences.
-         */
-        private void saveSessionCookie(HttpCookie cookie) {
-            Gson gson = new Gson();
-            String jsonSessionCookieString = gson.toJson(cookie);
-            SharedPreferences.Editor editor = getPrefs().edit();
-            editor.putString(PREF_SESSION_COOKIE, jsonSessionCookieString);
-            editor.apply();
-        }
+    private void saveJwtToken(HttpCookie cookie) {
+        Gson gson = new Gson();
+        String jwtToken = gson.toJson(cookie);
+        SharedPreferences.Editor editor = getPrefs().edit();
+        editor.putString(PREF_JWT_TOKEN, jwtToken);
+        editor.apply();
+    }
 
-        private SharedPreferences getPrefs() {
-            return mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        }
+    private SharedPreferences getPrefs() {
+        return mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
 }

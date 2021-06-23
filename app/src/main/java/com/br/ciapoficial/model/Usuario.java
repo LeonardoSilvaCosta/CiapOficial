@@ -1,14 +1,8 @@
 package com.br.ciapoficial.model;
 
-import com.br.ciapoficial.enums.PostoGradCatEnum;
-import com.br.ciapoficial.enums.QuadroEnum;
-import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
 import com.br.ciapoficial.enums.TipoVinculoEnum;
-import com.br.ciapoficial.enums.UnidadeEnum;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;

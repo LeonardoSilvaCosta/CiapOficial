@@ -203,4 +203,5 @@
     <string name="titular_hyperlink"><a href=""></a><u>ver prontuário</u></string>
     <string name="numero_filhos">Número de filhos</string>
     <string name="cadastrar_usuario">Cadastrar Usuário</string>
+    <string name="ciap">CIAP</string>
 </resources>

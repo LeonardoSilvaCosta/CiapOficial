@@ -16,7 +16,7 @@
         android:fontFamily="@font/poppinsbold"
         android:gravity="center"
         android:text="@string/informe_o_email_para_recuperar_a_senha"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,6 +64,7 @@
 
         <Button
             android:id="@+id/btnEnviarEmail"
+            android:background="@drawable/rounded_button"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
 
         <Button
             android:id="@+id/btnCancelar"
+            android:background="@drawable/rounded_button"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

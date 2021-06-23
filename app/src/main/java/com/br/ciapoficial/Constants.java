@@ -2,7 +2,7 @@ package com.br.ciapoficial;
 
 public class Constants {
 
-    public static final String BASE_API_URL = "http://192.168.0.103:8080";
+    public static final String BASE_API_URL = "http://192.168.0.104:8080";
 
     public static final String URLUsuarios = "http://192.168.0.103/ciap/usuarios";
     public static final String URLPostoGradCat = "http://192.168.0.103/ciap/posto_grad_cat";

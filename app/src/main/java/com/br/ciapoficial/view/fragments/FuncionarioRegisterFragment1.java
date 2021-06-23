@@ -79,10 +79,6 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     private Escolaridade escolaridade = new Escolaridade();
     private SexoEnum sexo;
 
-    //Ajustar os valores recebidos (eliminar espaços, se for o caso settar como uper ou lowercase
-    //Data de nascimento ter boa regra para validação de data ok
-    //Resgatar Uf no campo naturalidade e cidade de residência ok
-
     public FuncionarioRegisterFragment1() {
         // Required empty public constructor
     }

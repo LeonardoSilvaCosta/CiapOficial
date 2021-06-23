@@ -1,27 +1,26 @@
 package com.br.ciapoficial.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.view.fragments.PrincipalFragment;
+import com.br.ciapoficial.helper.PersistentCookieStore;
 import com.br.ciapoficial.view.fragments.FuncionarioRegisterFragment1;
+import com.br.ciapoficial.view.fragments.PrincipalFragment;
 
 import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
-import static com.br.ciapoficial.view.LoginActivity.USER_EMAIL;
-import static com.br.ciapoficial.view.LoginActivity.USER_ID;
-import static com.br.ciapoficial.view.LoginActivity.USER_PASS;
-import static com.br.ciapoficial.view.LoginActivity.USER_SEX;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private PrincipalFragment principalFragment;
     private FuncionarioRegisterFragment1 funcionarioRegisterFragment1;
 
-    SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferencesCookie;
+    SharedPreferences sharedPreferencesUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
         ciapToolbar =  findViewById(R.id.includedToolbar);
         setSupportActionBar(ciapToolbar);
 
-        sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferencesCookie = getSharedPreferences(PersistentCookieStore.PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferencesUser = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         principalFragment = new PrincipalFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -80,17 +82,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void desconectarUsuario() {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public boolean desconectarUsuario() {
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(FILE_NAME);
-        editor.remove(USER_ID);
-        editor.remove(USER_EMAIL);
-        editor.remove(USER_SEX);
-        editor.remove(USER_PASS);
+        SharedPreferences.Editor editor = sharedPreferencesCookie.edit();
+        editor.remove("Authorization");
         editor.commit();
 
+        SharedPreferences.Editor editor2 = sharedPreferencesUser.edit();
+        editor2.remove(FILE_NAME);
+        editor2.commit();
+
         abrirTelaLogin();
+        finish();
+
+        return true;
     }
 
     private void abrirTelaLogin() {

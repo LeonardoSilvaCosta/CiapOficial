@@ -97,18 +97,6 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     private Especialidade especialidade = new Especialidade();
     private String registroConselho;
 
-    //Ajustar validação de campo
-    //validar quadro, rgMilitar, nomeGuerra, unidade, dataInclusao, funcaoAdministrativa, ok
-    //situacao funcional, especialidade e registro de conselho ok
-    //visibilidade de quadro, rgMilitar e especialidade não estarão disponível se a categoria for VC e valor será preenchido ok
-    //como null
-    //visibilidade de ESPECIALIDADE e REGISTRO DE CONSELHO ficará disponível apenas se o valor preenchido
-    //em quadro for QCOPM ok
-    //Definir região do Conselho conforme especialidade selecionada (psi - 10 e S.S. - 1) ok
-    //Verificar como proceder para cadastrar de forma diferenciada funcionário não especialista e
-    //funcionário especialista
-    // Ajustar bug de passagem de campo na tela devido diferentes visibilidades de campo
-
     public FuncionarioRegisterFragment3() {
         // Required empty public constructor
     }

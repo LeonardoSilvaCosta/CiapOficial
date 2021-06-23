@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.br.ciapoficial"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -60,4 +60,7 @@ dependencies {
     //Lombok
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
+
 }

@@ -17,7 +17,7 @@
         android:gravity="center"
         android:text="@string/cadastrar_usuario"
         android:textSize="30sp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/lightGray"
         android:fontFamily="@font/poppinsbold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

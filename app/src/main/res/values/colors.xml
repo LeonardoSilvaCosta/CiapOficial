@@ -9,8 +9,13 @@
     <color name="blue">#0056B3</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorPrimary">#084d6e</color>
-    <color name="colorPrimaryDark">#4a1942</color>
-    <color name="colorAccent">#eaeaea</color>
+    <color name="colorPrimary">#2E3094</color>
+    <color name="colorPrimaryDark">#084d6e</color>
+    <color name="colorAccent">#EE1B24</color>
+
+    <color name="colorGoldCiap">#D59224</color>
+    <color name="colorGreenCiap">#13740B</color>
+    <color name="colorSilverCiap">#C2C2C2</color>
+    <color name="lightGray">#eaeaea</color>
 
 </resources>
