@@ -2,14 +2,13 @@ package com.br.ciapoficial.controller;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Base64;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -25,7 +24,6 @@ import com.br.ciapoficial.helper.GsonLocalDateSerializer;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Funcionario;
-import com.br.ciapoficial.model.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -142,7 +140,9 @@ public class FuncionarioController extends PessoaController {
 
                 }
             }
+
         }) {
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
@@ -238,7 +238,7 @@ public class FuncionarioController extends PessoaController {
 
     public void recuperarSenha(Context context, String email, final IVolleyCallback callback) {
 
-        String url = Constants.URLUsuarios + "/recuperar_senha.php";
+        String url = BASE_API_URL + "/forgot-password";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -249,22 +249,56 @@ public class FuncionarioController extends PessoaController {
 
                         callback.onSucess(response);
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work! ", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
-        }) {
+        })
+
+        {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                return params;
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                headers.put("email", "sir.costa@yahoo.com.br");
+                return headers;
             }
         };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         queue.add(stringRequest);
     }
+
 
     public void carregarImagemUsuario(Context context, String imagem, final IVolleyCallback callback) {
 

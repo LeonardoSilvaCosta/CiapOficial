@@ -43,6 +43,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private Dialog dialog;
 
+    //Finalizar o formulário WebView para a redefinição de senha ok
+    //Implementar a mensagem de informação de envio de email para redefinição de senha aqui
+    //no android - realizado com classe de resposta - OK
+    //Verificar se a melhor opção é enviar o email para redefinição pelo header ou pelo body ou como
+    //param
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,28 +179,12 @@ public class LoginActivity extends AppCompatActivity {
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-
-                            boolean isErro = jsonObject.getBoolean("erro");
-                            boolean emailErro = jsonObject.getBoolean("email");
-
-                            if (isErro) {
+                            String mensagem = jsonObject.getString("resposta");
 
                                 Toast.makeText(LoginActivity.this,
-                                        "Email não cadastrado!",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
+                                        mensagem,
+                                        Toast.LENGTH_LONG).show();
 
-                                if(emailErro) {
-                                    Toast.makeText(LoginActivity.this,
-                                            "O email não pôde ser enviado",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-
-                                    Toast.makeText(LoginActivity.this,
-                                            "Uma mensagem com a sua senha foi enviada para o seu email. ",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
