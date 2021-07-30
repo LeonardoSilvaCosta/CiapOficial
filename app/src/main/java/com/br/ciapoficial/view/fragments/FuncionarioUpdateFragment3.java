@@ -1,7 +1,10 @@
 package com.br.ciapoficial.view.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,8 @@ import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.helper.LocalDateDeserializer;
+import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
@@ -51,6 +56,8 @@ import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Unidade;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,19 +65,27 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.SneakyThrows;
 
-public class FuncionarioRegisterFragment3 extends Fragment {
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
+public class FuncionarioUpdateFragment3 extends Fragment {
+
+    //Teste realizados em todos os campos estão passando quando se avalia a condição de especialista
+    //É necessário verificar como funciona a atualização quando se trata de funcionario apenas
+    //Quando o funcionário muda de posto/grad/cat quadro muda a categoria do funcionario?
 
     private PrincipalFragment principalFragment;
 
     private TextInputLayout textInputLayoutQuadro, textInputLayoutRgMilitar,
             textInputLayoutEspecialidade, textInputLayoutRegistroConselho;
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra,
-            textInputEditTextDataInclusao, textInputEditTextRegistroConselho;
+            textInputEditTextDataInclusao, textInputEditTextRegistroConselho,
+            textInputEditTextConfirmarSenha;
     private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewQuadro,
             autoCompleteTextViewUnidade, autoCompleteTextViewFuncaoAdministrativa,
             autoCompleteTextViewSituacaoFuncional, autoCompleteTextViewEspecialidade;
@@ -95,16 +110,24 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     private FuncaoAdministrativa funcaoAdministrativa = new FuncaoAdministrativa();
     private SituacaoFuncional situacaoFuncional = new SituacaoFuncional();
     private Especialidade especialidade = new Especialidade();
+    private String regiaoDoConselho;
     private String registroConselho;
+    private String confirmacaoDeSenha;
 
-    public FuncionarioRegisterFragment3() {
+    private SharedPreferences sharedPreferences;
+
+    public FuncionarioUpdateFragment3() {
         // Required empty public constructor
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_funcionario_register3, container, false) ;
+        View view = inflater.inflate(R.layout.fragment_funcionario_update3, container, false) ;
+
+        sharedPreferences = getActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         configurarComponentes(view);
         configurarMascaraParaDataDeInclusao();
@@ -117,6 +140,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         popularCampoEspecialidadeComDB();
         popularCampoFuncaoAdministrativaComDB();
         popularCampoSituacaoFuncionalComDB();
+        receberDadosFuncionarioPreviamentePreenchidos();
         enviarFormulario();
         return view;
     }
@@ -137,11 +161,13 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         autoCompleteTextViewSituacaoFuncional = view.findViewById(R.id.edtSitucaoFuncional);
         autoCompleteTextViewEspecialidade = view.findViewById(R.id.edtEspecialidade);
         textInputEditTextRegistroConselho = view.findViewById(R.id.edtRegistroConselho);
+        textInputEditTextConfirmarSenha = view.findViewById(R.id.edtSenhaAtual);
         btnCadastrar = view.findViewById(R.id.btnRegistrar);
     }
 
     private void configurarMascaraParaDataDeInclusao()
-    {Mascaras.criarMascaraParaData(textInputEditTextDataInclusao);}
+    {
+        Mascaras.criarMascaraParaData(textInputEditTextDataInclusao);}
 
     private void definirVisibilidadeDoCampoQuadroComBaseNoPostoGradCat()
     {
@@ -519,6 +545,12 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroDoFuncionario() throws ParseException {
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosDoFuncionarioDoRegisterFragment2();
+        Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
+        Funcionario funcionarioRecebidoDoDb = (Funcionario) valoresRecebidosFragment1.getSerializable(
+                "funcionarioRecebidoDoDB");
+        Log.d("senhaAtual", funcionarioRecebidoDoDb.getSenha());
+
         if (
                 FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
                         listaPostoGradCatRecuperados) &&
@@ -533,7 +565,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                                 listaSituacoesFuncionaisRecuperadas) &&
                         FieldValidator.validarEspecialidade(autoCompleteTextViewEspecialidade,
                                 listaEspecialidadesRecuperadas) &&
-                        FieldValidator.validarRegistroConselho(textInputEditTextRegistroConselho))
+                        FieldValidator.validarRegistroConselho(textInputEditTextRegistroConselho) &&
+                        FieldValidator.validarConfirmacaoDeSenha(textInputEditTextConfirmarSenha,
+                                funcionarioRecebidoDoDb.getSenha()))
         {
             receberDadosDoFuncionarioPreenchidos();
             return true;
@@ -591,6 +625,141 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         }
 
         registroConselho = textInputEditTextRegistroConselho.getText().toString().trim();
+        confirmacaoDeSenha = textInputEditTextConfirmarSenha.getText().toString();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void receberDadosFuncionarioPreviamentePreenchidos()
+    {
+        Bundle valoresRecebidosFragment1e2 = this.getArguments();
+        Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
+
+
+        Funcionario dadosFuncionarioDb = (Funcionario) valoresRecebidosFragment1.getSerializable(
+                "funcionarioRecebidoDoDB");
+
+        if(dadosFuncionarioDb != null) {
+
+            if(postoGradCat.getNome() == null) {
+                if(dadosFuncionarioDb.getPostoGradCat().getNome() != null){
+                    autoCompleteTextViewPostGradCat.setText(dadosFuncionarioDb.getPostoGradCat().getNome()); }
+            }
+            else{
+                autoCompleteTextViewPostGradCat.setText(postoGradCat.getNome()); }
+            if(quadro.getNome() == null) {
+                if(dadosFuncionarioDb.getQuadro().getNome() != null) {
+                    autoCompleteTextViewQuadro.setText(
+                            dadosFuncionarioDb.getQuadro().getNome()); }
+            }
+            else{
+                autoCompleteTextViewQuadro.setText(quadro.getNome()); }
+            if(rgMilitar == null){
+                if(dadosFuncionarioDb.getRgMilitar() != null) {
+                    textInputEditTextRgMilitar.setText(dadosFuncionarioDb.getRgMilitar()); }
+            }
+            else{
+                textInputEditTextRgMilitar.setText(rgMilitar); }
+            if(nomeGuerra == null) {
+                if(dadosFuncionarioDb.getRgMilitar() != null){
+                    textInputEditTextNomeGuerra.setText(dadosFuncionarioDb.getNomeGuerra()); }
+            }
+            else{
+                textInputEditTextNomeGuerra.setText(nomeGuerra);
+            }
+            if(unidade.getNome() == null) {
+                if(dadosFuncionarioDb.getUnidade().getNome() != null) {
+                    autoCompleteTextViewUnidade.setText(
+                            dadosFuncionarioDb.getUnidade().getNome()); }
+            }
+            else{
+                autoCompleteTextViewUnidade.setText(unidade.getNome());
+            }
+            if(dataInclusao == null) {
+                if(dadosFuncionarioDb.getDataInclusao() != null){
+                    textInputEditTextDataInclusao.setText(
+                            DateFormater.localDateToString(dadosFuncionarioDb.getDataInclusao())); }
+            }
+            else{
+                textInputEditTextDataInclusao.setText(
+                        DateFormater.localDateToString(dataInclusao)); }
+            if(funcaoAdministrativa.getNome() == null) {
+                if(dadosFuncionarioDb.getFuncaoAdministrativa().getNome() != null){
+                    autoCompleteTextViewFuncaoAdministrativa.setText(
+                            dadosFuncionarioDb.getFuncaoAdministrativa().getNome()); }
+            }
+            else{
+                autoCompleteTextViewFuncaoAdministrativa.setText(funcaoAdministrativa.getNome());
+            }
+            if(situacaoFuncional.getNome() == null) {
+                if(dadosFuncionarioDb.getSituacaoFuncional().getNome() != null){
+                    autoCompleteTextViewSituacaoFuncional.setText(
+                            dadosFuncionarioDb.getSituacaoFuncional().getNome()); }
+            }
+            else{
+                autoCompleteTextViewSituacaoFuncional.setText(situacaoFuncional.getNome());
+            }
+        }
+
+        if(dadosFuncionarioDb.getQuadro().toString().equals(QuadroEnum.QCOPM.getNome())){
+            recuperarDadosEspecialista();
+            autoCompleteTextViewEspecialidade.setVisibility(View.VISIBLE);
+            textInputEditTextRegistroConselho.setVisibility(View.VISIBLE);
+        }else{
+            autoCompleteTextViewEspecialidade.setVisibility(View.GONE);
+            textInputEditTextRegistroConselho.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void recuperarDadosEspecialista() {
+        //Recuperar dados de especialista e injetar nos campos para atualização
+
+        EspecialistaController especialistaController = new EspecialistaController();
+        especialistaController.recuperarUsuarioLogado(getActivity(), new IVolleyCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onSucess(String response) {
+
+                Log.d("testando-esp", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    GsonBuilder customGson = new GsonBuilder();
+                    customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                    customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                    Gson gson = customGson.create();
+                    Especialista especialista = gson.fromJson(String.valueOf(jsonObject), Especialista.class);
+
+                    if(especialista != null) {
+
+                        if(especialidade.getNome() == null) {
+                            if(especialista.getEspecialidade().getNome() != null){
+                                autoCompleteTextViewEspecialidade.setText(
+                                        especialista.getEspecialidade().getNome()); }
+                        }
+                        else{
+                            autoCompleteTextViewEspecialidade.setText(especialidade.getNome());
+                        }
+
+                        if(registroConselho == null) {
+                            if(especialista.getRegistroConselho() != null){
+                                textInputEditTextRegistroConselho.setText(
+                                        especialista.getRegistroConselho()); }
+                        }
+                        else{
+                            textInputEditTextRegistroConselho.setText(registroConselho);
+                        }
+
+
+
+                    }
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -602,6 +771,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
         funcionario = new Funcionario();
 
+        funcionario.setId(valoresRecebidosFragment1.getInt("id"));
         funcionario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         funcionario.setDataNascimento(dataNascimento);
         funcionario.setCpf(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
@@ -621,7 +791,15 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         funcionario.setQuadro((quadro));
         funcionario.setFuncaoAdministrativa((funcaoAdministrativa));
         funcionario.setSituacaoFuncional((situacaoFuncional));
-        funcionario.setSenha(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
+
+        String novaSenha = valoresRecebidosFragment1.getString("novaSenha");
+
+        if(!novaSenha.isEmpty()) {
+            especialista.setSenha(novaSenha);
+        }else{
+            especialista.setSenha(confirmacaoDeSenha);
+        }
+
 
         return funcionario;
     }
@@ -635,6 +813,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
         especialista = new Especialista();
 
+        especialista.setId(valoresRecebidosFragment1.getInt("id"));
         especialista.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         especialista.setDataNascimento(dataNascimento);
         especialista.setCpf(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
@@ -655,18 +834,27 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         especialista.setFuncaoAdministrativa((funcaoAdministrativa));
         especialista.setSituacaoFuncional((situacaoFuncional));
         especialista.setEspecialidade(especialidade);
-        especialista.setSenha(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
+        especialista.setRegistroConselho(registroConselho);
+
+
+        String novaSenha = valoresRecebidosFragment1.getString("novaSenha");
+
+        if(!novaSenha.isEmpty()) {
+            especialista.setSenha(novaSenha);
+        }else{
+            especialista.setSenha(confirmacaoDeSenha);
+        }
 
         if(quadro.toString().equals(QuadroEnum.QCOPM.getNome()))
         {
             especialista.setEspecialidade((especialidade));
 
             if(especialidade.toString().equals(EspecialidadeEnum.PSICOLOGO.getNome())) {
-                especialista.setRegistroConselho("10/" + registroConselho); }
+                especialista.setRegiaoConselho("10"); }
             else if(especialidade.toString().equals(EspecialidadeEnum.ASSISTENTE_SOCIAL.getNome())) {
-                especialista.setRegistroConselho("1/" + registroConselho); }
+                especialista.setRegiaoConselho("1"); }
             else {
-                especialista.setRegistroConselho("Não se aplica");
+                especialista.setRegiaoConselho("Não se aplica");
             }
         }
 
@@ -674,11 +862,11 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     }
 
 
-    public void cadastrarFuncionario(Funcionario novoFuncionario)
+    public void atualizarFuncionario(Funcionario funcionario)
     {
-        new FuncionarioController().cadastrar(
+        new FuncionarioController().atualizar(
                 getActivity(),
-                novoFuncionario,
+                funcionario,
                 new IVolleyCallback() {
                     @Override
                     public void onSucess(String response) {
@@ -688,7 +876,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
 
                             Toast.makeText(principalFragment.getContext(),
-                                    "Cadastro realizado com sucesso!",
+                                    "Atualizado com sucesso!",
                                     Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
@@ -698,11 +886,11 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                 });
     }
 
-    private void cadastrarEspecialista(Especialista novoEspecialista)
+    private void atualizarEspecialista(Especialista especialista)
     {
-        new EspecialistaController().cadastrar(
+        new EspecialistaController().atualizar(
                 getActivity(),
-                novoEspecialista,
+                especialista,
                 new IVolleyCallback() {
                     @Override
                     public void onSucess(String response) {
@@ -712,7 +900,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
 
                             Toast.makeText(principalFragment.getContext(),
-                                    "Cadastro realizado com sucesso!",
+                                    "Atualizado com sucesso!",
                                     Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
@@ -736,13 +924,13 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                     {
                         Especialista novoEspecialista;
                         novoEspecialista = encapsularValoresParaCadastroDeEspecialista();
-                        cadastrarEspecialista(novoEspecialista);
+                        atualizarEspecialista(novoEspecialista);
                         Toast.makeText(getContext(), "especialista", Toast.LENGTH_SHORT).show();
                     }else
                     {
                         Funcionario novoFuncionario;
                         novoFuncionario = encapsularValoresParaCadastroDeFuncionario();
-                        cadastrarFuncionario(novoFuncionario);
+                        atualizarFuncionario(novoFuncionario);
                         Toast.makeText(getContext(), "funcionário", Toast.LENGTH_SHORT).show();
                     }
 
@@ -760,5 +948,4 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
 
     }
-
 }

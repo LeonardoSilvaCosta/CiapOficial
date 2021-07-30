@@ -155,57 +155,80 @@ public class FuncionarioController extends PessoaController {
         queue.add(stringRequest);
     }
 
-//    public void atualizarUsuario(Context context, final Funcionario funcionario, final VolleyCallback callback) {
-//
-//        String url = Constants.URLUsuarios + "/atualizar.php";
-//
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        callback.onSucess(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-//                error.printStackTrace();
-//            }
-//        }) {
+    public void atualizar(Context context, final Funcionario funcionario, final IVolleyCallback callback) {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        String urlFuncionariosComPathVariable = urlFuncionarios + "/" + funcionario.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT,
+                urlFuncionariosComPathVariable,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSucess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
+            }
+        }) {
+
 //            @Override
 //            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("id", Java2Json.converterJava2JasonInt(funcionario.getId()));
-//                params.put("nomeCompleto", funcionario.getNomeCompleto());
-//                params.put("dataNascimento", funcionario.getDataNascimento());
-//                params.put("cpf", funcionario.getCpf());
-//                params.put("sexo", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getSexo())));
-//                params.put("telefones",Java2Json.converterJava2JsonArrayString(funcionario.getTelefones()));
-//                params.put("email", funcionario.getEmail());
-//                params.put("cep", funcionario.getCep());
-//                params.put("uf", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getUf())));
-//                params.put("cidade", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getCidade())));
-//                params.put("bairro", funcionario.getBairro());
-//                params.put("logradouro", funcionario.getLogradouro());
-//                params.put("numero", funcionario.getNumero());
-//                params.put("rgMilitar", funcionario.getRgMilitar());
-//                params.put("postoGradCat", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getPostoGradCat())));
-//                params.put("nomeGuerra", funcionario.getNomeGuerra());
-//                params.put("unidade", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getUnidade())));
-//                params.put("quadro", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getQuadro())));
-//                params.put("especialidade", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getEspecialidade())));
-//                params.put("registroConselho", funcionario.getRegistroConselho());
-//                params.put("funcaoAdministrativa", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getFuncaoAdministrativa())));
-//                params.put("situacaoFuncional", Java2Json.converterJava2JasonInt(Integer.parseInt(funcionario.getSituacaoFuncional())));
-//                params.put("senha", funcionario.getSenha());
-//                return params;
+//                HashMap<String, String> pathVariable = new HashMap<>();
+//                pathVariable.put("funcionarioId", String.valueOf(funcionario.getId()));
+//                return super.getParams();
 //            }
-//        };
-//        queue.add(stringRequest);
-//
-//    }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json; charset=utf8");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() { return "application/json; charset=utf-8"; }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+                Gson gson = gsonBuilder.setPrettyPrinting().create();
+
+                return gson.toJson(funcionario).getBytes();
+            }
+        };
+
+        queue.add(stringRequest);
+    }
 
     public void deletarUsuario(Context context, final String id, final IVolleyCallback callback) {
 
@@ -251,34 +274,34 @@ public class FuncionarioController extends PessoaController {
                     }
                 },
                 new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-                if( error instanceof NetworkError) {
-                    Toast.makeText(context,
-                            "Falha na rede",
-                            Toast.LENGTH_SHORT).show();
-                } else if( error instanceof ServerError) {
-                    Toast.makeText(context,
-                            "500 Internal Server Error",
-                            Toast.LENGTH_SHORT).show();
-                } else if( error instanceof ParseError) {
-                    Toast.makeText(context,
-                            "ParseError",
-                            Toast.LENGTH_SHORT).show();
-                } else if( error instanceof NoConnectionError) {
-                    Toast.makeText(context,
-                            "Falha na conexão",
-                            Toast.LENGTH_SHORT).show();
-                } else if( error instanceof TimeoutError) {
-                    Toast.makeText(context,
-                            "504 Timeout Error",
-                            Toast.LENGTH_SHORT).show();
-                }else{
+                        if( error instanceof NetworkError) {
+                            Toast.makeText(context,
+                                    "Falha na rede",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if( error instanceof ServerError) {
+                            Toast.makeText(context,
+                                    "500 Internal Server Error",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if( error instanceof ParseError) {
+                            Toast.makeText(context,
+                                    "ParseError",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if( error instanceof NoConnectionError) {
+                            Toast.makeText(context,
+                                    "Falha na conexão",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if( error instanceof TimeoutError) {
+                            Toast.makeText(context,
+                                    "504 Timeout Error",
+                                    Toast.LENGTH_SHORT).show();
+                        }else{
 
-                }
-            }
-        })
+                        }
+                    }
+                })
 
         {
             @Override
@@ -302,11 +325,11 @@ public class FuncionarioController extends PessoaController {
 
     public void carregarImagemUsuario(Context context, String imagem, final IVolleyCallback callback) {
 
-        String url = Constants.URLUsuarios + "/carregar_imagem.php";
+        String url = urlFuncionarios + "/carregar-imagem.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -353,18 +376,26 @@ public class FuncionarioController extends PessoaController {
                 Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/Json; charset=utf8");
+                headers.put("Accept", "application/Json; charset=utf8");
+                return headers;
+            }
+        };
 
         queue.add(stringRequest);
     }
 
-    public void recuperarUsuarioLogado(Context context, final String email,  final IVolleyCallback callback) {
+    public void recuperarUsuarioLogado(Context context,  final IVolleyCallback callback) {
 
-        String url = Constants.URLUsuarios + "/recuperar_usuario_logado.php";
+        String url = urlFuncionarios + "/usuario-logado";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -374,16 +405,37 @@ public class FuncionarioController extends PessoaController {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
             }
-        })
-        {
+        }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                return params;
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/Json; charset=utf8");
+                headers.put("Accept", "application/Json; charset=utf8");
+                return headers;
             }
         };
 

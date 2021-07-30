@@ -12,11 +12,12 @@ import lombok.Setter;
 public class Endereco implements Serializable {
 
     @EqualsAndHashCode.Include
-    private Long id;
+    private Integer id;
     private String cep;
+    private Estado estado;
     private Cidade cidade;
     private String bairro;
     private String logradouro;
-    private int numero;
+    private Integer numero;
 
 }

@@ -2,12 +2,6 @@ package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +11,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.UfController;
-import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EstadoCivilEnum;
+import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.enums.TipoVinculoEnum;
@@ -31,12 +28,12 @@ import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
+import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
 import com.br.ciapoficial.model.Escolaridade;
 import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.Cidade;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -115,7 +112,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     private void alternarHintCampoUf() {
         if (tipoAtendido.equals(TipoAtendido.PM)) {
-            textInputLayoutUf.setHint(getResources().getString(R.string.uf));
+            textInputLayoutUf.setHint(getResources().getString(R.string.estado));
             textInputLayoutCidade.setHint(getResources().getString(R.string.cidade));
         } else {
             textInputLayoutUf.setHint(getResources().getString(R.string.uf_dependente_civil));

@@ -100,70 +100,66 @@ public class AddRemoveTextView {
         });
     }
 
-    public static void adicionarTextViewTelefoneUsuarioObjeto(Context context, int id_usuario, TextInputEditText campo,
-                                                              ArrayList<Telefone> listaDisplay,
-                                                              LinearLayout linearLayout)
-    {
+    public static void adicionarTextViewTelefoneUsuarioObjeto(Context context, TextInputEditText campo,
+                                                              List<Telefone> listaDeTelefonesRecebidosParaAtualizar,
+                                                              LinearLayout linearLayout) {
 
-        ArrayList<String> telefonesListados = new ArrayList<>();
 
-        for(Telefone telefone : listaDisplay) {
-            telefonesListados.add(telefone.getPessoaTelefoneId().getTelefone());
-        }
+//        for (Iterator<Telefone> telefone = listaDeTelefonesPreviamenteAdicionados.iterator(); telefone.hasNext();) {
+//            listaDeTelefonesRecebidosParaAtualizar.add(telefone.next());
+//        }
 
         String textoRecebido = Mascaras.removerMascaras(campo.getText().toString());
-        if(!(textoRecebido.length() < 11) && Patterns.PHONE.matcher(textoRecebido).matches())
-        {
-            TextView textView = new TextView(context);
+        TextView textView = new TextView(context);
 
-            if(textoRecebido.equals(""))
-            {
-                Toast.makeText(context,
-                        "O campo para inserção de telefone está vazio.",
-                        Toast.LENGTH_SHORT).show();
-            }else if(!(telefonesListados.contains(textoRecebido)))
-            {
-                textView.setPadding(0, 10, 0, 10);
-                textView.setText(textoRecebido);
-                textView.setTag("lista");
+        if (textoRecebido.isEmpty()) {
+            campo.setError("O campo para inserção de TELEFONE está vazio");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+        } else {
+            if (!(textoRecebido.length() < 11) && Patterns.PHONE.matcher(textoRecebido).matches()) {
+                if(!(listaDeTelefonesRecebidosParaAtualizar.toString().contains(textoRecebido)))
+                {
+                    textView.setPadding(0, 10, 0, 10);
+                    textView.setText(textoRecebido);
+                    textView.setTag("lista");
 
-                linearLayout.addView(textView);
+                    linearLayout.addView(textView);
 
-                campo.setText("");
+                    campo.setText("");
 
-                Telefone telefone = new Telefone();
-                telefone.getPessoaTelefoneId().setIdPessoa(id_usuario);
-                telefone.getPessoaTelefoneId().setTelefone(textoRecebido);
+                    PessoaTelefoneId pessoaTelefoneId = new PessoaTelefoneId();
+                    pessoaTelefoneId.setTelefone(textoRecebido);
+                    listaDeTelefonesRecebidosParaAtualizar.add(new Telefone(pessoaTelefoneId));
 
-                listaDisplay.add(telefone);
 
+                } else {
+                    campo.setError("Esse TELEFONE já foi inserido.");
+                    campo.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campo);
+                    campo.setText("");
+                }
+
+            }else{
+                campo.setError("Digite um número de TELEFONE válido.");
+                campo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campo);
             }
-            else
-            {
-                Toast.makeText(context,
-                        "Esse telefone já foi inserido.",
-                        Toast.LENGTH_SHORT).show();
-                campo.setText("");
-            }
-
-            removerItemDaListaDeTelefonesObjeto(textView, listaDisplay);
-        }else
-        {
-            Toast.makeText(context, "Digite um número de telefone válido.", Toast.LENGTH_SHORT).show();
         }
+        removerItemDaListaDeTelefonesObjeto(textView, listaDeTelefonesRecebidosParaAtualizar);
 
     }
 
-    public static void removerItemDaListaDeTelefonesObjeto(TextView textView, ArrayList<Telefone> listaDisplay)
+    public static void removerItemDaListaDeTelefonesObjeto(TextView textView, List<Telefone> listaDisplay)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
+                for(Iterator<Telefone> iter = listaDisplay.iterator(); iter.hasNext();)
                 {
-                    String telefoneSelecionado = listaDisplay.get(i).getPessoaTelefoneId().getTelefone();
+                    String telefoneSelecionado = iter.next().getPessoaTelefoneId().getTelefone();
                     if(telefoneSelecionado.equals(string))
                     {
                         listaDisplay.remove(telefoneSelecionado);
@@ -241,8 +237,8 @@ public class AddRemoveTextView {
         });
     }
 
-    public static void removerItemDaListaDeTelefonesEListarParaDelecao(ArrayList<TextView> textViews, ArrayList<Telefone> listaDisplay,
-                                                                       ArrayList<Telefone> telefoneParaDeletar)
+    public static void removerItemDaListaDeTelefonesEListarParaDelecao(List<TextView> textViews, List<Telefone> listaDisplay,
+                                                                       List<Telefone> telefoneParaDeletar)
     {
         for(TextView textView : textViews) {
             textView.setOnClickListener(new View.OnClickListener() {
@@ -250,13 +246,13 @@ public class AddRemoveTextView {
                 public void onClick(View v) {
 
                     String string = textView.getText().toString();
-                    for(int i = 0; i < listaDisplay.size(); i++)
+                    for(Iterator<Telefone> i = listaDisplay.listIterator(); i.hasNext();)
                     {
-                        String telefoneSelecionado = listaDisplay.get(i).getPessoaTelefoneId().getTelefone();
-                        if(telefoneSelecionado.equals(string))
+                        Telefone telefoneSelecionado = i.next();
+                        if(telefoneSelecionado.toString().equals(string))
                         {
-                            telefoneParaDeletar.add(listaDisplay.get(i));
-                            listaDisplay.remove(listaDisplay.get(i));
+                            telefoneParaDeletar.add(telefoneSelecionado);
+                            listaDisplay.remove(telefoneSelecionado);
 
                             textView.setVisibility(View.GONE);
                             break;
@@ -269,8 +265,7 @@ public class AddRemoveTextView {
 
     }
 
-    public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo,
-                                                 ArrayList<Usuario> atendidosRecuperados, ArrayList<Usuario> listaDisplay,
+    public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo, ArrayList<Usuario> atendidosRecuperados, ArrayList<Usuario> listaDisplay,
                                                  ArrayAdapter<Usuario> adapter, LinearLayout linearLayout)
     {
 

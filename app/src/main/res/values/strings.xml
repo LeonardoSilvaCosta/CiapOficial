@@ -21,7 +21,7 @@
     <string name="proxima">Próxima</string>
     <string name="cep">CEP</string>
     <string name="cep_usuario">CEP*</string>
-    <string name="uf">UF*</string>
+    <string name="estado">UF*</string>
     <string name="uf_dependente_civil">UF</string>
     <string name="cidade">Cidade*</string>
     <string name="cidade_dependente_civil">Cidade</string>
@@ -46,7 +46,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="funcao_administrativa">Função administrativa*</string>
-    <string name="registro_conselho">Registro Conselho sem a região*</string>
+    <string name="registro_conselho">Registro do Conselho sem a região*</string>
     <string name="digite_a_sua_nova_senha">Digite a sua nova senha</string>
     <string name="estado_civil">Estado civil</string>
     <string name="uf_de_origem">UF de origem</string>
@@ -204,4 +204,5 @@
     <string name="numero_filhos">Número de filhos</string>
     <string name="cadastrar_usuario">Cadastrar Usuário</string>
     <string name="ciap">CIAP</string>
+    <string name="confirmar_senha">Digite sua senha atual</string>
 </resources>

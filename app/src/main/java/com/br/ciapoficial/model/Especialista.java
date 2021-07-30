@@ -8,6 +8,7 @@ import lombok.Setter;
 public class Especialista extends Funcionario{
 
     private Especialidade especialidade;
+    private String regiaoConselho;
     private String registroConselho;
 
     @Override

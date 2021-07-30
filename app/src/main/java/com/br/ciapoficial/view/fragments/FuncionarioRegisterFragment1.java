@@ -32,9 +32,9 @@ import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.Estado;
 import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
-import com.br.ciapoficial.model.Uf;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -65,14 +65,14 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     private List<Telefone> arrayListDeTelefonesAdicionados = new ArrayList<>();
     private List<Telefone> listaDeTelefonesAdicionados = new ArrayList<>();
-    private List<Uf> listaDeUfsRecuperadas = new ArrayList<>();
+    private List<Estado> listaDeUfsRecuperadas = new ArrayList<>();
     private List<Cidade> listaDeCidadesRecuperadas = new ArrayList<>();
     private List<EstadoCivil> listaDeEstadosCivisRecuperados = new ArrayList<>();
     private List<Escolaridade> listaDeEscolaridadesRecuperadas = new ArrayList<>();
 
     private String nomeCompleto, cpf, email;
     private LocalDate dataNascimento;
-    private Uf uf;
+    private Estado estado;
     private Cidade naturalidade;
     private EstadoCivil estadoCivil = new EstadoCivil();
     private int numeroFilhos;
@@ -104,7 +104,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         return view ;
     }
 
-    public void configurarComponentes(View view)
+    private void configurarComponentes(View view)
     {
         linearLayoutTelefone = view.findViewById(R.id.linearLayoutTelefone);
         textInputEditTextNomeCompleto = view.findViewById(R.id.edtNomeCompleto);
@@ -124,16 +124,16 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         btnProxima = view.findViewById(R.id.btnProxima);
     }
 
-    public void configurarMascaraParaData()
+    private void configurarMascaraParaData()
     {Mascaras.criarMascaraParaData(textInputEditTextDataNascimento);}
 
-    public void configurarMascaraParaCpf()
+    private void configurarMascaraParaCpf()
     {Mascaras.criarMascaraParaCpf(textInputEditTextCpf);}
 
-    public void configurarMascaraParaTelefone()
+    private void configurarMascaraParaTelefone()
     {Mascaras.criarMascaraParaTelefone(textInputEditTextTelefone);}
 
-    public void criarTextViewParaTelefonesSelecionados(String textoRecebido)
+    private void criarTextViewParaTelefonesSelecionados(String textoRecebido)
     {
         TextView textView = new TextView(getContext());
         textView.setPadding(0, 10, 0, 10);
@@ -144,7 +144,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     }
 
-    public void configurarCampoDeTelefone()
+    private void configurarCampoDeTelefone()
     {
         linearLayoutTelefone.removeAllViews();
 
@@ -165,7 +165,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    public void definirComportamentoDosRadioButtons() {
+    private void definirComportamentoDosRadioButtons() {
 
         radioGroupSexo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -179,7 +179,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    public void popularCampoUfNatalComDB()
+    private void popularCampoUfNatalComDB()
     {
         UfController ufController = new UfController();
         ufController.listar(getActivity(), new IVolleyCallback() {
@@ -194,11 +194,11 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        Uf uf = new Uf();
-                        uf.setId(Integer.parseInt(object.getString("id")));
-                        uf.setNome(object.getString("nome"));
-                        listaDeUfsRecuperadas.add(uf);
-                        configurarCampoEstadoNatal(listaDeUfsRecuperadas);
+                        Estado estado = new Estado();
+                        estado.setId(Integer.parseInt(object.getString("id")));
+                        estado.setNome(object.getString("nome"));
+                        listaDeUfsRecuperadas.add(estado);
+                        configurarCampoUfNatal(listaDeUfsRecuperadas);
 
                     }
 
@@ -210,9 +210,9 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    public void configurarCampoEstadoNatal(List<Uf> listaEstadosRecuperados) {
+    public void configurarCampoUfNatal(List<Estado> listaEstadosRecuperados) {
 
-        ArrayAdapter<Uf> adapterUf = new ArrayAdapter<Uf>(getActivity(),
+        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUfNatal.setAdapter(adapterUf);
@@ -342,10 +342,10 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString().trim());
         cpf = textInputEditTextCpf.getText().toString().trim();
 
-        for (Uf ufSelecionada : listaDeUfsRecuperadas) {
-            if (ufSelecionada.getNome().equals
+        for (Estado estadoSelecionado : listaDeUfsRecuperadas) {
+            if (estadoSelecionado.getNome().equals
                     (autoCompleteTextViewUfNatal.getText().toString().trim()))
-                uf = ufSelecionada;
+                estado = estadoSelecionado;
         }
 
         for (Cidade cidadeSelecionada : listaDeCidadesRecuperadas) {

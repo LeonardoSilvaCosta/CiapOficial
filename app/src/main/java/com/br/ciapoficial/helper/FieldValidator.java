@@ -10,15 +10,17 @@ import androidx.annotation.RequiresApi;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Escolaridade;
 import com.br.ciapoficial.model.Especialidade;
+import com.br.ciapoficial.model.Estado;
 import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.FuncaoAdministrativa;
 import com.br.ciapoficial.model.PostoGradCat;
 import com.br.ciapoficial.model.Quadro;
 import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
-import com.br.ciapoficial.model.Uf;
 import com.br.ciapoficial.model.Unidade;
 import com.google.android.material.textfield.TextInputEditText;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 
@@ -74,7 +76,7 @@ public class FieldValidator {
         } else { rbtnMasculino.setError(null); return true; }
     }
 
-    public static boolean validarUf(AutoCompleteTextView campoUf, List<Uf> listaDeUfs)
+    public static boolean validarUf(AutoCompleteTextView campoUf, List<Estado> listaDeEstados)
     {
         String valorDoCampo = campoUf.getText().toString().trim();
 
@@ -86,12 +88,12 @@ public class FieldValidator {
             return false;
         }else
         {
-            if(listaDeUfs != null)
+            if(listaDeEstados != null)
             {
                 boolean valueExists = false;
-                for(Uf ufSelecionada : listaDeUfs)
+                for(Estado estadoSelecionado : listaDeEstados)
                 {
-                    if(ufSelecionada.toString().equals(valorDoCampo))
+                    if(estadoSelecionado.toString().equals(valorDoCampo))
                     {
                         valueExists = true;
                         break;
@@ -464,7 +466,7 @@ public class FieldValidator {
     }
 
     public static boolean validarFuncaoAdministrativa(AutoCompleteTextView campoFuncaoAdministrativa,
-                                         List<FuncaoAdministrativa> listaDeFuncoesAdministrativas)
+                                                      List<FuncaoAdministrativa> listaDeFuncoesAdministrativas)
     {
         String valorDoCampo = campoFuncaoAdministrativa.getText().toString().trim();
 
@@ -584,5 +586,73 @@ public class FieldValidator {
             return false;
         }else { campoRegistroConselho.setError(null);return true; }
     }
+
+    public static boolean validarSenhaUpdate(TextInputEditText campoSenha, boolean desejaAtualizarSenha) {
+
+        String senha = campoSenha.getText().toString();
+
+        if(desejaAtualizarSenha) {
+            if (!campoSenha.getText().toString().isEmpty()) {
+                if (senha.length() < 6) {
+                    campoSenha.setError("Sua SENHA deve conter pelo menos 6 caracteres.");
+                    campoSenha.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoSenha);
+                    return false;
+                } else {
+                    campoSenha.setError(null);
+                    return true;
+                }
+            }else{
+                campoSenha.setError("O campo SENHA não pode ficar em branco.");
+                campoSenha.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoSenha);
+                return false;
+            }
+        }
+        campoSenha.setError(null);
+        return true;
+    }
+
+    public static boolean validarConfirmacaoDeSenha(TextInputEditText campoSenha, String senhaAtual) {
+        String valorDoCampo = campoSenha.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty()) {
+            campoSenha.setError("O campo SENHA é obrigatório.");
+            campoSenha.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoSenha);
+            return false;
+        }else {
+            if(!BCrypt.checkpw(valorDoCampo, senhaAtual)) {
+                campoSenha.setError("A senha informada não conferece com a senha cadastrada.");
+                campoSenha.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoSenha);
+                return false;
+            }else{
+                campoSenha.setError(null);
+                return true;
+            }
+        }
+    }
+
+//
+//            boolean achouNumero = false;
+//            boolean achouMaiuscula = false;
+//            boolean achouMinuscula = false;
+//            boolean achouSimbolo = false;
+//            for (char c : senha.toCharArray()) {
+//                if (c >= '0' && c <= '9') {
+//                    achouNumero = true;
+//                } else if (c >= 'A' && c <= 'Z') {
+//                    achouMaiuscula = true;
+//                } else if (c >= 'a' && c <= 'z') {
+//                    achouMinuscula = true;
+//                } else {
+//                    achouSimbolo = true;
+//                }
+//            }
+//
+//            return achouNumero && achouMaiuscula && achouMinuscula && achouSimbolo;
+//        }
+
 
 }

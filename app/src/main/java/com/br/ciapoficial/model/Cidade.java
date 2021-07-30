@@ -14,6 +14,7 @@ public class Cidade implements Serializable {
     @EqualsAndHashCode.Include
     private Integer id;
     private String nome;
+    private Estado estado;
 
     @Override
     public String toString() {

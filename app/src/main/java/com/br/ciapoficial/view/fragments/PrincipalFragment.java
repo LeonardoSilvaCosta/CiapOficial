@@ -31,7 +31,7 @@ import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 public class PrincipalFragment extends Fragment {
 
-    private UserUpdateFragment1 userUpdateFragment1;
+    private FuncionarioUpdateFragment1 funcionarioUpdateFragment1;
     private UsuarioRegisterFragment1 usuarioRegisterFragment1;
     private AtendimentoRegisterFragment1 atendimentoRegisterFragment1;
     private SharedPreferences sharedPreferences;
@@ -56,7 +56,6 @@ public class PrincipalFragment extends Fragment {
         btnNovoAtendido = view.findViewById(R.id.btnNovoAtendido);
         btnNovoAtendimento = view.findViewById(R.id.btnNovoAtendimento);
         btnPesquisar = view.findViewById(R.id.btnPesquisar);
-
 
 
         configurarImagemAtualizarPerfil();
@@ -140,9 +139,9 @@ public class PrincipalFragment extends Fragment {
         btnAtualizarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userUpdateFragment1 = new UserUpdateFragment1();
+                funcionarioUpdateFragment1 = new FuncionarioUpdateFragment1();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameConteudo, userUpdateFragment1);
+                transaction.replace(R.id.frameConteudo, funcionarioUpdateFragment1);
                 transaction.addToBackStack(null).commit();
             }
         });

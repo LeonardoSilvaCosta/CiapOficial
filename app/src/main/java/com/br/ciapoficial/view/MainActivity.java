@@ -63,17 +63,17 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.desconectar:
-                desconectarUsuario();
+                desconectarFuncionario();
                 abrirTelaLogin();
                 break;
             case R.id.new_user:
-                callUserRegisterForm();
+                callFuncionarioRegisterForm();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void callUserRegisterForm() {
+    private void callFuncionarioRegisterForm() {
 
         funcionarioRegisterFragment1 = new FuncionarioRegisterFragment1();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public boolean desconectarUsuario() {
+    public boolean desconectarFuncionario() {
 
         SharedPreferences.Editor editor = sharedPreferencesCookie.edit();
         editor.remove("Authorization");

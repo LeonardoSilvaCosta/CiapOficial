@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.UserUpdateFragment2">
+    tools:context=".view.fragments.FuncionarioUpdateFragment2">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:gravity="center"
                     android:text="Atualizar Perfil"
                     android:textSize="30sp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/lightGray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
-                    android:hint="@string/uf"
+                    android:hint="@string/estado"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
