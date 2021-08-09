@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+
 public class TelefoneController {
 
     public void listar(Context context, final IVolleyCallback callback) {
@@ -35,6 +37,7 @@ public class TelefoneController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -88,6 +91,7 @@ public class TelefoneController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

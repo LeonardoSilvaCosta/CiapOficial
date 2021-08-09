@@ -1,8 +1,9 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.Constants.BASE_API_URL;
+
 import android.content.Context;
 import android.os.Build;
-import android.util.Base64;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -26,12 +27,11 @@ import com.br.ciapoficial.model.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.net.CookieStore;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.br.ciapoficial.Constants.BASE_API_URL;
+import lombok.SneakyThrows;
 
 public class AuthenticationController {
 
@@ -45,6 +45,7 @@ public class AuthenticationController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

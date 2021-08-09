@@ -1,30 +1,24 @@
 package com.br.ciapoficial.model;
 
-public class Vinculo {
-    private int id;
-    private String descricao;
+import java.io.Serializable;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+public class Vinculo implements Serializable {
+    @EqualsAndHashCode.Include
+    private Integer id;
+    private String nome;
 
     public Vinculo() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     @Override
     public String toString() {
-        return descricao;
+        return nome;
     }
 }

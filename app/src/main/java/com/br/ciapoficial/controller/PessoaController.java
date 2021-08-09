@@ -29,6 +29,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+
 public abstract class PessoaController {
 
     private static String TAG = PessoaController.class.getName();
@@ -41,6 +43,7 @@ public abstract class PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

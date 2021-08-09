@@ -11,6 +11,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 
+import lombok.SneakyThrows;
+
 public class ViaCep {
 
     public void buscarCep(Context context, String cep,  IVolleyCallback callback) {
@@ -21,6 +23,7 @@ public class ViaCep {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

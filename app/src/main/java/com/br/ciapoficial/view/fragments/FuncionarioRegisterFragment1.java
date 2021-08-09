@@ -79,6 +79,8 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     private Escolaridade escolaridade = new Escolaridade();
     private SexoEnum sexo;
 
+    //ajustar campo de telefone - lista não permite deletar número da tela após retornar de tela posterior
+
     public FuncionarioRegisterFragment1() {
         // Required empty public constructor
     }
@@ -141,7 +143,6 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         textView.setTag("lista");
 
         linearLayoutTelefone.addView(textView);
-
     }
 
     private void configurarCampoDeTelefone()
@@ -210,7 +211,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    public void configurarCampoUfNatal(List<Estado> listaEstadosRecuperados) {
+    private void configurarCampoUfNatal(List<Estado> listaEstadosRecuperados) {
 
         ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -222,7 +223,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     }
 
-    public void popularCampoCidadeComDB()
+    private void popularCampoCidadeComDB()
     {
         MunicipioComBaseNaUF.mostrarMunicipioComBaseNaUf(getActivity(), autoCompleteTextViewUfNatal,
                 autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas);
@@ -230,7 +231,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidadeNatal);
     }
 
-    public void popularCampoEstadoCivilComDB() {
+    private void popularCampoEstadoCivilComDB() {
 
         EstadoCivilController estadoCivilController = new EstadoCivilController();
         estadoCivilController.listar(getActivity(), new IVolleyCallback() {
@@ -260,7 +261,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         });
     }
 
-    public void configurarCampoEstadoCivil(List<EstadoCivil> listaEstadosCivisRecuperados) {
+    private void configurarCampoEstadoCivil(List<EstadoCivil> listaEstadosCivisRecuperados) {
 
         ArrayAdapter<EstadoCivil> adapterEstadoCivil = new ArrayAdapter<EstadoCivil>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -272,7 +273,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
 
     }
 
-    public void popularCampoEscolaridadeComDB() {
+    private void popularCampoEscolaridadeComDB() {
 
         EscolaridadeController escolaridadeController = new EscolaridadeController();
         escolaridadeController.listar(getActivity(), new IVolleyCallback() {

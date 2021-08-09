@@ -66,7 +66,6 @@ import lombok.SneakyThrows;
 public class FuncionarioRegisterFragment3 extends Fragment {
 
     private PrincipalFragment principalFragment;
-
     private TextInputLayout textInputLayoutQuadro, textInputLayoutRgMilitar,
             textInputLayoutEspecialidade, textInputLayoutRegistroConselho;
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra,
@@ -96,6 +95,8 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     private SituacaoFuncional situacaoFuncional = new SituacaoFuncional();
     private Especialidade especialidade = new Especialidade();
     private String registroConselho;
+
+    //verificar por que não está sendo realizado o cadastro de funcionários do tipo VC
 
     public FuncionarioRegisterFragment3() {
         // Required empty public constructor
@@ -278,7 +279,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         });
     }
 
-    public void configurarCampoPostoGradCat(List<PostoGradCat> listaPostoGradCatRecuperados) {
+    private void configurarCampoPostoGradCat(List<PostoGradCat> listaPostoGradCatRecuperados) {
 
         ArrayAdapter<PostoGradCat> adapterPostoGradCat = new ArrayAdapter<PostoGradCat>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,

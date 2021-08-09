@@ -1,8 +1,7 @@
 package com.br.ciapoficial.model;
 
-import com.br.ciapoficial.enums.TipoVinculoEnum;
-
 import java.time.LocalDate;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +10,16 @@ import lombok.Setter;
 @Setter
 public class Usuario extends Pessoa {
 
-    private String nomeGuerra;
-    private Unidade unidade;
-    private SituacaoFuncional situacaoFuncional;
-    private String rgMilitar;
     private PostoGradCat postoGradCat;
     private Quadro quadro;
+    private String rgMilitar;
+    private String nomeGuerra;
+    private Unidade unidade;
     private LocalDate dataInclusao;
+    private SituacaoFuncional situacaoFuncional;
     private Usuario titular;
-    private TipoVinculoEnum tipoVinculo;
-
+    private Vinculo tipoVinculo;
+    private Set<Especialista> especialista;
 
     public Usuario() {
 

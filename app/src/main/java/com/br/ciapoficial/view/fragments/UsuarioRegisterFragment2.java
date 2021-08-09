@@ -2,7 +2,6 @@ package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +20,20 @@ import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
-import com.br.ciapoficial.enums.TipoVinculoEnum;
-import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
+import com.br.ciapoficial.helper.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
 import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.Estado;
 import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Vinculo;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 
@@ -51,33 +52,39 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     private PrincipalFragment principalFragment;
     private UsuarioRegisterFragment3 usuarioRegisterFragment3;
+
     private TextInputLayout textInputLayoutUf, textInputLayoutCidade;
     private AutoCompleteTextView autoCompleteTextViewUf, autoCompleteTextViewCidade;
-    private TextInputEditText textInputEditTextCep, textInputEditTextBairro, textInputEditTextLogradouro,
-            textInputEditTextNumero;
+    private TextInputEditText textInputEditTextCep, textInputEditTextBairro,
+            textInputEditTextLogradouro, textInputEditTextNumero;
     Button btnProxima;
 
-    private ArrayList<UfEnum> listaEstadosRecuperados = new ArrayList<>();
+    private ArrayList<Estado> listaEstadosRecuperados = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
 
-    private Endereco endereco;
+    private Endereco endereco = new Endereco();
 
-    private String tipoAtendido;
+    private TipoAtendido tipoAtendido;
+
+    //Usar API de CEP para settar dados de endereço com mais facilidade
 
     public UsuarioRegisterFragment2() {
         // Required empty public constructor
     }
-    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_atendido_register2, container, false);
+        View view = inflater.inflate(R.layout.fragment_usuario_register2, container, false);
 
         Bundle getTipoAtendidoFromFragment1 = this.getArguments();
-        tipoAtendido = getTipoAtendidoFromFragment1.getString("tipoAtendido");
+        tipoAtendido = (TipoAtendido) getTipoAtendidoFromFragment1.getSerializable("tipoAtendido");
 
         configurarComponentes(view);
+        configurarMascaraCep();
+        alternarHintCampoUf();
+        popularCampoUfComDB();
+        popularCampoCidadeComDB();
         abrirProximaTela();
         return view;
     }
@@ -92,18 +99,13 @@ public class UsuarioRegisterFragment2 extends Fragment {
         textInputEditTextLogradouro = view.findViewById(R.id.edtLogradouro);
         textInputEditTextNumero = view.findViewById(R.id.edtNumero);
         btnProxima = view.findViewById(R.id.btnProxima);
-
-        configurarMascaraCep();
-        alternarHintCampoUf();
-        popularCampoUfComDB();
-        popularCampoCidadeComDB();
     }
 
     private void chamarViaCep() {
 
     }
 
-    private Bundle recuperarDadosAtendidoRegisterFragment1() {
+    private Bundle recuperarDadosUsuarioRegisterFragment1() {
         Bundle valoresRecebidosFragment1 = this.getArguments();
 
         return valoresRecebidosFragment1;
@@ -127,23 +129,23 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     private void popularCampoUfComDB() {
 
-
         UfController ufController = new UfController();
         ufController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
                 try {
-
-                    JSONArray jsonArray= new JSONArray(response);
+                    JSONArray jsonArray = new JSONArray(response);
 
                     for(int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        UfEnum ufEnum = (UfEnum) object.get("uf");
+                        Estado estado = new Estado();
+                        estado.setId(Integer.parseInt(object.getString("id")));
+                        estado.setNome(object.getString("nome"));
 
-                        listaEstadosRecuperados.add(ufEnum);
+                        listaEstadosRecuperados.add(estado);
                         configurarCampoEstado(listaEstadosRecuperados);
 
                     }
@@ -156,9 +158,9 @@ public class UsuarioRegisterFragment2 extends Fragment {
         });
     }
 
-    private void configurarCampoEstado(ArrayList<UfEnum> listaEstadosRecuperados) {
+    private void configurarCampoEstado(List<Estado> listaEstadosRecuperados) {
 
-        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
+        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUf.setAdapter(adapterUf);
@@ -174,11 +176,32 @@ public class UsuarioRegisterFragment2 extends Fragment {
                 autoCompleteTextViewCidade, listaCidadesRecuperadas);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidade);
+
     }
 
-    private void receberDadosAtendidoPreenchidos()
-    {
-        endereco = new Endereco();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean validarCadastroUsuario() throws ParseException {
+
+        //Aqui há validação diferente dependendo do tipo do atendido
+        //Se for PM, preenche todos os campos, caso seja dependente ou civil, os seguintes campos não
+        //são obrigatórios:
+        // CEP, Cidade, Bairro, Logradouro e Número, ou seja, nenhum campo de endereço.
+
+        if (
+                FieldValidator.validarCep(textInputEditTextCep) &&
+                        FieldValidator.validarUf(autoCompleteTextViewUf, listaEstadosRecuperados) &&
+                        FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
+                        FieldValidator.validarBairro(textInputEditTextBairro) &&
+                        FieldValidator.validarLogradouro(textInputEditTextLogradouro) &&
+                        FieldValidator.validarNumero(textInputEditTextNumero))
+        {
+            receberDadosUsuarioPreenchidos();
+            return true;
+        }else { return false; }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void receberDadosUsuarioPreenchidos() throws ParseException {
         endereco.setCep(Mascaras.removerMascaras(textInputEditTextCep.getText().toString()));
 
         for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
@@ -191,60 +214,16 @@ public class UsuarioRegisterFragment2 extends Fragment {
         endereco.setBairro(textInputEditTextBairro.getText().toString());
         endereco.setLogradouro(textInputEditTextLogradouro.getText().toString());
         endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString()));
-    }
 
-    private boolean validarAtendido() {
-        receberDadosAtendidoPreenchidos();
-
-        if (!TextUtils.isEmpty(endereco.getCep()) || !tipoAtendido.equals("PM")) {
-
-                if (!TextUtils.isEmpty(endereco.getCidade().toString()) || !tipoAtendido.equals("PM")) {
-
-                    if (!TextUtils.isEmpty(endereco.getBairro()) || !tipoAtendido.equals("PM")) {
-
-                        if (!TextUtils.isEmpty(endereco.getLogradouro()) || !tipoAtendido.equals("PM")) {
-
-                            if (!TextUtils.isEmpty(String.valueOf(endereco.getNumero())) || !tipoAtendido.equals("PM")) {
-
-                                return true;
-                            }
-                            else {
-                                textInputEditTextNumero.setError("O campo NÚMERO é obrigatório!");
-                                textInputEditTextNumero.requestFocus();
-                                return false; }
-
-                        }
-                        else {
-                            textInputEditTextLogradouro.setError("O campo LOGRADOURO é obrigatório!");
-                            textInputEditTextLogradouro.requestFocus();
-                            return false; }
-
-                    }
-                    else {
-                        textInputEditTextBairro.setError("O campo BAIRRO é obrigatório!");
-                        textInputEditTextBairro.requestFocus();
-                        return false; }
-
-                }
-                else {
-                    autoCompleteTextViewCidade.setError("O campo CIDADE é obrigatório!.");
-                    autoCompleteTextViewCidade.requestFocus();
-                    return false; }
-
-        }
-        else {
-            textInputEditTextCep.setError("O campo CEP é obrigatório!");
-            textInputEditTextCep.requestFocus();
-            return false; }
     }
 
     private Bundle encapsularValoresParaEnvio()
     {
-        Bundle valoresRecebidosFragment1 =  recuperarDadosAtendidoRegisterFragment1();
+        Bundle valoresRecebidosFragment1 =  recuperarDadosUsuarioRegisterFragment1();
         Bundle bundle = new Bundle();
 
         bundle.putBundle("valoresRecebidosFragment1", valoresRecebidosFragment1);
-        bundle.putSerializable("cep", (endereco));
+        bundle.putSerializable("endereco", (endereco));
 
         return bundle;
     }
@@ -257,9 +236,9 @@ public class UsuarioRegisterFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(validarAtendido())
+                if(validarCadastroUsuario())
                 {
-                    if(tipoAtendido.equals("1"))
+                    if(tipoAtendido.equals(tipoAtendido.PM))
                     {
 
                         Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
@@ -275,7 +254,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
                     {
                         Usuario novoUsuario;
                         novoUsuario = encapsularValoresParaCadastro();
-                        cadastrarAtendido(novoUsuario);
+                        cadastrarUsuario(novoUsuario);
 
                         principalFragment = new PrincipalFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -296,7 +275,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Usuario encapsularValoresParaCadastro() throws ParseException {
-        Bundle valoresRecebidosFragment1 = recuperarDadosAtendidoRegisterFragment1();
+        Bundle valoresRecebidosFragment1 = recuperarDadosUsuarioRegisterFragment1();
 
        Usuario usuario = new Usuario();
        Usuario titular = new Usuario();
@@ -305,7 +284,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);
-        usuario.setCpf(valoresRecebidosFragment1.getString("cpf"));
+        usuario.setCpf(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
@@ -314,13 +293,14 @@ public class UsuarioRegisterFragment2 extends Fragment {
         usuario.setEscolaridade((Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setNumeroFilhos((valoresRecebidosFragment1.getInt("numeroFilhos")));
         usuario.setTitular(titular);
-        usuario.setTipoVinculo((TipoVinculoEnum) valoresRecebidosFragment1.getSerializable("vinculo"));
+        usuario.setTipoVinculo((Vinculo) valoresRecebidosFragment1.getSerializable("vinculo"));
+
         usuario.setEndereco(endereco);
 
         return usuario;
     }
 
-    private void cadastrarAtendido(Usuario novoUsuario)
+    private void cadastrarUsuario(Usuario novoUsuario)
     {
         new UsuarioController().cadastrar(
                 getActivity(),
@@ -333,20 +313,9 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            boolean isErro = jsonObject.getBoolean("erro");
-
-                            String mensagem = jsonObject.getString("mensagem");
-
-                            if(isErro) {
-                                Toast.makeText(principalFragment.getContext(),
-                                        mensagem,
-                                        Toast.LENGTH_SHORT).show();
-                            }else {
-
-                                Toast.makeText(principalFragment.getContext(),
-                                        "Cadastro realizado com sucesso!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
                             e.printStackTrace();

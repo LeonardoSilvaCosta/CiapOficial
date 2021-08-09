@@ -2,13 +2,6 @@ package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,28 +11,32 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.PostoGradCatController;
 import com.br.ciapoficial.controller.QuadroController;
 import com.br.ciapoficial.controller.SituacaoFuncionalController;
 import com.br.ciapoficial.controller.UnidadeController;
-import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EstadoCivilEnum;
-import com.br.ciapoficial.enums.PostoGradCatEnum;
-import com.br.ciapoficial.enums.QuadroEnum;
+import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
-import com.br.ciapoficial.enums.SituacaoFuncionalEnum;
-import com.br.ciapoficial.enums.UnidadeEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
+import com.br.ciapoficial.helper.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Endereco;
 import com.br.ciapoficial.model.Escolaridade;
 import com.br.ciapoficial.model.EstadoCivil;
+import com.br.ciapoficial.model.PostoGradCat;
+import com.br.ciapoficial.model.Quadro;
+import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
+import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -50,6 +47,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 
@@ -57,24 +55,24 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
     private PrincipalFragment principalFragment;
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra, textInputEditTextDataInclusao;
-    private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewUnidade, autoCompleteTextViewQuadro,
+    private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewQuadro, autoCompleteTextViewUnidade,
             autoCompleteTextViewSituacaoFuncional;
     Button btnCadastrar;
 
     Usuario usuario;
 
-    private ArrayList<PostoGradCatEnum> listaPostoGradCatRecuperados = new ArrayList<>();
-    private ArrayList<UnidadeEnum> listaUnidadesRecuperadas = new ArrayList<>();
-    private ArrayList<QuadroEnum> listaQuadrosRecuperados = new ArrayList<>();
-    private ArrayList<SituacaoFuncionalEnum> listaSituacoesFuncionaisRecuperadas = new ArrayList<>();
+    private List<PostoGradCat> listaPostoGradCatRecuperados = new ArrayList<>();
+    private List<Quadro> listaQuadrosRecuperados = new ArrayList<>();
+    private List<Unidade> listaUnidadesRecuperadas = new ArrayList<>();
+    private List<SituacaoFuncional> listaSituacoesFuncionaisRecuperadas = new ArrayList<>();
 
+    private PostoGradCat postoGradCat = new PostoGradCat();
+    private Quadro quadro = new Quadro();
     private String rgMilitar;
-    private PostoGradCatEnum postoGradCatEnum;
     private String nomeGuerra;
-    private UnidadeEnum unidadeEnum;
-    private QuadroEnum quadroEnum;
+    private Unidade unidade = new Unidade();
     private LocalDate dataInclusao;
-    private SituacaoFuncionalEnum situacaoFuncionalEnum;
+    private SituacaoFuncional situacaoFuncional = new SituacaoFuncional();
 
     public UsuarioRegisterFragment3() {
         // Required empty public constructor
@@ -83,30 +81,35 @@ public class UsuarioRegisterFragment3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_atendido_register3, container, false) ;
+        View view = inflater.inflate(R.layout.fragment_usuario_register3, container, false) ;
 
 
         configurarComponentes(view);
+        configurarMascaraDataDeInclusao();
+        popularCampoPostoGradCatComDB();
+        popularCampoUnidadeComDB();
+        popularCampoQuadroComDB();
+        popularCampoSituacaoFuncionalComDB();
         enviarFormulario();
         return view;
     }
 
     private void configurarComponentes(View view)
     {
-        textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
         autoCompleteTextViewPostGradCat = view.findViewById(R.id.edtPostoGradCat);
+        autoCompleteTextViewQuadro = view.findViewById(R.id.edtQuadro);
+        textInputEditTextRgMilitar = view.findViewById(R.id.edtRgMilitar);
         textInputEditTextNomeGuerra = view.findViewById(R.id.edtNomeGuerra);
         autoCompleteTextViewUnidade = view.findViewById(R.id.edtUnidade);
-        autoCompleteTextViewQuadro = view.findViewById(R.id.edtQuadro);
         textInputEditTextDataInclusao = view.findViewById(R.id.edtDataInclusao);
         autoCompleteTextViewSituacaoFuncional = view.findViewById(R.id.edtSitucaoFuncional);
         btnCadastrar = view.findViewById(R.id.btnRegistrar);
+    }
 
-        popularCampoPostoGradCatComDB();
-        popularCampoUnidadeComDB();
-        popularCampoQuadroComDB();
-        popularCampoSituacaoFuncionalComDB();
-        configurarMascaraData();
+    private void configurarMascaraDataDeInclusao()
+    {
+        Mascaras mascara = new Mascaras();
+        mascara.criarMascaraParaData(textInputEditTextDataInclusao);
     }
 
     private void popularCampoPostoGradCatComDB() {
@@ -124,10 +127,11 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
+                        PostoGradCat postoGradCat = new PostoGradCat();
+                        postoGradCat.setId(Integer.parseInt(object.getString("id")));
+                        postoGradCat.setNome(object.getString("nome"));
 
-                        PostoGradCatEnum postoGradCatEnum = PostoGradCatEnum.valueOf(object.getString("postoGradCat"));
-
-                        listaPostoGradCatRecuperados.add(postoGradCatEnum);
+                        listaPostoGradCatRecuperados.add(postoGradCat);
                         configurarCampoPostoGradCat(listaPostoGradCatRecuperados);
 
                     }
@@ -140,57 +144,15 @@ public class UsuarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoPostoGradCat(ArrayList<PostoGradCatEnum> listaPostoGradCatRecuperados) {
+    private void configurarCampoPostoGradCat(List<PostoGradCat> listaPostoGradCatRecuperados) {
 
-        ArrayAdapter<PostoGradCatEnum> adapterPostoGradCat = new ArrayAdapter<PostoGradCatEnum>(getActivity(),
+        ArrayAdapter<PostoGradCat> adapterPostoGradCat = new ArrayAdapter<PostoGradCat>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaPostoGradCatRecuperados));
         autoCompleteTextViewPostGradCat.setAdapter(adapterPostoGradCat);
         autoCompleteTextViewPostGradCat.setThreshold(1);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewPostGradCat);
-
-    }
-
-    private void popularCampoUnidadeComDB() {
-
-        UnidadeController unidadeController = new UnidadeController();
-        unidadeController.listar(getActivity(), new IVolleyCallback() {
-            @Override
-            public void onSucess(String response) {
-
-                try {
-
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for(int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject object = jsonArray.getJSONObject(i);
-
-                        UnidadeEnum unidade = UnidadeEnum.valueOf(object.getString("unidade"));
-
-                        listaUnidadesRecuperadas.add(unidade);
-                        configurarCampoUnidade(listaUnidadesRecuperadas);
-
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-
-    private void configurarCampoUnidade(ArrayList<UnidadeEnum> listaUnidadesRecuperadas) {
-
-        ArrayAdapter<UnidadeEnum> adapterUnidade = new ArrayAdapter<UnidadeEnum>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                (listaUnidadesRecuperadas));
-        autoCompleteTextViewUnidade.setAdapter(adapterUnidade);
-        autoCompleteTextViewUnidade.setThreshold(1);
-
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewUnidade);
 
     }
 
@@ -209,7 +171,9 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        QuadroEnum quadro = QuadroEnum.valueOf(object.getString("quadro"));
+                        Quadro quadro = new Quadro();
+                        quadro.setId(Integer.parseInt(object.getString("id")));
+                        quadro.setNome(object.getString("nome"));
 
                         listaQuadrosRecuperados.add(quadro);
                         configurarCampoQuadro(listaQuadrosRecuperados);
@@ -224,15 +188,59 @@ public class UsuarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoQuadro(ArrayList<QuadroEnum> listaQuadrosRecuperados) {
+    private void configurarCampoQuadro(List<Quadro> listaQuadrosRecuperados) {
 
-        ArrayAdapter<QuadroEnum> adapterQuadro = new ArrayAdapter<QuadroEnum>(getActivity(),
+        ArrayAdapter<Quadro> adapterQuadro = new ArrayAdapter<Quadro>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaQuadrosRecuperados));
         autoCompleteTextViewQuadro.setAdapter(adapterQuadro);
         autoCompleteTextViewQuadro.setThreshold(1);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewQuadro);
+
+    }
+
+    private void popularCampoUnidadeComDB() {
+
+        UnidadeController unidadeController = new UnidadeController();
+        unidadeController.listar(getActivity(), new IVolleyCallback() {
+            @Override
+            public void onSucess(String response) {
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for(int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        Unidade unidade = new Unidade();
+                        unidade.setId(Integer.parseInt(object.getString("id")));
+                        unidade.setNome(object.getString("nome"));
+
+                        listaUnidadesRecuperadas.add(unidade);
+                        configurarCampoUnidade(listaUnidadesRecuperadas);
+
+                    }
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+    }
+
+    public void configurarCampoUnidade(List<Unidade> listaUnidadesRecuperadas) {
+
+        ArrayAdapter<Unidade> adapterUnidade = new ArrayAdapter<Unidade>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line,
+                (listaUnidadesRecuperadas));
+        autoCompleteTextViewUnidade.setAdapter(adapterUnidade);
+        autoCompleteTextViewUnidade.setThreshold(1);
+
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewUnidade);
 
     }
 
@@ -251,8 +259,9 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        SituacaoFuncionalEnum situacaoFuncional = SituacaoFuncionalEnum.valueOf(
-                                object.getString("situacaoFuncional"));
+                        SituacaoFuncional situacaoFuncional = new SituacaoFuncional();
+                        situacaoFuncional.setId(object.getInt("id"));
+                        situacaoFuncional.setNome(object.getString("nome"));
 
                         listaSituacoesFuncionaisRecuperadas.add(situacaoFuncional);
                         configurarCampoSituacaoFuncional(listaSituacoesFuncionaisRecuperadas);
@@ -267,9 +276,9 @@ public class UsuarioRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoSituacaoFuncional(ArrayList<SituacaoFuncionalEnum> listaSituacoesFuncionaisRecuperadas) {
+    private void configurarCampoSituacaoFuncional(List<SituacaoFuncional> listaSituacoesFuncionaisRecuperadas) {
 
-        ArrayAdapter<SituacaoFuncionalEnum> adapterSituacaoFuncional = new ArrayAdapter<SituacaoFuncionalEnum>(getActivity(),
+        ArrayAdapter<SituacaoFuncional> adapterSituacaoFuncional = new ArrayAdapter<SituacaoFuncional>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaSituacoesFuncionaisRecuperadas));
         autoCompleteTextViewSituacaoFuncional.setAdapter(adapterSituacaoFuncional);
@@ -279,13 +288,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
     }
 
-    private void configurarMascaraData()
-    {
-        Mascaras mascara = new Mascaras();
-        mascara.criarMascaraParaData(textInputEditTextDataInclusao);
-    }
-
-    private Bundle recuperarDadosAtendidoRegisterFragment2() {
+    private Bundle recuperarDadosDoUsuarioDoRegisterFragment2() {
         Bundle valoresRecebidosFragment1e2 = this.getArguments();
 
         return valoresRecebidosFragment1e2;
@@ -293,136 +296,91 @@ public class UsuarioRegisterFragment3 extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void receberDadosUsuarioPreenchidos() throws ParseException {
-        rgMilitar = textInputEditTextRgMilitar.getText().toString();
+    private boolean validarCadastroDoUsuario() throws ParseException {
+        if (
+                FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
+                        listaPostoGradCatRecuperados) &&
+                        FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
+                        FieldValidator.validarRgMilitar(textInputEditTextRgMilitar) &&
+                        FieldValidator.validarNomeGuerra(textInputEditTextNomeGuerra) &&
+                        FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
+                        FieldValidator.validarDataDeInclusao(textInputEditTextDataInclusao) &&
+                        FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
+                                listaSituacoesFuncionaisRecuperadas))
+        {
+            receberDadosDoUsuarioPreenchidos();
+            return true;
+        }else { return false; }
 
-        for(int i = 0; i < listaPostoGradCatRecuperados.size(); i++) {
-            PostoGradCatEnum postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
-            if(postoGradCatSelecionado.getNome().equals(autoCompleteTextViewPostGradCat.getText().toString())) {
-                postoGradCatEnum = postoGradCatSelecionado;
-            }
-        }
-        nomeGuerra = textInputEditTextNomeGuerra.getText().toString();
-
-        for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
-            UnidadeEnum unidadeSelecionada = listaUnidadesRecuperadas.get(i);
-            if(unidadeSelecionada.getNome().equals(autoCompleteTextViewUnidade.getText().toString())) {
-                unidadeEnum = unidadeSelecionada;
-            }
-        }
-        for(int i = 0; i < listaQuadrosRecuperados.size(); i++) {
-            QuadroEnum quadroSelecionado = listaQuadrosRecuperados.get(i);
-            if(quadroSelecionado.getNome().equals(autoCompleteTextViewQuadro.getText().toString())) {
-                quadroEnum = quadroSelecionado;
-            }
-        }
-
-        dataInclusao = DateFormater.StringToLocalDate(textInputEditTextDataInclusao.getText().toString());
-
-        for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
-            SituacaoFuncionalEnum situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
-            if(situacaoFuncionalSelecionada.getNome().equals(autoCompleteTextViewSituacaoFuncional.getText().toString())) {
-                situacaoFuncionalEnum = situacaoFuncionalSelecionada;
-            }
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean validarCadastroAtendido() throws ParseException {
-        receberDadosUsuarioPreenchidos();
+    public void receberDadosDoUsuarioPreenchidos() throws ParseException {
 
-        if (!TextUtils.isEmpty(rgMilitar)) {
-
-            if (!TextUtils.isEmpty(postoGradCatEnum.getNome())) {
-
-                if (!TextUtils.isEmpty(nomeGuerra)) {
-
-                    if (!TextUtils.isEmpty(unidadeEnum.getNome())) {
-
-                        if (!TextUtils.isEmpty(quadroEnum.getNome())) {
-
-                            if (dataInclusao != null) {
-
-                                if (!TextUtils.isEmpty(situacaoFuncionalEnum.getNome())) {
-
-                                    return true;
-
-                                }
-                                else {
-                                    autoCompleteTextViewSituacaoFuncional.setError("O campo SITUAÇÃO FUNCIONAL é obrigatório!");
-                                    autoCompleteTextViewSituacaoFuncional.requestFocus();
-                                    return false; }
-
-                            }
-                            else {
-                                textInputEditTextDataInclusao.setError("O campo DATA DE INCLUSÃO é obrigatório!");
-                                textInputEditTextDataInclusao.requestFocus();
-                                return false; }
-
-                        }
-                        else {
-                            autoCompleteTextViewQuadro.setError("O campo QUADRO é obrigatório!");
-                            autoCompleteTextViewQuadro.requestFocus();
-                            return false; }
-
-                    }
-                    else {
-                        autoCompleteTextViewUnidade.setError("O campo UNIDADE é obrigatório!");
-                        autoCompleteTextViewUnidade.requestFocus();
-                        return false; }
-
-                }
-                else {
-                    textInputEditTextNomeGuerra.setError("O campo NOME GUERRA é obrigatório!.");
-                    textInputEditTextNomeGuerra.requestFocus();
-                    return false; }
-
+        for(int i = 0; i < listaPostoGradCatRecuperados.size(); i++) {
+            PostoGradCat postoGradCatSelecionado = listaPostoGradCatRecuperados.get(i);
+            if(postoGradCatSelecionado.getNome().equals(autoCompleteTextViewPostGradCat.getText().toString())) {
+                postoGradCat = postoGradCatSelecionado;
             }
-            else {
-                autoCompleteTextViewPostGradCat.setError("O campo POSTO/GRAD/CAT é obrigatório!");
-                autoCompleteTextViewPostGradCat.requestFocus();
-                return false; }
-
         }
-        else {
-            textInputEditTextRgMilitar.setError("O campo RG é obrigatório!");
-            textInputEditTextRgMilitar.requestFocus();
-            return false; }
+        for(int i = 0; i < listaQuadrosRecuperados.size(); i++) {
+            Quadro quadroSelecionado = listaQuadrosRecuperados.get(i);
+            if(quadroSelecionado.getNome().equals(autoCompleteTextViewQuadro.getText().toString())) {
+                quadro = quadroSelecionado;
+            }
+        }
+
+        rgMilitar = textInputEditTextRgMilitar.getText().toString().trim();
+        nomeGuerra = textInputEditTextNomeGuerra.getText().toString().trim();
+
+        for(int i = 0; i < listaUnidadesRecuperadas.size(); i++) {
+            Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
+            if(unidadeSelecionada.getNome().equals(autoCompleteTextViewUnidade.getText().toString())) {
+                unidade = unidadeSelecionada;
+            }
+        }
+
+        dataInclusao = DateFormater.StringToLocalDate(textInputEditTextDataInclusao.getText().toString().trim());
+
+        for(int i = 0; i < listaSituacoesFuncionaisRecuperadas.size(); i++) {
+            SituacaoFuncional situacaoFuncionalSelecionada = listaSituacoesFuncionaisRecuperadas.get(i);
+            if(situacaoFuncionalSelecionada.getNome().equals(autoCompleteTextViewSituacaoFuncional.getText().toString())) {
+                situacaoFuncional = situacaoFuncionalSelecionada;
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Usuario encapsularValoresParaCadastro() throws ParseException {
-        Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendidoRegisterFragment2();
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosDoUsuarioDoRegisterFragment2();
         Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
 
         LocalDate dataNascimento = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataNascimento"));
-        LocalDate dataInclusao = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataInclusao"));
 
         usuario = new Usuario();
 
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);
-        usuario.setCpf((valoresRecebidosFragment1.getString("cpf")));
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
+        usuario.setNaturalidade( (Cidade)valoresRecebidosFragment1.getSerializable("naturalidade"));
+        usuario.setEstadoCivil( (EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));
+        usuario.setNumeroFilhos(valoresRecebidosFragment1.getInt("numeroFilhos"));
+        usuario.setEscolaridade( (Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
-        usuario.setEstadoCivil((EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));
-        usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("cidadeNatal"));
-        usuario.setEscolaridade((Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
-        usuario.setNumeroFilhos(valoresRecebidosFragment1.getInt("numeroFilhos"));
         usuario.setEndereco((Endereco) valoresRecebidosFragment1e2.getSerializable("endereco"));
         usuario.setRgMilitar(rgMilitar);
-//        usuario.setPostoGradCat(postoGradCatEnum);
-//        usuario.setNomeGuerra(nomeGuerra);
-//        usuario.setUnidade(unidadeEnum);
-//        usuario.setQuadro(quadroEnum);
-//        usuario.setDataInclusao(dataInclusao);
-//        usuario.setSituacaoFuncional(situacaoFuncionalEnum);
+        usuario.setPostoGradCat((postoGradCat));
+        usuario.setNomeGuerra(nomeGuerra);
+        usuario.setUnidade((unidade));
+        usuario.setDataInclusao((dataInclusao));
+        usuario.setQuadro((quadro));
+        usuario.setSituacaoFuncional((situacaoFuncional));
 
         return usuario;
     }
 
-    private void cadastrarAtendido(Usuario novoUsuario)
+    private void cadastrarUsuario(Usuario novoUsuario)
     {
         new UsuarioController().cadastrar(
                 getActivity(),
@@ -431,26 +389,15 @@ public class UsuarioRegisterFragment3 extends Fragment {
                     @Override
                     public void onSucess(String response) {
 
-                        Log.e("CadastroAtendido", response);
+                        Log.e("CadastroUsuario", response);
 
                         try{
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            boolean isErro = jsonObject.getBoolean("erro");
-
-                            String mensagem = jsonObject.getString("mensagem");
-
-                            if(isErro) {
-                                Toast.makeText(principalFragment.getContext(),
-                                        mensagem,
-                                        Toast.LENGTH_SHORT).show();
-                            }else {
-
-                                Toast.makeText(principalFragment.getContext(),
-                                        "Cadastro realizado com sucesso!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
                             e.printStackTrace();
@@ -467,12 +414,12 @@ public class UsuarioRegisterFragment3 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroAtendido())
+                if(validarCadastroDoUsuario())
                 {
                     Usuario novoUsuario;
                     novoUsuario = encapsularValoresParaCadastro();
 
-                    cadastrarAtendido(novoUsuario);
+                    cadastrarUsuario(novoUsuario);
 
                     principalFragment = new PrincipalFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

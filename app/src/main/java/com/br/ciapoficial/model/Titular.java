@@ -3,14 +3,14 @@ package com.br.ciapoficial.model;
 import java.io.Serializable;
 
 public class Titular implements Serializable {
-    private int id;
+    private Integer id;
     private String nome;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

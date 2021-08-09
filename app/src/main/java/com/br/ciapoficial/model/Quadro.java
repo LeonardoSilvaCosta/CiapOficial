@@ -1,23 +1,21 @@
 package com.br.ciapoficial.model;
 
-public class Quadro {
-    private int id;
+import java.io.Serializable;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+public class Quadro implements Serializable {
+
+    @EqualsAndHashCode.Include
+    private Integer id;
     private String nome;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public Quadro() {
     }
 
     @Override

@@ -64,7 +64,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         return view;
     }
 
-    public void configurarComponentes(View view) {
+    private void configurarComponentes(View view) {
         textInputEditTextCep = view.findViewById(R.id.edtCep);
         autoCompleteTextViewUf = view.findViewById(R.id.edtUf);
         autoCompleteTextViewCidade = view.findViewById(R.id.edtCidadeNatal);
@@ -74,20 +74,20 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         btnProxima = view.findViewById(R.id.btnProxima);
     }
 
-    public void chamarViaCep() {
+    private void chamarViaCep() {
 
     }
 
-    public Bundle recuperarDadosFuncionarioRegisterFragment1() {
+    private Bundle recuperarDadosFuncionarioRegisterFragment1() {
         Bundle valoresRecebidosFragment1 = this.getArguments();
 
         return valoresRecebidosFragment1;
 
     }
 
-    public void configurarMascaraParaCep() {Mascaras.criarMascaraParaCep(textInputEditTextCep);}
+    private void configurarMascaraParaCep() {Mascaras.criarMascaraParaCep(textInputEditTextCep);}
 
-    public void popularCampoUfComDB() {
+    private void popularCampoUfComDB() {
 
         UfController ufController = new UfController();
         ufController.listar(getActivity(), new IVolleyCallback() {
@@ -118,7 +118,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         });
     }
 
-    public void configurarCampoEstado(List<Estado> listaEstadosRecuperados) {
+    private void configurarCampoEstado(List<Estado> listaEstadosRecuperados) {
 
         ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -130,7 +130,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
 
     }
 
-    public void popularCampoCidadeComDB() {
+    private void popularCampoCidadeComDB() {
 
         MunicipioComBaseNaUF.mostrarMunicipioComBaseNaUf(getActivity(), autoCompleteTextViewUf,
                 autoCompleteTextViewCidade, listaCidadesRecuperadas);
@@ -139,7 +139,7 @@ public class FuncionarioRegisterFragment2 extends Fragment {
 
     }
 
-    public boolean validarCadastroFuncionario() {
+    private boolean validarCadastroFuncionario() {
 
         if (
                 FieldValidator.validarCep(textInputEditTextCep) &&
@@ -165,8 +165,6 @@ public class FuncionarioRegisterFragment2 extends Fragment {
         endereco.setBairro(textInputEditTextBairro.getText().toString().trim());
         endereco.setLogradouro(textInputEditTextLogradouro.getText().toString().trim());
         endereco.setNumero(Integer.parseInt(textInputEditTextNumero.getText().toString().trim()));
-
-        encapsularValoresParaEnvio();
     }
 
 

@@ -21,9 +21,11 @@ import com.br.ciapoficial.interfaces.IVolleyCallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+
 public class VinculoController {
 
-    String url = Constants.BASE_API_URL + "tipos_vinculo";
+    String url = Constants.BASE_API_URL + "/tipos_vinculo";
 
     public void listar(Context context, final IVolleyCallback callback) {
 
@@ -31,6 +33,7 @@ public class VinculoController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

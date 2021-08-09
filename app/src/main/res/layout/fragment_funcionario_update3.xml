@@ -18,7 +18,7 @@
 
             <include
                 android:id="@+id/include"
-                layout="@layout/template_register_form_3" />
+                layout="@layout/template_funcionario_register_form_3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

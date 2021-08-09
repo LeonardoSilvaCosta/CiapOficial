@@ -1,17 +1,22 @@
 package com.br.ciapoficial.model;
 
+import java.io.Serializable;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
-public class PostoGradCat {
+public class PostoGradCat implements Serializable {
 
     @EqualsAndHashCode.Include
-    private int id;
+    private Integer id;
     private String nome;
+
+    public PostoGradCat() {
+    }
 
     @Override
     public String toString() {

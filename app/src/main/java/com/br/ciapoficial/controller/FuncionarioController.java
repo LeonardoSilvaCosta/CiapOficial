@@ -1,5 +1,7 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.Constants.BASE_API_URL;
+
 import android.content.Context;
 import android.os.Build;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.br.ciapoficial.Constants.BASE_API_URL;
+import lombok.SneakyThrows;
 
 public class FuncionarioController extends PessoaController {
     private static String TAG = FuncionarioController.class.getName();
@@ -43,6 +45,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlFuncionarios,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -108,6 +111,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlFuncionarios,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -164,6 +168,7 @@ public class FuncionarioController extends PessoaController {
         StringRequest stringRequest = new StringRequest(Request.Method.PUT,
                 urlFuncionariosComPathVariable,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
                         callback.onSucess(response);
@@ -236,6 +241,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, urlFuncionarios,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -267,6 +273,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -331,6 +338,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -365,6 +373,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -397,6 +406,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -450,6 +460,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -482,6 +493,7 @@ public class FuncionarioController extends PessoaController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

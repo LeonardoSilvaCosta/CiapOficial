@@ -18,6 +18,8 @@ import com.br.ciapoficial.model.Quadro;
 import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Unidade;
+import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.Vinculo;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -653,6 +655,91 @@ public class FieldValidator {
 //
 //            return achouNumero && achouMaiuscula && achouMinuscula && achouSimbolo;
 //        }
+
+    public static boolean validarTitular(AutoCompleteTextView campoTitular,
+                                         List<Usuario> listaDeTitulares, RadioButton rbtnDependente)
+    {
+
+        if(rbtnDependente.isChecked()) {
+
+            String valorDoCampo = campoTitular.getText().toString().trim();
+
+            if(valorDoCampo.isEmpty())
+            {
+                campoTitular.setError("O campo TITULAR é obrigatório.");
+                campoTitular.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoTitular);
+                return false;
+            }else
+            {
+                if(listaDeTitulares != null) {
+                    boolean valueExists = false;
+                    for(Usuario titularSelecionado : listaDeTitulares)
+                    {
+                        if(titularSelecionado.toString().equals(valorDoCampo))
+                        { valueExists = true; }
+                    }
+
+                    if(valueExists) {
+                        campoTitular.setError(null);
+                        return true;
+                    }
+                    else
+                    {
+                        campoTitular.setError("Insira uma opção de Titular válida.");
+                        campoTitular.requestFocus();
+                        DellayAction.clearErrorAfter2Seconds(campoTitular);
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    public static boolean validarVinculo(AutoCompleteTextView campoVinculo,
+                                         List<Vinculo> listaDeVinculos, RadioButton rbtnDependente)
+    {
+
+        if(rbtnDependente.isChecked()) {
+
+            String valorDoCampo = campoVinculo.getText().toString().trim();
+
+            if(valorDoCampo.isEmpty())
+            {
+                campoVinculo.setError("O campo VÍNCULO é obrigatório.");
+                campoVinculo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoVinculo);
+                return false;
+            }else
+            {
+                if(listaDeVinculos != null) {
+                    boolean valueExists = false;
+                    for(Vinculo vinculoSelecionado : listaDeVinculos)
+                    {
+                        if(vinculoSelecionado.toString().equals(valorDoCampo))
+                        { valueExists = true; }
+                    }
+
+                    if(valueExists) {
+                        campoVinculo.setError(null);
+                        return true;
+                    }
+                    else
+                    {
+                        campoVinculo.setError("Insira uma opção de VÍNCULO válida.");
+                        campoVinculo.requestFocus();
+                        DellayAction.clearErrorAfter2Seconds(campoVinculo);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
 
 
 }

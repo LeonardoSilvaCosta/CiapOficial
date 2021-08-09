@@ -2,12 +2,7 @@ package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,83 +12,92 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.EscolaridadeController;
 import com.br.ciapoficial.controller.EstadoCivilController;
 import com.br.ciapoficial.controller.UfController;
+import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.controller.VinculoController;
-import com.br.ciapoficial.enums.EscolaridadeEnum;
-import com.br.ciapoficial.enums.EstadoCivilEnum;
-import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
-import com.br.ciapoficial.enums.TipoVinculoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
+import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.helper.LocalDateDeserializer;
+import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
-import com.br.ciapoficial.helper.CPFValidator;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
+import com.br.ciapoficial.model.Cidade;
+import com.br.ciapoficial.model.Escolaridade;
+import com.br.ciapoficial.model.Estado;
+import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.Cidade;
+import com.br.ciapoficial.model.Vinculo;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 
 public class UsuarioRegisterFragment1 extends Fragment {
 
+    private UsuarioRegisterFragment2 usuarioRegisterFragment2;
+
     private LinearLayout linearLayoutConteudo, linearLayoutTelefone;
     private TextInputLayout textInputLayoutTitular, textInputLayoutVinculo, textInputLayoutDataNascimento;
     private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
-            textInputEditTextCpf, textInputEditTextTelefone, textInputEditTextEmail,
-            textInputEditTextNumeroFilhos;
-    private AutoCompleteTextView autoCompleteTextViewEstadoCivil, autoCompleteTextViewUfNatal,
-            autoCompleteTextViewCidadeNatal, autoCompleteTextViewEscolaridade,
-            autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
+    textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone,
+    textInputEditTextEmail;
+    private AutoCompleteTextView autoCompleteTextViewUfNatal, autoCompleteTextViewCidadeNatal,
+    autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade,
+    autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
     private RadioGroup radioGroupSexo, radioGroupTipoAtendido;
     private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
     private Button btnAdicionarTelefone, btnProxima;
 
-    private ArrayList<Telefone> arrayListTelefoneAdicionados = new ArrayList<>();
-    private ArrayList<Telefone> listaDeTelefoneAdicionados = new ArrayList<>();
-
-    private UsuarioRegisterFragment2 atendidoPmRegisterFragment2;
-
-    private ArrayList<UfEnum> listaUfsRecuperadas = new ArrayList<>();
+    private List<Telefone> arrayListTelefoneAdicionados = new ArrayList<>();
+    private List<Telefone> listaDeTelefoneAdicionados = new ArrayList<>();
+    private List<Estado> listaUfsRecuperadas = new ArrayList<>();
     private ArrayList<Cidade> listaCidadesRecuperadas = new ArrayList<>();
-    private ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados = new ArrayList<>();
-    private ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas = new ArrayList<>();
+    private ArrayList<EstadoCivil> listaEstadosCivisRecuperados = new ArrayList<>();
+    private ArrayList<Escolaridade> listaEscolaridadesRecuperadas = new ArrayList<>();
     private ArrayList<Usuario> listaTitularesRecuperados = new ArrayList<>();
-    private ArrayList<TipoVinculoEnum> listaVinculosRecuperados = new ArrayList<>();
+    private ArrayList<Vinculo> listaVinculosRecuperados = new ArrayList<>();
+
+    private String nomeCompleto, cpf, email;
+    private LocalDate dataNascimento;
+    private Estado estado;
+    private Cidade naturalidade;
+    private EstadoCivil estadoCivil = new EstadoCivil();
+    private int numeroFilhos;
+    private Escolaridade escolaridade = new Escolaridade();
+    private SexoEnum sexo;
 
     private TipoAtendido tipoAtendido;
-    private String nomeCompleto;
-    private LocalDate dataNascimento;
-    private String cpf;
-    private SexoEnum sexoEnum;
-    private String email;
-    private Telefone telefone;
-    private EstadoCivilEnum estadoCivilEnum;
-    private Cidade naturalidade;
-    private EscolaridadeEnum escolaridadeEnum;
-    private int numeroFilhos;
     private Usuario titular;
-    private TipoVinculoEnum vinculoEnum;
-
-    private ArrayAdapter arrayAdapterChild;
+    private Vinculo vinculo;
 
     public UsuarioRegisterFragment1() {
         // Required empty public constructor
@@ -102,15 +106,21 @@ public class UsuarioRegisterFragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_atendido_register1, container, false);
+        View view = inflater.inflate(R.layout.fragment_usuario_register1, container, false);
 
         configurarComponentes(view);
         configurarMascaraData();
         configurarMascaraCpf();
         configurarMascaraTelefone();
-        configurarCampoTelefone();
+        configurarCampoDeTelefone();
         definirComportamentoRadioButtonsTipoAtendido();
         definirComportamentoRadioButtonsSexo();
+        popularCampoUfNatalComDB();
+        popularCampoCidadeComDB();
+        popularCampoEstadoCivilComDB();
+        popularCampoEscolaridadeComDB();
+        popularCampoTitularComDB();
+        popularCampoVinculoComDB();
         abrirProximaTela();
 
         return view ;
@@ -119,44 +129,37 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void configurarComponentes(View view)
     {
         linearLayoutConteudo = view.findViewById(R.id.linearLayoutConteudo);
-        linearLayoutConteudo.setVisibility(View.GONE);
-
         linearLayoutTelefone = view.findViewById(R.id.linearLayoutTelefone);
         textInputLayoutVinculo = view.findViewById(R.id.textInputLayoutVinculo);
         textInputLayoutTitular = view.findViewById(R.id.textInputLayoutTitular);
-        textInputLayoutDataNascimento = view.findViewById(R.id.textInputLayoutDataNascimento);
         textInputEditTextNomeCompleto = view.findViewById(R.id.edtNomeCompleto);
+        textInputLayoutDataNascimento = view.findViewById(R.id.textInputLayoutDataNascimento);
         textInputEditTextDataNascimento = view.findViewById(R.id.edtDataNascimento);
         textInputEditTextCpf = view.findViewById(R.id.edtCpf);
         radioGroupSexo = view.findViewById(R.id.radioGroupSexo);
-        radioGroupTipoAtendido = view.findViewById(R.id.radioGroupTipoAtendido);
+        radioGroupTipoAtendido = view.findViewById(R.id.radioGroupTipoUsuario);
         rbtnMasculino = view.findViewById(R.id.rbtnMasculino);
         rbtnFeminino = view.findViewById(R.id.rbtnFeminino);
         rbtnPm = view.findViewById(R.id.rbtnPm);
         rbtnDependente = view.findViewById(R.id.rbtnDependente);
         rbtnCivil = view.findViewById(R.id.rbtnCivil);
+        autoCompleteTextViewUfNatal = view.findViewById(R.id.edtUf);
+        autoCompleteTextViewCidadeNatal = view.findViewById(R.id.edtCidadeNatal);
+        autoCompleteTextViewEstadoCivil = view.findViewById(R.id.edtEstadoCivil);
+        textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
+        autoCompleteTextViewEscolaridade = view.findViewById(R.id.edtEscolaridade);
         textInputEditTextTelefone = view.findViewById(R.id.edtTelefone);
         textInputEditTextEmail = view.findViewById(R.id.edtEmail);
-        autoCompleteTextViewEstadoCivil = view.findViewById(R.id.edtEstadoCivil);
-        autoCompleteTextViewUfNatal = view.findViewById(R.id.edtUfNatal);
-        autoCompleteTextViewCidadeNatal = view.findViewById(R.id.edtCidadeNatal);
-        autoCompleteTextViewEscolaridade = view.findViewById(R.id.edtEscolaridade);
-        textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
         autoCompleteTextViewTitular = view.findViewById(R.id.edtTitular);
         autoCompleteTextViewVinculo = view.findViewById(R.id.edtVinculo);
         btnAdicionarTelefone = view.findViewById(R.id.btnAdicionarTelefone);
         btnProxima = view.findViewById(R.id.btnProxima);
 
         configurarVisibilidadeInicialDeCampos();
-        popularCampoUfNatalComDB();
-        popularCampoCidadeComDB();
-        popularCampoEstadoCivilComDB();
-        popularCampoEscolaridadeComDB();
-        popularCampoTitularComDB();
-        popularCampoVinculoComDB();
     }
 
     private void configurarVisibilidadeInicialDeCampos() {
+        linearLayoutConteudo.setVisibility(View.GONE);
         textInputLayoutTitular.setVisibility(View.GONE);
         textInputLayoutVinculo.setVisibility(View.GONE);
         textInputLayoutVinculo.setVisibility(View.GONE);
@@ -165,24 +168,38 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void configurarMascaraData()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraParaData(textInputEditTextDataNascimento);
-    }
+        mascara.criarMascaraParaData(textInputEditTextDataNascimento); }
 
     private void configurarMascaraCpf()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraParaCpf(textInputEditTextCpf);
-    }
+        mascara.criarMascaraParaCpf(textInputEditTextCpf); }
 
     private void configurarMascaraTelefone()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraParaTelefone(textInputEditTextTelefone);
+        mascara.criarMascaraParaTelefone(textInputEditTextTelefone); }
+
+    private void criarTextViewParaTelefonesSelecionados(String textoRecebido)
+    {
+        TextView textView = new TextView(getContext());
+        textView.setPadding(0, 10, 0, 10);
+        textView.setText(textoRecebido);
+        textView.setTag("lista");
+
+        linearLayoutTelefone.addView(textView);
     }
 
-    private void configurarCampoTelefone()
+    private void configurarCampoDeTelefone()
     {
         linearLayoutTelefone.removeAllViews();
+
+        if(listaDeTelefoneAdicionados != null) {
+            for(Telefone telefoneRecebido : listaDeTelefoneAdicionados) {
+                String textoRecebido = telefoneRecebido.toString();
+                criarTextViewParaTelefonesSelecionados(textoRecebido);
+            }
+        }
 
         btnAdicionarTelefone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,58 +257,16 @@ public class UsuarioRegisterFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.rbtnMasculino) {
-                    sexoEnum = SexoEnum.MASCULINO;
+                    sexo = sexo.MASCULINO;
                 } else if (checkedId == R.id.rbtnFeminino) {
-                    sexoEnum = SexoEnum.FEMININO;
+                    sexo = sexo.FEMININO;
                 }
             }
         });
     }
 
-    private void popularCampoEstadoCivilComDB() {
-
-        EstadoCivilController estadoCivilController = new EstadoCivilController();
-        estadoCivilController.listar(getActivity(), new IVolleyCallback() {
-            @Override
-            public void onSucess(String response) {
-
-                try {
-
-                    JSONArray jsonArray = new JSONArray(response);
-
-                        for(int i = 0; i < jsonArray.length(); i++) {
-
-                            JSONObject object = jsonArray.getJSONObject(i);
-
-                            EstadoCivilEnum estadoCivil = EstadoCivilEnum.valueOf(object.getString("estadoCivil"));
-
-                            listaEstadosCivisRecuperados.add(estadoCivil);
-                            configurarCampoEstadoCivil(listaEstadosCivisRecuperados);
-
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-
-    private void configurarCampoEstadoCivil(ArrayList<EstadoCivilEnum> listaEstadosCivisRecuperados) {
-
-        ArrayAdapter<EstadoCivilEnum> adapterEstadoCivil = new ArrayAdapter<EstadoCivilEnum>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                (listaEstadosCivisRecuperados));
-        autoCompleteTextViewEstadoCivil.setAdapter(adapterEstadoCivil);
-        autoCompleteTextViewEstadoCivil.setThreshold(1);
-
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewEstadoCivil);
-
-    }
-
-    private void popularCampoUfNatalComDB() {
-
+    private void popularCampoUfNatalComDB()
+    {
         UfController ufController = new UfController();
         ufController.listar(getActivity(), new IVolleyCallback() {
             @Override
@@ -301,14 +276,15 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                     JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            UfEnum estado = UfEnum.valueOf(object.getString("uf"));
-
-                            listaUfsRecuperadas.add(estado);
-                            configurarCampoEstadoNatal(listaUfsRecuperadas);
+                        Estado estado = new Estado();
+                        estado.setId(Integer.parseInt(object.getString("id")));
+                        estado.setNome(object.getString("nome"));
+                        listaUfsRecuperadas.add(estado);
+                        configurarCampoUfNatal(listaUfsRecuperadas);
 
                     }
 
@@ -320,9 +296,9 @@ public class UsuarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEstadoNatal(ArrayList<UfEnum> listaEstadosRecuperados) {
+    private void configurarCampoUfNatal(List<Estado> listaEstadosRecuperados) {
 
-        ArrayAdapter<UfEnum> adapterUf = new ArrayAdapter<UfEnum>(getActivity(),
+        ArrayAdapter<Estado> adapterUf = new ArrayAdapter<Estado>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEstadosRecuperados));
         autoCompleteTextViewUfNatal.setAdapter(adapterUf);
@@ -332,12 +308,54 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
     }
 
-    private void popularCampoCidadeComDB() {
-
+    private void popularCampoCidadeComDB()
+    {
         MunicipioComBaseNaUF.mostrarMunicipioComBaseNaUf(getActivity(), autoCompleteTextViewUfNatal,
                 autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewCidadeNatal);
+    }
+
+    private void popularCampoEstadoCivilComDB() {
+
+        EstadoCivilController estadoCivilController = new EstadoCivilController();
+        estadoCivilController.listar(getActivity(), new IVolleyCallback() {
+            @Override
+            public void onSucess(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for(int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        EstadoCivil estadoCivil = new EstadoCivil();
+                        estadoCivil.setId(Integer.parseInt(object.getString("id")));
+                        estadoCivil.setNome(object.getString("nome"));
+
+                        listaEstadosCivisRecuperados.add(estadoCivil);
+                        configurarCampoEstadoCivil(listaEstadosCivisRecuperados);
+
+                    }
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+    }
+
+    private void configurarCampoEstadoCivil(List<EstadoCivil> listaEstadosCivisRecuperados) {
+
+        ArrayAdapter<EstadoCivil> adapterEstadoCivil = new ArrayAdapter<EstadoCivil>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line,
+                (listaEstadosCivisRecuperados));
+        autoCompleteTextViewEstadoCivil.setAdapter(adapterEstadoCivil);
+        autoCompleteTextViewEstadoCivil.setThreshold(1);
+
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewEstadoCivil);
+
     }
 
     private void popularCampoEscolaridadeComDB() {
@@ -348,19 +366,20 @@ public class UsuarioRegisterFragment1 extends Fragment {
             public void onSucess(String response) {
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            EscolaridadeEnum escolaridade = EscolaridadeEnum.valueOf(object.getString("escolaridade"));
+                        Escolaridade escolaridade = new Escolaridade();
+                        escolaridade.setId(Integer.parseInt(object.getString("id")));
+                        escolaridade.setNome(object.getString("nome"));
 
-                            listaEscolaridadesRecuperadas.add(escolaridade);
-                            configurarCampoEscolaridade(listaEscolaridadesRecuperadas);
+                        listaEscolaridadesRecuperadas.add(escolaridade);
+                        configurarCampoEscolaridade(listaEscolaridadesRecuperadas);
 
-                        }
+                    }
 
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -370,9 +389,9 @@ public class UsuarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoEscolaridade(ArrayList<EscolaridadeEnum> listaEscolaridadesRecuperadas) {
+    public void configurarCampoEscolaridade(List<Escolaridade> listaEscolaridadesRecuperadas) {
 
-        ArrayAdapter<EscolaridadeEnum> adapterEscolaridade = new ArrayAdapter<EscolaridadeEnum>(getActivity(),
+        ArrayAdapter<Escolaridade> adapterEscolaridade = new ArrayAdapter<Escolaridade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaEscolaridadesRecuperadas));
         autoCompleteTextViewEscolaridade.setAdapter(adapterEscolaridade);
@@ -386,6 +405,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
         UsuarioController usuarioTitularController = new UsuarioController();
         usuarioTitularController.listar(getActivity(), new IVolleyCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSucess(String response) {
 
@@ -395,13 +415,16 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                         for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
-
-                            Usuario titular = new Usuario();
-                            titular = (Usuario) object.get("titular");
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            GsonBuilder customGson = new GsonBuilder();
+                            customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                            customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                            Gson gson = customGson.create();
+                            Usuario titular = gson.fromJson(String.valueOf(jsonObject), Usuario.class);
 
                             listaTitularesRecuperados.add(titular);
                             configurarCampoTitular(listaTitularesRecuperados);
+                            Log.d("listaTit", listaTitularesRecuperados.toString());
 
                     }
 
@@ -440,9 +463,11 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                             JSONObject object = jsonArray.getJSONObject(i);
 
-                            TipoVinculoEnum tipoVinculo = (TipoVinculoEnum) object.get("tipoVinculo");
+                            Vinculo vinculo = new Vinculo();
+                            vinculo.setId(Integer.parseInt(object.getString("id")));
+                            vinculo.setNome(object.getString("descricao"));
 
-                            listaVinculosRecuperados.add(vinculoEnum);
+                            listaVinculosRecuperados.add(vinculo);
                             configurarCampoVinculo(listaVinculosRecuperados);
 
                         }
@@ -455,9 +480,9 @@ public class UsuarioRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoVinculo(ArrayList<TipoVinculoEnum> listaVinculosRecuperados) {
+    private void configurarCampoVinculo(ArrayList<Vinculo> listaVinculosRecuperados) {
 
-        ArrayAdapter<TipoVinculoEnum> adapterTipoVinculo = new ArrayAdapter<TipoVinculoEnum>(getActivity(),
+        ArrayAdapter<Vinculo> adapterTipoVinculo = new ArrayAdapter<Vinculo>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 (listaVinculosRecuperados));
         autoCompleteTextViewVinculo.setAdapter(adapterTipoVinculo);
@@ -467,169 +492,104 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean validarCadastroUsuario() throws ParseException
+    {
+        if (
+                FieldValidator.validarNomeCompleto(textInputEditTextNomeCompleto) &&
+                        FieldValidator.validarDataDeNascimento(textInputEditTextDataNascimento) &&
+                        FieldValidator.validarCpf(textInputEditTextCpf) &&
+                        FieldValidator.validarSexo(radioGroupSexo, rbtnMasculino) &&
+                        FieldValidator.validarUf(autoCompleteTextViewUfNatal, listaUfsRecuperadas) &&
+                        FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas) &&
+                        FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados) &&
+                        FieldValidator.validarNumeroDeFilhos(textInputEditTextNumeroFilhos) &&
+                        FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas) &&
+                        FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
+                        FieldValidator.validarEmail(textInputEditTextEmail) &&
+                        FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
+                        FieldValidator.validarVinculo(autoCompleteTextViewVinculo, listaVinculosRecuperados, rbtnDependente))
+        {
+            receberDadosFuncionarioPreenchidos();
+            return true;
+        }else { return false; }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void receberDadosUsuarioPreenchidos() throws ParseException {
-        nomeCompleto = textInputEditTextNomeCompleto.getText().toString();
-        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString());
-        cpf = Mascaras.removerMascaras(textInputEditTextCpf.getText().toString());
-        listaDeTelefoneAdicionados = arrayListTelefoneAdicionados;
-        email = textInputEditTextEmail.getText().toString();
-        for(int i = 0; i < listaEstadosCivisRecuperados.size(); i++) {
-            EstadoCivilEnum estadoCivilSelecionado = listaEstadosCivisRecuperados.get(i);
-            if(estadoCivilSelecionado.getNome().equals(autoCompleteTextViewEstadoCivil.getText().toString())) {
-                estadoCivilEnum = estadoCivilSelecionado;
-            }
+    public void receberDadosFuncionarioPreenchidos() throws ParseException {
+        nomeCompleto = textInputEditTextNomeCompleto.getText().toString().trim();
+        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString().trim());
+        cpf = textInputEditTextCpf.getText().toString().trim();
+
+        for (Estado estadoSelecionado : listaUfsRecuperadas) {
+            if (estadoSelecionado.getNome().equals
+                    (autoCompleteTextViewUfNatal.getText().toString().trim()))
+                estado = estadoSelecionado;
         }
-        for(int i = 0; i < listaCidadesRecuperadas.size(); i++) {
-            Cidade cidadeSelecionada = listaCidadesRecuperadas.get(i);
-            if(cidadeSelecionada.getNome().equals(autoCompleteTextViewCidadeNatal.getText().toString())) {
+
+        for (Cidade cidadeSelecionada : listaCidadesRecuperadas) {
+            if (cidadeSelecionada.getNome().equals
+                    (autoCompleteTextViewCidadeNatal.getText().toString().trim()))
                 naturalidade = cidadeSelecionada;
-            }
         }
-        for(int i = 0; i < listaEscolaridadesRecuperadas.size(); i++) {
-            EscolaridadeEnum escolaridadeSelecionada = listaEscolaridadesRecuperadas.get(i);
-            if(escolaridadeSelecionada.getNome().equals(autoCompleteTextViewEscolaridade.getText().toString())) {
-                escolaridadeEnum = escolaridadeSelecionada;
+
+        for (EstadoCivil estadoCivilSelecionado : listaEstadosCivisRecuperados)
+        {
+            if (estadoCivilSelecionado.getNome().equals
+                    (autoCompleteTextViewEstadoCivil.getText().toString().trim()))
+                estadoCivil = estadoCivilSelecionado;
+        }
+
+        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString().trim());
+
+
+        for (Escolaridade escolaridadeSelecionada : listaEscolaridadesRecuperadas)
+        {
+            if (escolaridadeSelecionada.getNome().equals
+                    (autoCompleteTextViewEscolaridade.getText().toString().trim())) {
+                escolaridade = escolaridadeSelecionada;
             }
         }
 
-        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString());
+        listaDeTelefoneAdicionados = arrayListTelefoneAdicionados;
 
-        for(int i = 0; i < listaTitularesRecuperados.size(); i++) {
-            Usuario titularSelecionado = listaTitularesRecuperados.get(i);
+        email = textInputEditTextEmail.getText().toString().trim();
+
+        for(Usuario titularSelecionado: listaTitularesRecuperados)
+        {
             if(titularSelecionado.toString().equals(autoCompleteTextViewTitular.getText().toString())) {
                 titular = titularSelecionado;
             }
         }
 
-        for(int i = 0; i < listaVinculosRecuperados.size(); i++) {
-            TipoVinculoEnum vinculoSelecionado = listaVinculosRecuperados.get(i);
+        for(Vinculo vinculoSelecionado : listaVinculosRecuperados) {
             if(vinculoSelecionado.toString().equals(autoCompleteTextViewVinculo.getText().toString())) {
-                vinculoEnum = vinculoSelecionado;
+                vinculo = vinculoSelecionado;
             }
         }
 
+        encapsularValoresParaEnvio();
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean validarCadastroUsuario() throws ParseException {
-        receberDadosUsuarioPreenchidos();
-        Boolean validarCPF = CPFValidator.validarCPF(textInputEditTextCpf.getText().toString());
-
-        if(rbtnPm.isChecked() || rbtnDependente.isChecked() || rbtnCivil.isChecked()) {
-
-            if (!TextUtils.isEmpty(nomeCompleto)) {
-
-                if (dataNascimento != null || !tipoAtendido.equals("PM")) {
-
-//                    if (dataNascimento.replaceAll("[/]", "").length() == 8 || !tipoAtendido.equals("PM")) {
-
-                        if (!TextUtils.isEmpty(cpf)) {
-
-                            if (rbtnMasculino.isChecked() || rbtnFeminino.isChecked()) {
-
-                                if (!TextUtils.isEmpty(sexoEnum.getNome())) {
-
-                                    if (!listaDeTelefoneAdicionados.isEmpty()) {
-
-                                        if (validarCPF.equals(true)) {
-
-                                            if(titular != null || !tipoAtendido.equals("Dependente")) {
-
-                                                if (!TextUtils.isEmpty(vinculoEnum.getNome()) || !tipoAtendido.equals("Dependente")) {
-
-                                                    encapsularValoresParaEnvio();
-                                                    return true;
-
-                                                }
-                                                else {
-                                                    autoCompleteTextViewVinculo.setError("O campo VÍNCULO é obrigatório!");
-                                                    autoCompleteTextViewVinculo.requestFocus();
-                                                    return false; }
-
-                                            }
-                                            else {
-                                                autoCompleteTextViewVinculo.setError("O campo TITULAR é obrigatório!");
-                                                autoCompleteTextViewVinculo.requestFocus();
-                                                return false; }
-
-                                        }
-                                        else {
-                                            textInputEditTextCpf.setError("CPF invalido!");
-                                            textInputEditTextCpf.requestFocus();
-                                            return false; }
-
-                                    }
-                                    else {
-                                        textInputEditTextTelefone.setError("É necessário adicionar ao menos um telefone.");
-                                        textInputEditTextTelefone.requestFocus();
-                                        return false; }
-
-                                }
-                                else {
-                                    Toast.makeText(getActivity(),
-                                            "Selecione uma opção de SEXO",
-                                            Toast.LENGTH_SHORT).show();
-                                    rbtnMasculino.requestFocus();
-                                    return false; }
-
-                            }
-                            else {
-                                Toast.makeText(getActivity(),
-                                        "Selecione uma opção de SEXO",
-                                        Toast.LENGTH_SHORT).show();
-                                rbtnMasculino.requestFocusFromTouch();
-                                return false; }
-
-                        }
-                        else {
-                            textInputEditTextCpf.setError("O campo CPF é obrigatório!");
-                            textInputEditTextCpf.requestFocus();
-                            return false; }
-
-//                    }
-//                    else {
-//                        textInputEditTextDataNascimento.setError("Digite uma data válida.");
-//                        textInputEditTextDataNascimento.requestFocus();
-//                        return false; }
-
-                }
-                else {
-                    textInputEditTextDataNascimento.setError("O campo DATA DE NASCIMENTO é obrigatório!");
-                    textInputEditTextDataNascimento.requestFocus();
-                    return false; }
-
-            }
-            else {
-                textInputEditTextNomeCompleto.setError("O campo NOME COMPLETO é obrigatório!");
-                textInputEditTextNomeCompleto.requestFocus();
-                return false; }
-
-        }
-        else {
-            Toast.makeText(getActivity(), "Selecione uma opção de TIPO DE ATENDIDO!", Toast.LENGTH_SHORT).show();
-            rbtnPm.requestFocusFromTouch();
-            return false; }
-    }
-
     public Bundle encapsularValoresParaEnvio()
     {
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("tipoAtendido", tipoAtendido);
         bundle.putString("nomeCompleto", nomeCompleto);
-        bundle.putString("dataNascimento", dataNascimento.toString());
+        bundle.putString("dataNascimento", DateFormater.localDateToString(dataNascimento));
         bundle.putString("cpf", cpf);
-        bundle.putSerializable("sexo", sexoEnum);
-        bundle.putSerializable("telefones", listaDeTelefoneAdicionados);
-        bundle.putString("email", email);
-        bundle.putSerializable("estadoCivil", estadoCivilEnum);
-        bundle.putSerializable("cidadeNatal", naturalidade);
-        bundle.putSerializable("escolaridade", escolaridadeEnum);
+        bundle.putSerializable("sexo", sexo);
+        bundle.putSerializable("naturalidade", naturalidade);
+        bundle.putSerializable("estadoCivil", estadoCivil);
         bundle.putInt("numeroFilhos", numeroFilhos);
+        bundle.putSerializable("escolaridade", escolaridade);
+        bundle.putSerializable("telefones", (Serializable) listaDeTelefoneAdicionados);
+        bundle.putString("email", email);
         bundle.putSerializable("titular", titular);
-        bundle.putSerializable("vinculo", vinculoEnum);
+        bundle.putSerializable("vinculo", vinculo);
 
         return bundle;
     }
@@ -646,11 +606,11 @@ public class UsuarioRegisterFragment1 extends Fragment {
                 {
                     Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
-                    atendidoPmRegisterFragment2 = new UsuarioRegisterFragment2();
-                    atendidoPmRegisterFragment2.setArguments(valoresEncapsuladosParaEnvio);
+                    usuarioRegisterFragment2 = new UsuarioRegisterFragment2();
+                    usuarioRegisterFragment2.setArguments(valoresEncapsuladosParaEnvio);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frameConteudo, atendidoPmRegisterFragment2);
+                    fragmentTransaction.replace(R.id.frameConteudo, usuarioRegisterFragment2);
                     fragmentTransaction.addToBackStack(null).commit();
                 }
 

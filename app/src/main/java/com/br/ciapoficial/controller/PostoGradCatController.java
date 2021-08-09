@@ -21,6 +21,8 @@ import com.br.ciapoficial.interfaces.IVolleyCallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+
 public class PostoGradCatController {
 
     public void listar(Context context, final IVolleyCallback callback) {
@@ -31,6 +33,7 @@ public class PostoGradCatController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

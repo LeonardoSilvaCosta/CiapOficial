@@ -1,5 +1,7 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.Constants.BASE_API_URL;
+
 import android.content.Context;
 import android.os.Build;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.br.ciapoficial.Constants.BASE_API_URL;
+import lombok.SneakyThrows;
 
 public class EspecialistaController extends FuncionarioController {
 
@@ -45,6 +47,7 @@ public class EspecialistaController extends FuncionarioController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 
@@ -113,6 +116,7 @@ public class EspecialistaController extends FuncionarioController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, urlEspecialistasComPathVariable,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
                         callback.onSucess(response);
@@ -180,6 +184,7 @@ public class EspecialistaController extends FuncionarioController {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
+                    @SneakyThrows
                     @Override
                     public void onResponse(String response) {
 

@@ -1,6 +1,7 @@
 package com.br.ciapoficial.interfaces;
 
-public interface IVolleyCallback {
-    void onSucess(String response);
+import org.json.JSONException;
 
+public interface IVolleyCallback {
+    void onSucess(String response) throws JSONException;
 }
