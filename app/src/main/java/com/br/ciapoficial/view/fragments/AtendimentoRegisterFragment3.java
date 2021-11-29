@@ -1,7 +1,7 @@
 package com.br.ciapoficial.view.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,36 +12,63 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AtendimentoController;
+import com.br.ciapoficial.controller.AvaliacaoController;
 import com.br.ciapoficial.controller.DocumentoProduzidoController;
 import com.br.ciapoficial.controller.EncaminhamentoController;
 import com.br.ciapoficial.controller.MedicacaoPsiquiatricaController;
 import com.br.ciapoficial.controller.ProcedimentoController;
+import com.br.ciapoficial.controller.ServicoDeAssistenciaEspecialController;
 import com.br.ciapoficial.controller.SinalSintomaController;
+import com.br.ciapoficial.enums.TipoServicoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
-import com.br.ciapoficial.helper.DataEntreJavaEMysql;
+import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
-import com.br.ciapoficial.model.Atendimento;
-import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
-import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
-import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
-import com.br.ciapoficial.model.in_atendimento.Procedimento;
-import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
+import com.br.ciapoficial.model.Especialista;
+import com.br.ciapoficial.model.Unidade;
+import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.model.in_servico.Acesso;
+import com.br.ciapoficial.model.in_servico.Atendimento;
+import com.br.ciapoficial.model.in_servico.Avaliacao;
+import com.br.ciapoficial.model.in_servico.CondicaoLaboral;
+import com.br.ciapoficial.model.in_servico.DemandaEspecifica;
+import com.br.ciapoficial.model.in_servico.DemandaGeral;
+import com.br.ciapoficial.model.in_servico.Deslocamento;
+import com.br.ciapoficial.model.in_servico.DocumentoProduzido;
+import com.br.ciapoficial.model.in_servico.Encaminhamento;
+import com.br.ciapoficial.model.in_servico.MedicacaoPsiquiatrica;
+import com.br.ciapoficial.model.in_servico.Modalidade;
+import com.br.ciapoficial.model.in_servico.Procedimento;
+import com.br.ciapoficial.model.in_servico.Programa;
+import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
+import com.br.ciapoficial.model.in_servico.SinalSintoma;
+import com.br.ciapoficial.model.in_servico.TipoAvaliacao;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import lombok.SneakyThrows;
 
 public class AtendimentoRegisterFragment3 extends Fragment {
 
@@ -53,32 +80,38 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             autoCompleteTextViewEncaminhamento, autoCompleteTextViewSinalSintoma,
             autoCompleteTextViewMedicacaoPsiquiatrica;
     private TextInputEditText textInputEditTextEvolucao;
-    private RadioGroup radioGroupAfastamento;
-    private RadioButton rbtnAfastamentoSim, rbtnAfastamentoNao;
+    private RadioGroup radioGroupAfastamento, radioGroupEncaminhanhamento;
+    private RadioButton rbtnAfastamentoSim, rbtnAfastamentoNao, rbtnEncaminhamentoInterno,
+            rbtnEncaminhamentoExterno;
     private Button btnAdicionarDocumentoProduzido, btnAdicionarEncaminhamento, btnAdicionarSinalSintoma,
             btnAdicionarMedicacao, btnRegistrar;
 
-    Atendimento atendimento;
+    private List<Procedimento> listaProcedimentosRecuperados = new ArrayList<>();
+    private List<DocumentoProduzido> listaDocumentosProduzidosRecuperados = new ArrayList<>();
+    private List<Encaminhamento> listaDeEncaminhamentosRecuperados = new ArrayList<>();
+    private List<SinalSintoma> listaSinaisSintomasRecuperados = new ArrayList<>();
+    private List<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas = new ArrayList<>();
 
-    private ArrayList<Procedimento> listaProcedimentosRecuperados = new ArrayList<>();
-    private ArrayList<DocumentoProduzido> listaDocumentosProduzidosRecuperados = new ArrayList<>();
-    private ArrayList<Encaminhamento> listaDeEncaminhamentosRecuperados = new ArrayList<>();
-    private ArrayList<SinalSintoma> listaSinaisSintomasRecuperados = new ArrayList<>();
-    private ArrayList<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas = new ArrayList<>();
-
-    private ArrayList<DocumentoProduzido> arrayListDocumentosSelecionados;
-    private ArrayList<SinalSintoma> arrayListSinaisSintomasSelecionados;
-    private ArrayList<MedicacaoPsiquiatrica> arrayListMedicacoesSelecionadas;
-    private ArrayList<Encaminhamento> arrayListEncaminhamentosSelecionados;
+    private List<DocumentoProduzido> listaDeDocumentosSelecionadosNaoValidados;
+    private List<SinalSintoma> listaDeSinaisSintomasSelecionadosNaoValidados;
+    private List<Encaminhamento> listaDeEncaminhamentosSelecionadosNaoValidados = new ArrayList<>();
+    private List<MedicacaoPsiquiatrica> listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas;
     private ArrayAdapter<DocumentoProduzido>  adapterDocumentos;
     private ArrayAdapter<Encaminhamento> adapterEncaminhamento;
     private ArrayAdapter<SinalSintoma> adapterSinaisSintomas;
     private ArrayAdapter<MedicacaoPsiquiatrica> adapterMedicacoes;
-    private ArrayList<String> listaDeDocumentosSelecionados = new ArrayList<>();
-    private ArrayList<String> listaDeEncaminhamentosSelecionados = new ArrayList<>();
-    private ArrayList<String> listadeSinaisSintomasSelecionados = new ArrayList<>();
-    private ArrayList<String> listaDeMedicacoesPsiquiatricasSelecionadas = new ArrayList<>();
-    private String procedimento, evolucao;
+
+    private List<DocumentoProduzido> listaDeDocumentosSelecionadosValidados = new ArrayList<>();
+    private List<Encaminhamento> listaDeEncaminhamentosSelecionadosValidados = new ArrayList<>();
+    private List<SinalSintoma> listaDeSinaisSintomasSelecionadosValidados = new ArrayList<>();
+    private List<MedicacaoPsiquiatrica> listaDeMedicacoesPsiquiatricasSelecionadasValidadas = new ArrayList<>();
+
+    private Atendimento atendimento;
+    private Avaliacao avaliacao;
+    private ServicoDeAssistenciaEspecial sae;
+
+    private Procedimento procedimento;
+    private String evolucao;
     private boolean afastamento;
 
     public AtendimentoRegisterFragment3() {
@@ -91,6 +124,20 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_atendimento_register3, container, false);
 
         configurarComponentes(view);
+        definirComportamentoRadioButtons();
+
+        criarTextViewParaDocumentosProduzidosSelecionados();
+        criarTextViewParaEncaminhamentosSelecionados();
+        criarTextViewParaSinaisSintomasSelecionados();
+        criarTextViewParaMedicacoesPsiquiatricasSelecionadas();
+
+        popularCampoProcedimentoComDB();
+        popularCampoDocumentoProduzidoComDB();
+        popularCampoEncaminhamentoComDB();
+        popularCampoSinalSintomaComDB();
+        popularCampoMedicacaoPsiquiatricaComDB();
+        popularCampoMedicacaoPsiquiatricaComDB();
+
         enviarFormulario();
         return view;
     }
@@ -115,15 +162,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         btnAdicionarSinalSintoma = view.findViewById(R.id.btnAdicionarSinaisSintomas);
         btnAdicionarMedicacao = view.findViewById(R.id.btnAdicionarMedicacao);
         btnRegistrar = view.findViewById(R.id.btnRegistrar);
-
-
-        popularCampoProcedimentoComDB();
-        popularCampoDocumentoProduzidoComDB();
-        popularCampoEncaminhamentoComDB();
-        popularCampoSinalSintomaComDB();
-        popularCampoMedicacaoPsiquiatricaComDB();
-        popularCampoMedicacaoPsiquiatricaComDB();
-        definirComportamentoRadioButtons();
     }
 
     private Bundle recuperarDadosAtendimentoRegisterFragment2() {
@@ -131,8 +169,165 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         return valoresRecebidosFragment1e2;
     }
 
-    private void popularCampoProcedimentoComDB() {
+    private void criarTextViewParaDocumentosProduzidosSelecionados()
+    {
+        TextView textView = new TextView(getContext());
+        for(DocumentoProduzido documentoRecebido : listaDeDocumentosSelecionadosValidados) {
+            String textoRecebido = documentoRecebido.toString();
 
+            textView.setPadding(0, 10, 0, 10);
+            textView.setText(textoRecebido);
+            textView.setTag("lista");
+
+            linearLayoutDocumentoProduzido.addView(textView);
+        }
+        removerItemDaListaDeDocumentos(textView, listaDeDocumentosSelecionadosNaoValidados, adapterDocumentos);
+    }
+
+    private static void removerItemDaListaDeDocumentos(TextView textView, List<DocumentoProduzido> listaDisplay,
+                                                       ArrayAdapter<DocumentoProduzido> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<DocumentoProduzido> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    DocumentoProduzido deslocamentoSelecionado = iter.next();
+                    if(deslocamentoSelecionado.toString().equals(string))
+                    {
+                        listaDisplay.remove(deslocamentoSelecionado);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void criarTextViewParaEncaminhamentosSelecionados()
+    {
+        TextView textView = new TextView(getContext());
+        for(Encaminhamento encaminhamentoRecebido : listaDeEncaminhamentosSelecionadosValidados) {
+            String textoRecebido = encaminhamentoRecebido.toString();
+
+            textView.setPadding(0, 10, 0, 10);
+            textView.setText(textoRecebido);
+            textView.setTag("lista");
+
+            linearLayoutEncaminhamento.addView(textView);
+        }
+        removerItemDaListaDeEncaminhamentos(textView, listaDeEncaminhamentosSelecionadosNaoValidados, adapterEncaminhamento);
+    }
+
+    private static void removerItemDaListaDeEncaminhamentos(TextView textView, List<Encaminhamento> listaDisplay,
+                                                            ArrayAdapter<Encaminhamento> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<Encaminhamento> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    Encaminhamento encaminhamentoSelecionado = iter.next();
+                    if(encaminhamentoSelecionado.toString().equals(string))
+                    {
+                        listaDisplay.remove(encaminhamentoSelecionado);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    private void criarTextViewParaSinaisSintomasSelecionados()
+    {
+        TextView textView = new TextView(getContext());
+        for(SinalSintoma sinalSintomaRecebido : listaDeSinaisSintomasSelecionadosValidados) {
+            String textoRecebido = sinalSintomaRecebido.toString();
+
+            textView.setPadding(0, 10, 0, 10);
+            textView.setText(textoRecebido);
+            textView.setTag("lista");
+
+            linearLayoutSinalSintoma.addView(textView);
+        }
+        removerItemDaListaDeSinaisSintomas(textView, listaDeSinaisSintomasSelecionadosNaoValidados, adapterSinaisSintomas);
+    }
+
+    private static void removerItemDaListaDeSinaisSintomas(TextView textView, List<SinalSintoma> listaDisplay,
+                                                           ArrayAdapter<SinalSintoma> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<SinalSintoma> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    SinalSintoma sinalSintomaSelecionado = iter.next();
+                    if(sinalSintomaSelecionado.toString().equals(string))
+                    {
+                        listaDisplay.remove(sinalSintomaSelecionado);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    private void criarTextViewParaMedicacoesPsiquiatricasSelecionadas()
+    {
+        TextView textView = new TextView(getContext());
+        for(MedicacaoPsiquiatrica medicacaoPsiquiatricaRecebida : listaDeMedicacoesPsiquiatricasSelecionadasValidadas) {
+            String textoRecebido = medicacaoPsiquiatricaRecebida.toString();
+
+            textView.setPadding(0, 10, 0, 10);
+            textView.setText(textoRecebido);
+            textView.setTag("lista");
+
+            linearLayoutMedicacaoPsiquiatrica.addView(textView);
+        }
+        removerItemDaListaDeMedicaoPsiquiatrica(textView, listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas, adapterMedicacoes);
+    }
+
+    private static void removerItemDaListaDeMedicaoPsiquiatrica(TextView textView, List<MedicacaoPsiquiatrica> listaDisplay,
+                                                                ArrayAdapter<MedicacaoPsiquiatrica> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<MedicacaoPsiquiatrica> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    MedicacaoPsiquiatrica medicacaoPsiquiatricaSelecionada = iter.next();
+                    if(medicacaoPsiquiatricaSelecionada.toString().equals(string))
+                    {
+                        listaDisplay.remove(medicacaoPsiquiatricaSelecionada);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void popularCampoProcedimentoComDB() {
         ProcedimentoController procedimentoController = new ProcedimentoController();
         procedimentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
@@ -140,24 +335,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Procedimento procedimento = new Procedimento();
-                            procedimento.setId(Integer.parseInt(object.getString("id")));
-                            procedimento.setDescricao(object.getString("descricao"));
+                        Procedimento procedimento = new Procedimento();
+                        procedimento.setId(Integer.parseInt(object.getString("id")));
+                        procedimento.setNome(object.getString("nome"));
 
-                            listaProcedimentosRecuperados.add(procedimento);
+                        listaProcedimentosRecuperados.add(procedimento);
+                        configurarCampoProcedimento(listaProcedimentosRecuperados);
 
-                            configurarCampoProcedimento(listaProcedimentosRecuperados);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -168,7 +358,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoProcedimento(ArrayList<Procedimento> listaProcedimentosRecuperados) {
+    private void configurarCampoProcedimento(List<Procedimento> listaProcedimentosRecuperados) {
 
         ArrayAdapter<Procedimento> adapterProcedimentos= new ArrayAdapter<Procedimento>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -187,27 +377,20 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         documentoProduzidoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
-
                 try {
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        DocumentoProduzido documentoProduzido = new DocumentoProduzido();
+                        documentoProduzido.setId(Integer.parseInt(object.getString("id")));
+                        documentoProduzido.setNome(object.getString("nome"));
 
-                            DocumentoProduzido documentoProduzido = new DocumentoProduzido();
-                            documentoProduzido.setId(Integer.parseInt(object.getString("id")));
-                            documentoProduzido.setDescricao(object.getString("descricao"));
+                        listaDocumentosProduzidosRecuperados.add(documentoProduzido);
+                        configurarCampoDocumentoProduzido(listaDocumentosProduzidosRecuperados);
 
-                            listaDocumentosProduzidosRecuperados.add(documentoProduzido);
-
-                            configurarCampoDocumentoProduzido(listaDocumentosProduzidosRecuperados);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -218,7 +401,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoDocumentoProduzido(ArrayList<DocumentoProduzido> listaDocumentosProduzidosRecuperados)
+    private void configurarCampoDocumentoProduzido(List<DocumentoProduzido> listaDocumentosProduzidosRecuperados)
     {
         linearLayoutDocumentoProduzido.removeAllViews();
 
@@ -228,10 +411,10 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         autoCompleteTextViewDocumentoProduzido.setAdapter(adapterDocumentos);
         autoCompleteTextViewDocumentoProduzido.setThreshold(1);
 
-        arrayListDocumentosSelecionados = new ArrayList<DocumentoProduzido>();
+        listaDeDocumentosSelecionadosNaoValidados = new ArrayList<DocumentoProduzido>();
         adapterDocumentos = new ArrayAdapter<DocumentoProduzido>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListDocumentosSelecionados);
+                listaDeDocumentosSelecionadosNaoValidados);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewDocumentoProduzido);
 
@@ -240,15 +423,13 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     }
 
     private void gerenciarListaDeDocumentosSelecionados()
-
-
     {
         btnAdicionarDocumentoProduzido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewDocumentoProduzido(getActivity(), autoCompleteTextViewDocumentoProduzido,
-                        listaDocumentosProduzidosRecuperados, arrayListDocumentosSelecionados,
+                        listaDocumentosProduzidosRecuperados, listaDeDocumentosSelecionadosNaoValidados,
                         adapterDocumentos, linearLayoutDocumentoProduzido);
             }
         });
@@ -263,25 +444,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Encaminhamento encaminhamento = new Encaminhamento();
-                            encaminhamento.setId(Integer.parseInt(object.getString("id")));
-                            encaminhamento.setDestino(object.getString("destino"));
-                            encaminhamento.setTipo(object.getString("tipo"));
+                        Encaminhamento encaminhamento = new Encaminhamento();
+                        encaminhamento.setId(Integer.parseInt(object.getString("id")));
+                        encaminhamento.setDestino(object.getString("destino"));
+                        encaminhamento.setTipo(object.getString("tipo"));
 
-                            listaDeEncaminhamentosRecuperados.add(encaminhamento);
-
-                            configurarCampoEncaminhamento(listaDeEncaminhamentosRecuperados);
-
-                        }
+                        listaDeEncaminhamentosRecuperados.add(encaminhamento);
+                        configurarCampoEncaminhamento(listaDeEncaminhamentosRecuperados);
                     }
 
                 }catch (JSONException e) {
@@ -290,11 +465,10 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             }
 
         });
+
     }
 
-    private void configurarCampoEncaminhamento(ArrayList<Encaminhamento> listaEncaminhamentosRecuperados) {
-
-        linearLayoutEncaminhamento.removeAllViews();
+    private void configurarCampoEncaminhamento(List<Encaminhamento> listaEncaminhamentosRecuperados) {
 
         adapterEncaminhamento = new ArrayAdapter<Encaminhamento>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -302,27 +476,36 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         autoCompleteTextViewEncaminhamento.setAdapter(adapterEncaminhamento);
         autoCompleteTextViewEncaminhamento.setThreshold(1);
 
-        arrayListEncaminhamentosSelecionados = new ArrayList<Encaminhamento>();
+        configurarCampoEncaminhamento();
+    }
+
+    private void configurarCampoEncaminhamento() {
+
+        linearLayoutEncaminhamento.removeAllViews();
+
+        listaDeEncaminhamentosSelecionadosNaoValidados = new ArrayList<Encaminhamento>();
         adapterEncaminhamento = new ArrayAdapter<Encaminhamento>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListEncaminhamentosSelecionados);
+                listaDeEncaminhamentosSelecionadosNaoValidados);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewEncaminhamento);
 
-        gerenciarListaDeEncaminhamentosSelecionados();
-    }
+        if(listaDeEncaminhamentosSelecionadosValidados == null) {
+            linearLayoutEncaminhamento.removeAllViews();
+        }else{
+            criarTextViewParaEncaminhamentosSelecionados();
+            for(Encaminhamento encaminhamentosRecebidos : listaDeEncaminhamentosSelecionadosValidados) {
+                listaDeEncaminhamentosSelecionadosNaoValidados.add(encaminhamentosRecebidos);
+            }
+        }
 
-    private void gerenciarListaDeEncaminhamentosSelecionados()
-
-
-    {
         btnAdicionarEncaminhamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AddRemoveTextView.adicionarTextViewEncaminhamento(getActivity(), autoCompleteTextViewEncaminhamento,
-                        listaDeEncaminhamentosRecuperados, arrayListEncaminhamentosSelecionados,
-                        adapterEncaminhamento, linearLayoutEncaminhamento);
+                AddRemoveTextView.adicionarTextViewEncaminhamento(getActivity(),
+                        autoCompleteTextViewEncaminhamento, listaDeEncaminhamentosRecuperados,
+                        listaDeEncaminhamentosSelecionadosNaoValidados, adapterEncaminhamento, linearLayoutEncaminhamento);
             }
         });
     }
@@ -336,24 +519,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            SinalSintoma sinalSintoma = new SinalSintoma();
-                            sinalSintoma.setId(Integer.parseInt(object.getString("id")));
-                            sinalSintoma.setDescricao(object.getString("descricao"));
+                        SinalSintoma sinalSintoma = new SinalSintoma();
+                        sinalSintoma.setId(Integer.parseInt(object.getString("id")));
+                        sinalSintoma.setNome(object.getString("nome"));
 
-                            listaSinaisSintomasRecuperados.add(sinalSintoma);
+                        listaSinaisSintomasRecuperados.add(sinalSintoma);
+                        configurarCampoSinalSintoma(listaSinaisSintomasRecuperados);
 
-                            configurarCampoSinalSintoma(listaSinaisSintomasRecuperados);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -364,7 +542,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoSinalSintoma(ArrayList<SinalSintoma> listaSinaisSintomasRecuperados)
+    private void configurarCampoSinalSintoma(List<SinalSintoma> listaSinaisSintomasRecuperados)
     {
         linearLayoutSinalSintoma.removeAllViews();
 
@@ -374,10 +552,10 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         autoCompleteTextViewSinalSintoma.setAdapter(adapterSinaisSintomas);
         autoCompleteTextViewSinalSintoma.setThreshold(1);
 
-        arrayListSinaisSintomasSelecionados = new ArrayList<SinalSintoma>();
+        listaDeSinaisSintomasSelecionadosNaoValidados = new ArrayList<SinalSintoma>();
         adapterSinaisSintomas = new ArrayAdapter<SinalSintoma>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListSinaisSintomasSelecionados);
+                listaDeSinaisSintomasSelecionadosNaoValidados);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewSinalSintoma);
 
@@ -391,7 +569,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewSinalSintoma(getActivity(), autoCompleteTextViewSinalSintoma,
-                        listaSinaisSintomasRecuperados, arrayListSinaisSintomasSelecionados,
+                        listaSinaisSintomasRecuperados, listaDeSinaisSintomasSelecionadosNaoValidados,
                         adapterSinaisSintomas, linearLayoutSinalSintoma);
             }
         });
@@ -406,24 +584,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            MedicacaoPsiquiatrica medicacaoPsiquiatrica = new MedicacaoPsiquiatrica();
-                            medicacaoPsiquiatrica.setId(Integer.parseInt(object.getString("id")));
-                            medicacaoPsiquiatrica.setDescricao(object.getString("descricao"));
+                        MedicacaoPsiquiatrica medicacaoPsiquiatrica = new MedicacaoPsiquiatrica();
+                        medicacaoPsiquiatrica.setId(Integer.parseInt(object.getString("id")));
+                        medicacaoPsiquiatrica.setNome(object.getString("nome"));
 
-                            listaMedicacoesPsiquiatricasRecuperadas.add(medicacaoPsiquiatrica);
+                        listaMedicacoesPsiquiatricasRecuperadas.add(medicacaoPsiquiatrica);
+                        configurarCampoMedicacaoPsiquiatrica(listaMedicacoesPsiquiatricasRecuperadas);
 
-                            configurarCampoMedicacaoPsiquiatrica(listaMedicacoesPsiquiatricasRecuperadas);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -434,7 +607,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
-    private void configurarCampoMedicacaoPsiquiatrica(ArrayList<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas) {
+    private void configurarCampoMedicacaoPsiquiatrica(List<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas) {
 
         adapterMedicacoes = new ArrayAdapter<MedicacaoPsiquiatrica>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -442,10 +615,10 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         autoCompleteTextViewMedicacaoPsiquiatrica.setAdapter(adapterMedicacoes);
         autoCompleteTextViewMedicacaoPsiquiatrica.setThreshold(1);
 
-        arrayListMedicacoesSelecionadas = new ArrayList<MedicacaoPsiquiatrica>();
+        listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas = new ArrayList<MedicacaoPsiquiatrica>();
         adapterMedicacoes = new ArrayAdapter<MedicacaoPsiquiatrica>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListMedicacoesSelecionadas);
+                listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewMedicacaoPsiquiatrica);
 
@@ -461,7 +634,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewMedicacaoPsiquiatrica(getActivity(), autoCompleteTextViewMedicacaoPsiquiatrica,
-                        listaMedicacoesPsiquiatricasRecuperadas, arrayListMedicacoesSelecionadas,
+                        listaMedicacoesPsiquiatricasRecuperadas, listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas,
                         adapterMedicacoes, linearLayoutMedicacaoPsiquiatrica);
             }
         });
@@ -481,152 +654,162 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean validarCadastroAtendimento() throws ParseException {
+        if (
+                FieldValidator.validarProcedimento(autoCompleteTextViewProcedimento,
+                        listaProcedimentosRecuperados) &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewDocumentoProduzido,
+                        listaDeDocumentosSelecionadosNaoValidados, "DOCUMENTO PRODUZIDO") &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewEncaminhamento,
+                        listaDeEncaminhamentosSelecionadosNaoValidados, "ENCAMINHAMENTO") &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewSinalSintoma,
+                        listaDeSinaisSintomasSelecionadosNaoValidados, "SINAL/SINTOMA") &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewMedicacaoPsiquiatrica,
+                        listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas, "MEDICAÇÃO PSIQUIÁTRICA") &&
+                FieldValidator.validarRadioGroup(radioGroupAfastamento, rbtnAfastamentoNao, "AFASTAMENTO") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextEvolucao, "EVOLUÇÃO")) {
+            receberDadosAtendimentoPreenchidos();
+            return true;
+        } else { return false; }
+    }
+
     private void receberDadosAtendimentoPreenchidos()
     {
 
-        for(int i = 0; i < listaProcedimentosRecuperados.size(); i++)
+        for (Procedimento procedimentoSelecionado : listaProcedimentosRecuperados)
         {
-            Procedimento procedimentoSelecionado = listaProcedimentosRecuperados.get(i);
-            if(procedimentoSelecionado.getDescricao().equals(autoCompleteTextViewProcedimento.getText().toString())) {
-                procedimento = String.valueOf(procedimentoSelecionado.getId());
-                break;
-            }
+            if (procedimentoSelecionado.getNome().equals
+                    (autoCompleteTextViewProcedimento.getText().toString().trim()))
+                procedimento = procedimentoSelecionado;
+            break;
         }
 
-        for(int i = 0; i < arrayListDocumentosSelecionados.size(); i++) {
-            DocumentoProduzido documentoProduzidoSelecionado = arrayListDocumentosSelecionados.get(i);
-            listaDeDocumentosSelecionados.add(String.valueOf(documentoProduzidoSelecionado.getId()));
-        }
-
-        for(int i = 0; i < arrayListEncaminhamentosSelecionados.size(); i++) {
-            Encaminhamento encaminhamentoSelecionado = arrayListEncaminhamentosSelecionados.get(i);
-            listaDeEncaminhamentosSelecionados.add(String.valueOf(encaminhamentoSelecionado.getId()));
-        }
-
-
-        for(int i = 0; i < arrayListSinaisSintomasSelecionados.size(); i++) {
-            SinalSintoma sinalSintomaSelecionado = arrayListSinaisSintomasSelecionados.get(i);
-            listadeSinaisSintomasSelecionados.add(String.valueOf(sinalSintomaSelecionado.getId()));
-        }
-
-        for(int i = 0; i < arrayListMedicacoesSelecionadas.size(); i++) {
-            MedicacaoPsiquiatrica medicaoPsiquiatricaSelecionada = arrayListMedicacoesSelecionadas.get(i);
-            listaDeMedicacoesPsiquiatricasSelecionadas.add(String.valueOf(medicaoPsiquiatricaSelecionada.getId()));
-        }
+        listaDeDocumentosSelecionadosValidados = listaDeDocumentosSelecionadosNaoValidados;
+        listaDeEncaminhamentosSelecionadosValidados = listaDeEncaminhamentosSelecionadosNaoValidados;
+        listaDeSinaisSintomasSelecionadosValidados = listaDeSinaisSintomasSelecionadosNaoValidados;
+        listaDeMedicacoesPsiquiatricasSelecionadasValidadas = listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas;
 
         evolucao = textInputEditTextEvolucao.getText().toString();
     }
 
-    private boolean validarCadastroAtendimento() {
-        receberDadosAtendimentoPreenchidos();
-
-        if (!TextUtils.isEmpty(procedimento)) {
-
-            if (!listaDeDocumentosSelecionados.isEmpty()) {
-
-                if (!listaDeEncaminhamentosSelecionados.isEmpty()) {
-
-                    if (!listadeSinaisSintomasSelecionados.isEmpty()) {
-
-                        if (!listaDeMedicacoesPsiquiatricasSelecionadas.isEmpty()) {
-
-                            if (rbtnAfastamentoSim.isChecked() || rbtnAfastamentoNao.isChecked()) {
-
-                                if (!TextUtils.isEmpty(evolucao)) {
-
-                                    encapsularValoresParaEnvio();
-                                    return true;
-
-                                }
-                                else {
-                                    Toast.makeText(getActivity(), "É necessário evoluir.",
-                                            Toast.LENGTH_SHORT).show();
-                                    textInputEditTextEvolucao.requestFocus();
-                                    return false; }
-
-                            }
-                            else {
-                                Toast.makeText(getActivity(), "Selecione alguma opção em AFASTAMENTO.",
-                                        Toast.LENGTH_SHORT).show();
-                                rbtnAfastamentoSim.requestFocusFromTouch();
-                                return false; }
-
-                        }
-                        else {
-                            Toast.makeText(getActivity(),
-                                    "É necessário adicionar ao menos um item em MEDICAÇÃO PSIQUIÁTRICA.",
-                                    Toast.LENGTH_SHORT).show();
-                            autoCompleteTextViewMedicacaoPsiquiatrica.requestFocus();
-                            return false; }
-
-
-                    }
-                    else {
-                        Toast.makeText(getActivity(),
-                                "É necessário adicionar ao menos um item em SINAIS/SINTOMAS.",
-                                Toast.LENGTH_SHORT).show();
-                        autoCompleteTextViewSinalSintoma.requestFocus();
-                        return false; }
-
-                }
-                else {
-                    Toast.makeText(getActivity(),
-                            "É necessário adicionar ao menos um item em ENCAMINHAMENTO.",
-                            Toast.LENGTH_SHORT).show();
-                    autoCompleteTextViewEncaminhamento.requestFocus();
-                    return false; }
-
-            }
-            else {
-                Toast.makeText(getActivity(),
-                        "É necessário adicionar ao menos um item em DOCUMENTO PRODUZIDO.",
-                        Toast.LENGTH_SHORT).show();
-                autoCompleteTextViewDocumentoProduzido.requestFocus();
-                return false; }
-
-        }
-        else {
-            Toast.makeText(getActivity(),
-                    "É necessário adicionar ao menos um item em PROCEDIMENTO.",
-                    Toast.LENGTH_SHORT).show();
-            autoCompleteTextViewProcedimento.requestFocus();
-            return false; }
-    }
-
-    private Atendimento encapsularValoresParaEnvio()
-    {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Atendimento encapsularValoresParaRegistroDeAtendimento() throws ParseException {
         Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendimentoRegisterFragment2();
         Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
 
+        LocalDate data= DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("data"));
+
         atendimento = new Atendimento();
 
-        atendimento.setData(DataEntreJavaEMysql.enviarDataParaMySqlComoString(valoresRecebidosFragment1.getString("data")));
-        atendimento.setOficiaisResponsaveis(valoresRecebidosFragment1.getStringArrayList("listaOficiais"));
-        atendimento.setAtendidos(valoresRecebidosFragment1.getStringArrayList("listaAtendidos"));
-        atendimento.setUnidade(valoresRecebidosFragment1.getString("unidade"));
-        atendimento.setModalidade((valoresRecebidosFragment1.getString("modalidade")));
-        atendimento.setAcesso((valoresRecebidosFragment1.getString("acesso")));
-        atendimento.setTipo((valoresRecebidosFragment1e2.getString("tipo")));
-        atendimento.setTipoAvaliacao((valoresRecebidosFragment1e2.getString("tipoAvaliacao")));
-        atendimento.setPrograma((valoresRecebidosFragment1e2.getString("programa")));
-        atendimento.setDeslocamentos(valoresRecebidosFragment1e2.getStringArrayList("listaDeslocamentos"));
-        atendimento.setDemandaGeral((valoresRecebidosFragment1e2.getString("demandaGeral")));
-        atendimento.setDemandasEspecificas(valoresRecebidosFragment1e2.getStringArrayList("listaDemandasEspecificas"));
-        atendimento.setCondicaoLaboral((valoresRecebidosFragment1e2.getString("condicaoLaboral")));
+        atendimento.setData(data);
+        atendimento.setEspecialistas(new HashSet<>(
+                (ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
+        atendimento.setUsuarios(new HashSet<>(
+                (ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
+        atendimento.setUnidade( (Unidade) valoresRecebidosFragment1.getSerializable("unidade"));
+        atendimento.setModalidade( (Modalidade)(valoresRecebidosFragment1.getSerializable("modalidade")));
+        atendimento.setAcesso( (Acesso) (valoresRecebidosFragment1.getSerializable("acesso")));
+        atendimento.setPrograma( (Programa) (valoresRecebidosFragment1e2.getSerializable("programa")));
+        atendimento.setDeslocamentos( new HashSet<> (
+                (ArrayList<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos")));
+        atendimento.setDemandaGeral( (DemandaGeral) (valoresRecebidosFragment1e2.getSerializable("demandaGeral")));
+        atendimento.setDemandasEspecificas( new HashSet<> (
+                (ArrayList<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas")));
         atendimento.setProcedimento((procedimento));
-        atendimento.setDocumentosProduzidos(listaDeDocumentosSelecionados);
-        atendimento.setEncaminhamentos(listaDeEncaminhamentosSelecionados);
-        atendimento.setSinaisSintomas(listadeSinaisSintomasSelecionados);
-        atendimento.setMedicacoesPsiquiatricas(listaDeMedicacoesPsiquiatricasSelecionadas);
+        atendimento.setDocumentosProduzidos(new HashSet<>(
+                (ArrayList<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados));
+        atendimento.setEncaminhamentos(new HashSet<>(
+                (ArrayList<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados));
+        atendimento.setSinaisSintomas(new HashSet<>(
+                (ArrayList<SinalSintoma>) listaDeSinaisSintomasSelecionadosValidados));
+        atendimento.setMedicacoesPsiquiatricas(new HashSet<>(
+                (ArrayList<MedicacaoPsiquiatrica>) listaDeMedicacoesPsiquiatricasSelecionadasValidadas));
         atendimento.setAfastamento(afastamento);
         atendimento.setEvolucao(evolucao);
 
+        Log.d("resultado de dados",
+                atendimento.getEspecialistas().toString() + " " +
+                        atendimento.getUsuarios().toString() + " " +
+                        atendimento.getData().toString() + " " +
+                                atendimento.getUnidade().toString() + " " +
+                                atendimento.getModalidade().toString() + " " +
+                                atendimento.getAcesso().toString() + " " +
+                                atendimento.getPrograma().toString() + " " +
+                                atendimento.getDeslocamentos().toString() + " " +
+                                atendimento.getDemandaGeral().toString() + " " +
+                                atendimento.getDemandasEspecificas().toString() + " " +
+                                atendimento.getProcedimento().toString() + " " +
+                                atendimento.getEncaminhamentos().toString() + " " +
+                                atendimento.getDocumentosProduzidos().toString() + " " +
+                                atendimento.isAfastamento() + " " +
+                                atendimento.getEvolucao() + " " +
+                                atendimento.getSinaisSintomas().toString() + " " +
+                                atendimento.getMedicacoesPsiquiatricas().toString());
         return atendimento;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Avaliacao encapsularValoresParaRegistroDeAvaliacao() throws ParseException {
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendimentoRegisterFragment2();
+        Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
+
+        LocalDate data= DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("data"));
+
+        avaliacao = new Avaliacao();
+
+        avaliacao.setData(data);
+        avaliacao.setEspecialistas((Set<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas"));
+        avaliacao.setUsuarios((Set<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos"));
+        avaliacao.setUnidade( (Unidade) valoresRecebidosFragment1.getSerializable("unidade"));
+        avaliacao.setModalidade( (Modalidade)(valoresRecebidosFragment1.getSerializable("modalidade")));
+        avaliacao.setAcesso( (Acesso) (valoresRecebidosFragment1.getSerializable("acesso")));
+        avaliacao.setTipoAvaliacao( (TipoAvaliacao) (valoresRecebidosFragment1e2.getSerializable("tipoAvaliacao")));
+        avaliacao.setPrograma( (Programa) (valoresRecebidosFragment1e2.getSerializable("programa")));
+        avaliacao.setDeslocamentos( (Set<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos"));
+        avaliacao.setDemandaGeral( (DemandaGeral) (valoresRecebidosFragment1e2.getSerializable("demandaGeral")));
+        avaliacao.setDemandasEspecificas( (Set<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas"));
+        avaliacao.setProcedimento((procedimento));
+        avaliacao.setDocumentosProduzidos((Set<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados);
+        avaliacao.setEncaminhamentos((Set<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados);
+        avaliacao.setAfastamento(afastamento);
+        avaliacao.setEvolucao(evolucao);
+
+        return avaliacao;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private ServicoDeAssistenciaEspecial encapsularValoresParaRegistroDeSae() throws ParseException {
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendimentoRegisterFragment2();
+        Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
+
+        LocalDate data= DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("data"));
+
+        sae = new ServicoDeAssistenciaEspecial();
+
+        sae.setData(data);
+        sae.setEspecialistas((Set<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas"));
+        sae.setUsuarios((Set<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos"));
+        sae.setUnidade( (Unidade) valoresRecebidosFragment1.getSerializable("unidade"));
+        sae.setModalidade( (Modalidade)(valoresRecebidosFragment1.getSerializable("modalidade")));
+        sae.setAcesso( (Acesso) (valoresRecebidosFragment1.getSerializable("acesso")));
+        sae.setPrograma( (Programa) (valoresRecebidosFragment1e2.getSerializable("programa")));
+        sae.setDeslocamentos( (Set<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos"));
+        sae.setDemandaGeral( (DemandaGeral) (valoresRecebidosFragment1e2.getSerializable("demandaGeral")));
+        sae.setDemandasEspecificas( (Set<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas"));
+        sae.setCondicaoLaboral( (CondicaoLaboral) (valoresRecebidosFragment1e2.getSerializable("condicaoLaboral")));
+        sae.setProcedimento((procedimento));
+        sae.setDocumentosProduzidos((Set<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados);
+        sae.setEncaminhamentos((Set<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados);
+        sae.setAfastamento(afastamento);
+        sae.setEvolucao(evolucao);
+
+        return sae;
     }
 
     private void registrarAtendimento(Atendimento novoAtendimento)
     {
-        new AtendimentoController().registrarAtendimento(
+        new AtendimentoController().registrar(
                 getActivity(),
                 novoAtendimento,
                 new IVolleyCallback() {
@@ -639,20 +822,61 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            boolean isErro = jsonObject.getBoolean("erro");
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
 
-                            String mensagem = jsonObject.getString("mensagem");
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
 
-                            if(isErro) {
-                                Toast.makeText(principalFragment.getContext(),
-                                        mensagem,
-                                        Toast.LENGTH_SHORT).show();
-                            }else {
+    private void registrarAvaliacao(Avaliacao novaAvaliacao)
+    {
+        new AvaliacaoController().registrar(
+                getActivity(),
+                novaAvaliacao,
+                new IVolleyCallback() {
+                    @Override
+                    public void onSucess(String response) {
 
-                                Toast.makeText(principalFragment.getContext(),
-                                        mensagem,
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                        Log.e("ERRO", response);
+
+                        try{
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void registrarSae(ServicoDeAssistenciaEspecial novoSae)
+    {
+        new ServicoDeAssistenciaEspecialController().registrar(
+                getActivity(),
+                novoSae,
+                new IVolleyCallback() {
+                    @Override
+                    public void onSucess(String response) {
+
+                        Log.e("ERRO", response);
+
+                        try{
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Toast.makeText(principalFragment.getContext(),
+                                    "Cadastro realizado com sucesso!",
+                                    Toast.LENGTH_SHORT).show();
 
                         }catch (JSONException e) {
                             e.printStackTrace();
@@ -662,17 +886,35 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     }
 
     private void enviarFormulario() {
+        Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendimentoRegisterFragment2();
+        String tipo = valoresRecebidosFragment1e2.getString("tipoServico");
 
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroAtendimento())
-                {
-                    Atendimento novoAtendimento;
-                    novoAtendimento = encapsularValoresParaEnvio();
+                if(validarCadastroAtendimento()) {
+                    if(tipo.equals(TipoServicoEnum.ATENDIMENTO_PSICOLOGICO.getNome()) ||
+                            tipo.equals(TipoServicoEnum.ATENDIMENTO_SOCIAL.getNome())) {
+                        Atendimento novoAtendimento;
+                        novoAtendimento = encapsularValoresParaRegistroDeAtendimento();
+                        registrarAtendimento(novoAtendimento);
+                        Toast.makeText(getContext(), "atendimento", Toast.LENGTH_SHORT).show();
+                    } else if (tipo.equals(TipoServicoEnum.AVALIACAO_PSICOLOGICA.getNome()) ||
+                            tipo.equals(TipoServicoEnum.AVALIACAO_SOCIAL.getNome())) {
+                        Avaliacao novaAvaliacao;
+                        novaAvaliacao = encapsularValoresParaRegistroDeAvaliacao();
+                        registrarAvaliacao(novaAvaliacao);
+                        Toast.makeText(getContext(), "avaliacao", Toast.LENGTH_SHORT).show();
+                    } else {
 
-                    registrarAtendimento(novoAtendimento);
+                        ServicoDeAssistenciaEspecial novoSae;
+                        novoSae = encapsularValoresParaRegistroDeSae();
+                        registrarSae(novoSae);
+                        Toast.makeText(getContext(), "sae", Toast.LENGTH_SHORT).show();
+                    }
 
                     principalFragment = new PrincipalFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -687,16 +929,5 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             }
         });
 
-    }
-
-    @Override
-    public void onResume() {
-
-        listaProcedimentosRecuperados.clear();
-        listaDocumentosProduzidosRecuperados.clear();
-        listaDeEncaminhamentosRecuperados.clear();
-        listaSinaisSintomasRecuperados.clear();
-        listaMedicacoesPsiquiatricasRecuperadas.clear();
-        super.onResume();
     }
 }

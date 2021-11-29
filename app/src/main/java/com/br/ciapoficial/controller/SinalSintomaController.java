@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class SinalSintomaController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/sinais+sintomas";
 
-        String url = Constants.BASE_API_URL + "/sinais+sintomas";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

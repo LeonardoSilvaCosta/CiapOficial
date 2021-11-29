@@ -1,5 +1,8 @@
 package com.br.ciapoficial.view.fragments;
 
+import static android.app.Activity.RESULT_OK;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -43,7 +46,7 @@ import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
@@ -78,9 +81,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.SneakyThrows;
-
-import static android.app.Activity.RESULT_OK;
-import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 public class FuncionarioUpdateFragment1 extends Fragment {
 
@@ -556,18 +556,18 @@ public class FuncionarioUpdateFragment1 extends Fragment {
     public boolean validarCadastroFuncionario() throws ParseException
     {
         if (
-                FieldValidator.validarNomeCompleto(textInputEditTextNomeCompleto) &&
-                        FieldValidator.validarDataDeNascimento(textInputEditTextDataNascimento) &&
-                        FieldValidator.validarCpf(textInputEditTextCpf) &&
-                        FieldValidator.validarSexo(radioGroupSexo, rbtnMasculino) &&
-                        FieldValidator.validarUf(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
-                        FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
-                        FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
-                        FieldValidator.validarNumeroDeFilhos(textInputEditTextNumeroFilhos) &&
-                        FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
-                        FieldValidator.validarTelefones(textInputEditTextTelefone, listaDeTelefonesAdicionados) &&
-                        FieldValidator.validarEmail(textInputEditTextEmail) &&
-                        FieldValidator.validarSenhaUpdate(textInputEditTextSenha, rbtnAtualizarSenhaSim.isChecked()))
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeCompleto, "NOME COMPLETO") &&
+                FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
+                FieldValidator.validarCpf(textInputEditTextCpf) &&
+                FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
+                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
+                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
+                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
+                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
+                FieldValidator.validarTelefones(textInputEditTextTelefone, listaDeTelefonesAdicionados) &&
+                FieldValidator.validarEmail(textInputEditTextEmail) &&
+                FieldValidator.validarSenhaUpdate(textInputEditTextSenha, rbtnAtualizarSenhaSim.isChecked()))
         {
             receberDadosFuncionarioPreenchidos();
             return true;

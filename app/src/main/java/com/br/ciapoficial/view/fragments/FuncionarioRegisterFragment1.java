@@ -26,7 +26,7 @@ import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
@@ -54,8 +54,8 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     private FuncionarioRegisterFragment2 funcionarioRegisterFragment2;
 
     private LinearLayout linearLayoutTelefone;
-    private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
-            textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone,
+    private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataDeNascimento,
+            textInputEditTextCpf, textInputEditTextNumeroDeFilhos, textInputEditTextTelefone,
             textInputEditTextEmail;
     private AutoCompleteTextView autoCompleteTextViewUfNatal, autoCompleteTextViewCidadeNatal,
             autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade;
@@ -110,7 +110,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     {
         linearLayoutTelefone = view.findViewById(R.id.linearLayoutTelefone);
         textInputEditTextNomeCompleto = view.findViewById(R.id.edtNomeCompleto);
-        textInputEditTextDataNascimento = view.findViewById(R.id.edtDataNascimento);
+        textInputEditTextDataDeNascimento = view.findViewById(R.id.edtDataNascimento);
         textInputEditTextCpf = view.findViewById(R.id.edtCpf);
         radioGroupSexo = view.findViewById(R.id.radioGroupSexo);
         rbtnMasculino = view.findViewById(R.id.rbtnMasculino);
@@ -118,7 +118,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
         autoCompleteTextViewUfNatal = view.findViewById(R.id.edtUf);
         autoCompleteTextViewCidadeNatal = view.findViewById(R.id.edtCidadeNatal);
         autoCompleteTextViewEstadoCivil = view.findViewById(R.id.edtEstadoCivil);
-        textInputEditTextNumeroFilhos = view.findViewById(R.id.edtNumeroFilhos);
+        textInputEditTextNumeroDeFilhos = view.findViewById(R.id.edtNumeroFilhos);
         autoCompleteTextViewEscolaridade = view.findViewById(R.id.edtEscolaridade);
         textInputEditTextTelefone = view.findViewById(R.id.edtTelefone);
         textInputEditTextEmail = view.findViewById(R.id.edtEmail);
@@ -127,7 +127,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     }
 
     private void configurarMascaraParaData()
-    {Mascaras.criarMascaraParaData(textInputEditTextDataNascimento);}
+    {Mascaras.criarMascaraParaData(textInputEditTextDataDeNascimento);}
 
     private void configurarMascaraParaCpf()
     {Mascaras.criarMascaraParaCpf(textInputEditTextCpf);}
@@ -320,17 +320,17 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     public boolean validarCadastroFuncionario() throws ParseException
     {
         if (
-                FieldValidator.validarNomeCompleto(textInputEditTextNomeCompleto) &&
-                        FieldValidator.validarDataDeNascimento(textInputEditTextDataNascimento) &&
-                        FieldValidator.validarCpf(textInputEditTextCpf) &&
-                        FieldValidator.validarSexo(radioGroupSexo, rbtnMasculino) &&
-                        FieldValidator.validarUf(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
-                        FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
-                        FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
-                        FieldValidator.validarNumeroDeFilhos(textInputEditTextNumeroFilhos) &&
-                        FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
-                        FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListDeTelefonesAdicionados) &&
-                        FieldValidator.validarEmail(textInputEditTextEmail))
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeCompleto, "NOME COMPLETO") &&
+                FieldValidator.validarData(textInputEditTextDataDeNascimento, "DATA DE NASCIMENTO") &&
+                FieldValidator.validarCpf(textInputEditTextCpf) &&
+                FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
+                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
+                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
+                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroDeFilhos, "NÚMERO DE FILHOS") &&
+                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
+                FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListDeTelefonesAdicionados) &&
+                FieldValidator.validarEmail(textInputEditTextEmail))
         {
             receberDadosFuncionarioPreenchidos();
             return true;
@@ -340,7 +340,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void receberDadosFuncionarioPreenchidos() throws ParseException {
         nomeCompleto = textInputEditTextNomeCompleto.getText().toString().trim();
-        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataNascimento.getText().toString().trim());
+        dataNascimento = DateFormater.StringToLocalDate(textInputEditTextDataDeNascimento.getText().toString().trim());
         cpf = textInputEditTextCpf.getText().toString().trim();
 
         for (Estado estadoSelecionado : listaDeUfsRecuperadas) {
@@ -362,7 +362,7 @@ public class FuncionarioRegisterFragment1 extends Fragment {
                 estadoCivil = estadoCivilSelecionado;
         }
 
-        numeroFilhos = Integer.valueOf(textInputEditTextNumeroFilhos.getText().toString().trim());
+        numeroFilhos = Integer.valueOf(textInputEditTextNumeroDeFilhos.getText().toString().trim());
 
 
         for (Escolaridade escolaridadeSelecionada : listaDeEscolaridadesRecuperadas)

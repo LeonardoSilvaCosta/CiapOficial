@@ -1,0 +1,61 @@
+Anotações sobre a classe AtendimentoRegisterFragment1
+
+#desafio01:
+    Definir fluxo referente ao(s) especialista(s) que estarão realizando atendimento:
+
+    COMPONENTES EM USO:
+
+            linearLayoutEspecialista: utilizado para exibir textview referente a especialista selecionado;
+
+            autoCompleteTextViewEspecialista: utilizado para listar e autocompletar as opções de especialistas;
+
+            btnAdicionarEspecialista: utilizado para adicionar o especialista selecionado;
+
+            listaDeEspecialistasRecuperados: essa lista recebe do DB a lista com todos os especialistas;
+
+            listaDeEspecialistasSelecionadosNaoValidados: essa lista recebe os especialistas adicionados;
+
+            listaDeEspecialistasSelecionadosValidados: após a listaDeEspecialistasSelecionadosNaoValidados ser
+            submetida a validação, os valores validados são recebidos pela listaDeEspecialistasSelecionadosValidados
+            que será repassada para o DB.
+
+            MÉTODOS ENVOLVIDOS
+
+             - popularCampoComDB():
+                1) consulta os especialistas no DB com a api Volley;
+                2) listaDeAtendidosRecupeados adiciona os especialistas recuperados;
+                3) configurarCampoEspecialistaResponsavel();
+
+             - configurarCampoEspecialistaResponsavel()
+                1) vincula adapterEspecialista a listaDeEspecialistasRecuperados e vincula
+                ela ao autoCompleteTextViewEspecialista para prover o autoComplete com 1 Threshold
+                2) vincula adapterEspecialista com a listaDeEspecialistasSelecionadosNaoValidados
+                3) verifica se a listaDeEspecialistasSelecionadosValidados não está vázia, caso não
+                esteja, acrescenta os elementos no linearLayoutEspecialista e acrescenta os dados que estão na
+                listaDeEspecialistasDeEspecialistasValidados na listaDeEspecialistasSelecionadosNaoValidados,
+                caso contráio, remove
+                tudo o que já esteja no linearLayout
+                4) aciona o método showDropDownClick para mostrar a lista de especialistas recuperados
+                no autoComplete caso a arrow no autoComplete seja clicada
+                5) o botão btnAdicionarEspecialista é configura para acionar o método
+                adicionarTextViewEspecialista da classe AddRemoveTextView;
+             - onResume():
+               nesse método é utilizado o listaDeEspecialistasRecuperados.clear() para limpar a listaDeEspecialistasRecuperados,
+               impedindo a duplicação de dados durante a listagem de todos os especialistas
+
+             - criarTextViewParaEspecialistasSelecionados():
+               1) cria textView de forma programática
+               2) percorre a listaDeEspecialistasSelecionadosValidados e cria um textView para cada um
+               3) adiciona o textView ao linearLayoutEspecialista
+
+
+            - validarCadastroDeServico():
+               1) validar a listaDeEspecialistasSelecionadosNaoValidados
+
+            - receberDadosDoServicoPreenchidos():
+               1) listaDeEspecialistasSelecionadosValidados recebe listaDeEspecialistasSelecionadosNaoValidados pós
+               validação
+
+            - encapsulaValoresParaEnvio():
+               1) listaDeEspeicialistasSelecionadosValidados é enviado para a próxima tela via bundle com o título
+               "listaDeEspecialistas"

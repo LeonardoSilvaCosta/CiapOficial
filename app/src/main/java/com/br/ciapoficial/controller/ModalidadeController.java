@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class ModalidadeController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/modalidades";
 
-        String url = Constants.BASE_API_URL + "/modalidades";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

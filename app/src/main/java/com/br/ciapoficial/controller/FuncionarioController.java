@@ -382,7 +382,7 @@ public class FuncionarioController extends PessoaController {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "didn't work!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "didn't work! - recuperar imagem", Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         }) {

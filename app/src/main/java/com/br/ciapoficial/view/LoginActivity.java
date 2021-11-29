@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AuthenticationController;
 import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.PersistentCookieStore;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.UserModel;

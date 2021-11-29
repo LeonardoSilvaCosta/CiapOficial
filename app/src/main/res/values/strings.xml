@@ -58,11 +58,11 @@
     <string name="data_de_inclusao">Data de inclusão</string>
     <string name="data_de_atendimento">Data de Atendimento</string>
     <string name="oficial_responsavel">Oficial responsavel</string>
-    <string name="unidade_do_atendimento">Unidade do atendimento</string>
+    <string name="unidade_do_atendimento">Unidade do servico</string>
     <string name="modalidade">Modalidade</string>
-    <string name="acesso_ao_atendimento">Acesso ao atendimento</string>
+    <string name="acesso_ao_atendimento">Acesso ao servico</string>
     <string name="tipo_de_servico">Tipo de serviço</string>
-    <string name="tipo_de_atendimento">Tipo do atendimento</string>
+    <string name="tipo_de_atendimento">Tipo do servico</string>
     <string name="tipo_de_avaliacao">Tipo de Avaliação</string>
     <string name="programa">Programa</string>
     <string name="deslocamento">Deslocamento</string>
@@ -78,13 +78,13 @@
     <string name="medicacao_psiquiatrica">Medicação psiquiátrica</string>
     <string name="procedimento">Procedimento</string>
     <string name="encaminhamento">Encaminhamento</string>
-    <string name="data_de_atendimento_not_null">data de atendimento*</string>
+    <string name="data_de_atendimento_not_null">data de servico*</string>
     <string name="oficial_responsavel_not_null">oficial responsavel*</string>
     <string name="atendido_not_null">Atendido*</string>
-    <string name="unidade_do_atendimento_not_null">unidade do atendimento*</string>
+    <string name="unidade_do_atendimento_not_null">unidade do servico*</string>
     <string name="modalidade_not_null">Modalidade*</string>
-    <string name="acesso_ao_atendimento_not_null">Acesso ao atendimento*</string>
-    <string name="tipo_de_atendimento_not_null">Tipo de atendimento*</string>
+    <string name="acesso_ao_atendimento_not_null">Acesso ao servico*</string>
+    <string name="tipo_de_atendimento_not_null">Tipo de servico*</string>
     <string name="demanda_geral_not_null">Demanda geral*</string>
     <string name="procedimento_not_null">Procedimento*</string>
 
@@ -205,4 +205,6 @@
     <string name="cadastrar_usuario">Cadastrar Usuário</string>
     <string name="ciap">CIAP</string>
     <string name="confirmar_senha">Digite sua senha atual</string>
+    <string name="interno">Interno</string>
+    <string name="externo">Externo</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.br.ciapoficial.helper;
+package com.br.ciapoficial.validation;
 
 import android.os.Build;
 import android.widget.AutoCompleteTextView;
@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.RequiresApi;
 
+import com.br.ciapoficial.helper.DellayAction;
 import com.br.ciapoficial.model.Cidade;
 import com.br.ciapoficial.model.Escolaridade;
 import com.br.ciapoficial.model.Especialidade;
@@ -20,65 +21,202 @@ import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Vinculo;
+import com.br.ciapoficial.model.in_servico.Acesso;
+import com.br.ciapoficial.model.in_servico.CondicaoLaboral;
+import com.br.ciapoficial.model.in_servico.DemandaEspecifica;
+import com.br.ciapoficial.model.in_servico.DemandaGeral;
+import com.br.ciapoficial.model.in_servico.Modalidade;
+import com.br.ciapoficial.model.in_servico.Procedimento;
+import com.br.ciapoficial.model.in_servico.Programa;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FieldValidator {
 
-    public static boolean validarNomeCompleto(TextInputEditText campoNomeCompleto)
+    public static boolean isFieldEmptyOrNull(TextInputEditText campoString, String nomeDoCampo)
     {
-        String valorDoCampo = campoNomeCompleto.getText().toString().trim();
+        String valorDoCampo = Objects.requireNonNull(campoString.getText()).toString().trim();
         if(valorDoCampo.isEmpty()) {
-            campoNomeCompleto.setError("O campo NOME COMPLETO é obrigatório.");
-            campoNomeCompleto.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoNomeCompleto);
+            campoString.setError("O campo " + nomeDoCampo + "é obrigatório.");
+            campoString.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoString);
             return false;
-        }else { campoNomeCompleto.setError(null);return true; }
+        }else { campoString.setError(null);return true; }
+    }
+
+    public static boolean isListEmptyOrNull(AutoCompleteTextView campo,
+                                            List<?> lista, String nomeDoCampo) {
+        if (lista.isEmpty()) {
+            campo.setError("Selecione ao menos uma opção de " + nomeDoCampo + ".");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+            return false;
+        } else {
+            campo.setError(null);
+            return true;
+        }
+    }
+
+    public static boolean validarRadioGroup(RadioGroup radioGroup, RadioButton rbtnDefault, String nomeDoCampo) {
+        if (radioGroup.getCheckedRadioButtonId() == -1) {
+            rbtnDefault.setError("Selecione uma opção em " + nomeDoCampo + ".");
+            rbtnDefault.requestFocus();
+            rbtnDefault.requestFocusFromTouch();
+            DellayAction.clearErrorAfter2Seconds(rbtnDefault);
+            return false;
+        } else { rbtnDefault.setError(null); return true; }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static boolean validarDataDeNascimento(TextInputEditText campoData)
+    public static boolean validarData(TextInputEditText campoData, String nomeDoCampo)
     {
-        String valorDoCampo = campoData.getText().toString().trim();
+        String valorDoCampo = Objects.requireNonNull(campoData.getText()).toString().trim();
         if(valorDoCampo.isEmpty()) {
-            campoData.setError("O campo DATA DE NASCIMENTO é obrigatório.");
+            campoData.setError("O campo " + nomeDoCampo + " é obrigatório.");
             campoData.requestFocus();
             DellayAction.clearErrorAfter2Seconds(campoData);
             return false;
         }else if (!DateValidator.isDateValid(valorDoCampo)) {
-            campoData.setError("Digite uma DATA válida.");
+            campoData.setError("Digite uma " + nomeDoCampo + " válida.");
             campoData.requestFocus();
             DellayAction.clearErrorAfter2Seconds(campoData);
             return false;
         }else{ campoData.setError(null); return true; }
     }
 
-    public static boolean validarCpf(TextInputEditText cpf)
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static boolean validarDataDoServico(AutoCompleteTextView campoData)
     {
-        String valorDoCampo = cpf.getText().toString().trim();
+        String valorDoCampo = campoData.getText().toString().trim();
         if(valorDoCampo.isEmpty()) {
-            cpf.setError("O campo CPF é obrigatório.");
+            campoData.setError("O campo DATA DO SERVIÇO é obrigatório.");
+            campoData.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoData);
+            return false;
+        }else if (!DateValidator.isDateValid(valorDoCampo)) {
+            campoData.setError("Digite uma DATA DE SERVIÇO válida.");
+            campoData.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoData);
+            return false;
+        }else{ campoData.setError(null); return true; }
+    }
+
+    public static boolean validarCpf(TextInputEditText campoCpf)
+    {
+        String valorDoCampo = Objects.requireNonNull(campoCpf.getText()).toString().trim();
+        if(valorDoCampo.isEmpty()) {
+            campoCpf.setError("O campo CPF é obrigatório.");
             return false;
         }else if(!CPFValidator.validarCPF(valorDoCampo)) {
-            cpf.setError("CPF Inválido.");
+            campoCpf.setError("Digite um CPF válido.");
             return false;
-        }else{ cpf.setError(null); return true; }
+        }else{ campoCpf.setError(null); return true; }
     }
 
-    public static boolean validarSexo(RadioGroup radioGroupSexo, RadioButton rbtnMasculino) {
-        if (radioGroupSexo.getCheckedRadioButtonId() == -1) {
-            rbtnMasculino.setError("Selecione uma opção em SEXO");
-            rbtnMasculino.requestFocus();
-            rbtnMasculino.requestFocusFromTouch();
-            DellayAction.clearErrorAfter2Seconds(rbtnMasculino);
+    public static boolean validarTelefones(TextInputEditText autoCompleteTextViewTelefones,
+                                           List<Telefone> telefones)
+    {
+        if(telefones.isEmpty()) {
+            autoCompleteTextViewTelefones.setError("É necessário inserir ao menos um telefone.");
+            autoCompleteTextViewTelefones.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(autoCompleteTextViewTelefones);
             return false;
-        } else { rbtnMasculino.setError(null); return true; }
+        }else { autoCompleteTextViewTelefones.setError(null); return true; }
     }
 
-    public static boolean validarUf(AutoCompleteTextView campoUf, List<Estado> listaDeEstados)
+    public static boolean validarCondicaoLaboral(AutoCompleteTextView campoCondicaoLaboralSelecionada, List<CondicaoLaboral> listaDeCondicoesLaborais,
+                                                 List<DemandaEspecifica> listaDeDemandasEspecificasSelecionadasNaoValidadas)
+    {
+        String valorDoCampo = campoCondicaoLaboralSelecionada.getText().toString().trim();
+        boolean containsObitoMilitar = listaDeDemandasEspecificasSelecionadasNaoValidadas.toString().contains("Óbito(militar)");
+
+        if(containsObitoMilitar) {
+            if(valorDoCampo.isEmpty())
+            {
+                campoCondicaoLaboralSelecionada.setError("O campo CONDIÇÃO LABORAL é obrigatório.");
+                campoCondicaoLaboralSelecionada.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoCondicaoLaboralSelecionada);
+                return false;
+            }else
+            {
+                if(listaDeCondicoesLaborais != null) {
+                    boolean valueExists = false;
+                    for(CondicaoLaboral condicaoLaboralSelecionada : listaDeCondicoesLaborais)
+                    {
+                        if(condicaoLaboralSelecionada.toString().equals(valorDoCampo))
+                        { valueExists = true; break; }
+                    }
+
+                    if (valueExists)
+                    {
+                        campoCondicaoLaboralSelecionada.setError(null);
+                        return true;
+                    }else
+                    {
+                        campoCondicaoLaboralSelecionada.setError("Insira uma opção de CONDIÇÃO LABORAL válida.");
+                        campoCondicaoLaboralSelecionada.requestFocus();
+                        DellayAction.clearErrorAfter2Seconds(campoCondicaoLaboralSelecionada);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean validarSenhaUpdate(TextInputEditText campoSenha, boolean desejaAtualizarSenha) {
+
+        String senha = Objects.requireNonNull(campoSenha.getText()).toString();
+
+        if(desejaAtualizarSenha) {
+            if (!campoSenha.getText().toString().isEmpty()) {
+                if (senha.length() < 6) {
+                    campoSenha.setError("Sua SENHA deve conter pelo menos 6 caracteres.");
+                    campoSenha.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoSenha);
+                    return false;
+                } else {
+                    campoSenha.setError(null);
+                    return true;
+                }
+            }else{
+                campoSenha.setError("O campo SENHA não pode ficar em branco.");
+                campoSenha.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoSenha);
+                return false;
+            }
+        }
+        campoSenha.setError(null);
+        return true;
+    }
+
+    public static boolean validarConfirmacaoDeSenha(TextInputEditText campoSenha, String senhaAtual) {
+        String valorDoCampo = Objects.requireNonNull(campoSenha.getText()).toString().trim();
+
+        if(valorDoCampo.isEmpty()) {
+            campoSenha.setError("O campo SENHA é obrigatório.");
+            campoSenha.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoSenha);
+            return false;
+        }else {
+            if(!BCrypt.checkpw(valorDoCampo, senhaAtual)) {
+                campoSenha.setError("A senha informada não conferece com a senha cadastrada.");
+                campoSenha.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campoSenha);
+                return false;
+            }else{
+                campoSenha.setError(null);
+                return true;
+            }
+        }
+    }
+
+    public static boolean validarUF(AutoCompleteTextView campoUf, List<Estado> listaDeEstados)
     {
         String valorDoCampo = campoUf.getText().toString().trim();
 
@@ -189,17 +327,6 @@ public class FieldValidator {
         return true;
     }
 
-    public static boolean validarNumeroDeFilhos(TextInputEditText numeroDeFilhos)
-    {
-        String valorDoCampo = numeroDeFilhos.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            numeroDeFilhos.setError("O campo NÚMERO DE FILHOS é obrigatório.");
-            numeroDeFilhos.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(numeroDeFilhos);
-            return false;
-        }else { numeroDeFilhos.setError(null);return true; }
-    }
-
     public static boolean validarEscolaridade(AutoCompleteTextView campoEscolaridade,
                                               List<Escolaridade> listaDeEscolaridades)
     {
@@ -237,20 +364,9 @@ public class FieldValidator {
         return true;
     }
 
-    public static boolean validarTelefones(TextInputEditText autoCompleteTextViewTelefones,
-                                           List<Telefone> telefones)
-    {
-        if(telefones.isEmpty()) {
-            autoCompleteTextViewTelefones.setError("É necessário inserir ao menos um telefone.");
-            autoCompleteTextViewTelefones.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(autoCompleteTextViewTelefones);
-            return false;
-        }else { autoCompleteTextViewTelefones.setError(null); return true; }
-    }
-
     public static boolean validarEmail(TextInputEditText email)
     {
-        String valorDoCampo = email.getText().toString().trim();
+        String valorDoCampo = Objects.requireNonNull(email.getText()).toString().trim();
         String checkEmail = "[a-zA-Z0-9._-]+@[a-z]+.+[a-z]+";
 
         if (valorDoCampo.isEmpty()) {
@@ -268,7 +384,7 @@ public class FieldValidator {
 
     public static boolean validarCep (TextInputEditText cep)
     {
-        String valorDoCampo = cep.getText().toString().trim();
+        String valorDoCampo = Objects.requireNonNull(cep.getText()).toString().trim();
         String checkCep = "[0-9]{5}-[0-9]{3}";
         if(valorDoCampo.isEmpty()) {
             cep.setError("O campo CEP é obrigatório.");
@@ -282,39 +398,6 @@ public class FieldValidator {
             return false;
         } else {
             cep.setError(null);return true; }
-    }
-
-    public static boolean validarBairro (TextInputEditText bairro)
-    {
-        String valorDoCampo = bairro.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            bairro.setError("O campo BAIRRO é obrigatório.");
-            bairro.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(bairro);
-            return false;
-        }else { bairro.setError(null);return true; }
-    }
-
-    public static boolean validarLogradouro (TextInputEditText logradouro)
-    {
-        String valorDoCampo = logradouro.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            logradouro.setError("O campo LOGRADOURO é obrigatório.");
-            logradouro.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(logradouro);
-            return false;
-        }else { logradouro.setError(null);return true; }
-    }
-
-    public static boolean validarNumero (TextInputEditText numero)
-    {
-        String valorDoCampo = numero.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            numero.setError("O campo NÚMERO é obrigatório.");
-            numero.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(numero);
-            return false;
-        }else { numero.setError(null);return true; }
     }
 
     public static boolean validarPostoGradCat(AutoCompleteTextView campoPostoGradCat,
@@ -391,28 +474,6 @@ public class FieldValidator {
         return true;
     }
 
-    public static boolean validarRgMilitar (TextInputEditText campoRgMilitar)
-    {
-        String valorDoCampo = campoRgMilitar.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            campoRgMilitar.setError("O campo RG é obrigatório.");
-            campoRgMilitar.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoRgMilitar);
-            return false;
-        }else { campoRgMilitar.setError(null);return true; }
-    }
-
-    public static boolean validarNomeGuerra (TextInputEditText campoNomeGuerra)
-    {
-        String valorDoCampo = campoNomeGuerra.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            campoNomeGuerra.setError("O campo NOME GUERRA é obrigatório.");
-            campoNomeGuerra.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoNomeGuerra);
-            return false;
-        }else { campoNomeGuerra.setError(null);return true; }
-    }
-
     public static boolean validarUnidade(AutoCompleteTextView campoUnidade,
                                          List<Unidade> listaDeUnidades)
     {
@@ -448,23 +509,6 @@ public class FieldValidator {
             }
         }
         return true;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static boolean validarDataDeInclusao(TextInputEditText campoData)
-    {
-        String valorDoCampo = campoData.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            campoData.setError("O campo DATA DE INCLUSÃO é obrigatório.");
-            campoData.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoData);
-            return false;
-        }else if (!DateValidator.isDateValid(valorDoCampo)) {
-            campoData.setError("Digite uma DATA válida.");
-            campoData.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoData);
-            return false;
-        }else{ campoData.setError(null); return true; }
     }
 
     public static boolean validarFuncaoAdministrativa(AutoCompleteTextView campoFuncaoAdministrativa,
@@ -578,64 +622,6 @@ public class FieldValidator {
         return true;
     }
 
-    public static boolean validarRegistroConselho (TextInputEditText campoRegistroConselho)
-    {
-        String valorDoCampo = campoRegistroConselho.getText().toString().trim();
-        if(valorDoCampo.isEmpty()) {
-            campoRegistroConselho.setError("O campo REGISTRO NO CONSELHO é obrigatório.");
-            campoRegistroConselho.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoRegistroConselho);
-            return false;
-        }else { campoRegistroConselho.setError(null);return true; }
-    }
-
-    public static boolean validarSenhaUpdate(TextInputEditText campoSenha, boolean desejaAtualizarSenha) {
-
-        String senha = campoSenha.getText().toString();
-
-        if(desejaAtualizarSenha) {
-            if (!campoSenha.getText().toString().isEmpty()) {
-                if (senha.length() < 6) {
-                    campoSenha.setError("Sua SENHA deve conter pelo menos 6 caracteres.");
-                    campoSenha.requestFocus();
-                    DellayAction.clearErrorAfter2Seconds(campoSenha);
-                    return false;
-                } else {
-                    campoSenha.setError(null);
-                    return true;
-                }
-            }else{
-                campoSenha.setError("O campo SENHA não pode ficar em branco.");
-                campoSenha.requestFocus();
-                DellayAction.clearErrorAfter2Seconds(campoSenha);
-                return false;
-            }
-        }
-        campoSenha.setError(null);
-        return true;
-    }
-
-    public static boolean validarConfirmacaoDeSenha(TextInputEditText campoSenha, String senhaAtual) {
-        String valorDoCampo = campoSenha.getText().toString().trim();
-
-        if(valorDoCampo.isEmpty()) {
-            campoSenha.setError("O campo SENHA é obrigatório.");
-            campoSenha.requestFocus();
-            DellayAction.clearErrorAfter2Seconds(campoSenha);
-            return false;
-        }else {
-            if(!BCrypt.checkpw(valorDoCampo, senhaAtual)) {
-                campoSenha.setError("A senha informada não conferece com a senha cadastrada.");
-                campoSenha.requestFocus();
-                DellayAction.clearErrorAfter2Seconds(campoSenha);
-                return false;
-            }else{
-                campoSenha.setError(null);
-                return true;
-            }
-        }
-    }
-
 //
 //            boolean achouNumero = false;
 //            boolean achouMaiuscula = false;
@@ -654,7 +640,6 @@ public class FieldValidator {
 //            }
 //
 //            return achouNumero && achouMaiuscula && achouMinuscula && achouSimbolo;
-//        }
 
     public static boolean validarTitular(AutoCompleteTextView campoTitular,
                                          List<Usuario> listaDeTitulares, RadioButton rbtnDependente)
@@ -741,5 +726,227 @@ public class FieldValidator {
         return true;
     }
 
+    public static boolean validarModalidade(AutoCompleteTextView campoModalidadeSelecionada,
+                                            List<Modalidade> listaDeModalidades)
+    {
+        String valorDoCampo = campoModalidadeSelecionada.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoModalidadeSelecionada.setError("O campo MODALIDADE é obrigatório.");
+            campoModalidadeSelecionada.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoModalidadeSelecionada);
+            return false;
+        }else
+        {
+            if(listaDeModalidades != null) {
+                boolean valueExists = false;
+                for(Modalidade modalidadeSelecionada : listaDeModalidades)
+                {
+                    if(modalidadeSelecionada.toString().equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoModalidadeSelecionada.setError(null);
+                    return true;
+                }else
+                {
+                    campoModalidadeSelecionada.setError("Insira uma opção de MODALIDADE válida.");
+                    campoModalidadeSelecionada.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoModalidadeSelecionada);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean validarAcessoAtendimento(AutoCompleteTextView campoAcessoAtendimentoSelecionado,
+                                                   List<Acesso> listaDeAcessos)
+    {
+        String valorDoCampo = campoAcessoAtendimentoSelecionado.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoAcessoAtendimentoSelecionado.setError("O campo ACESSO é obrigatório.");
+            campoAcessoAtendimentoSelecionado.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoAcessoAtendimentoSelecionado);
+            return false;
+        }else
+        {
+            if(listaDeAcessos != null) {
+                boolean valueExists = false;
+                for(Acesso acessoSelecionada : listaDeAcessos)
+                {
+                    if(acessoSelecionada.toString().equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoAcessoAtendimentoSelecionado.setError(null);
+                    return true;
+                }else
+                {
+                    campoAcessoAtendimentoSelecionado.setError("Insira uma opção de ACESSO válida.");
+                    campoAcessoAtendimentoSelecionado.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoAcessoAtendimentoSelecionado);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean validarTipoDeServico(AutoCompleteTextView campoTipoServicoSelecionado,
+                                               List<String> listaDeServicos)
+    {
+        String valorDoCampo = campoTipoServicoSelecionado.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoTipoServicoSelecionado.setError("O campo TIPO DE SERVIÇO é obrigatório.");
+            campoTipoServicoSelecionado.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoTipoServicoSelecionado);
+            return false;
+        }else
+        {
+            if(listaDeServicos != null) {
+                boolean valueExists = false;
+                for(String servicoSelecionado : listaDeServicos)
+                {
+                    if(servicoSelecionado.equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoTipoServicoSelecionado.setError(null);
+                    return true;
+
+                }else
+                {
+                    campoTipoServicoSelecionado.setError("Insira uma opção de SERVIÇO válida.");
+                    campoTipoServicoSelecionado.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoTipoServicoSelecionado);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean validarPrograma(AutoCompleteTextView campoProgramaSelecionado,
+                                          List<Programa> listaDeProgramas)
+    {
+        String valorDoCampo = campoProgramaSelecionado.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoProgramaSelecionado.setError("O campo PROGRAMA é obrigatório.");
+            campoProgramaSelecionado.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoProgramaSelecionado);
+            return false;
+        }else
+        {
+            if(listaDeProgramas != null) {
+                boolean valueExists = false;
+                for(Programa programaSelecionado : listaDeProgramas)
+                {
+                    if(programaSelecionado.getNome().equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoProgramaSelecionado.setError(null);
+                    return true;
+                }else
+                {
+                    campoProgramaSelecionado.setError("Insira uma opção de PROGRAMA válida.");
+                    campoProgramaSelecionado.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoProgramaSelecionado);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean validarDemandaGeral(AutoCompleteTextView campoDemandaGeralSelecionada,
+                                              List<DemandaGeral> listaDeDemandasGerais)
+    {
+        String valorDoCampo = campoDemandaGeralSelecionada.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoDemandaGeralSelecionada.setError("O campo DEMANDA GERAL é obrigatório.");
+            campoDemandaGeralSelecionada.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoDemandaGeralSelecionada);
+            return false;
+        }else
+        {
+            if(listaDeDemandasGerais != null) {
+                boolean valueExists = false;
+                for(DemandaGeral demandaGeralSelecionada : listaDeDemandasGerais)
+                {
+                    if(demandaGeralSelecionada.getNome().equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoDemandaGeralSelecionada.setError(null);
+                    return true;
+                }else
+                {
+                    campoDemandaGeralSelecionada.setError("Insira uma opção de DEMANDA GERAL válida.");
+                    campoDemandaGeralSelecionada.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoDemandaGeralSelecionada);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean validarProcedimento(AutoCompleteTextView campoProcedimentoSelecionado,
+                                              List<Procedimento> listaDeProcedimentos)
+    {
+        String valorDoCampo = campoProcedimentoSelecionado.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoProcedimentoSelecionado.setError("O campo PROCEDIMENTO é obrigatório.");
+            campoProcedimentoSelecionado.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoProcedimentoSelecionado);
+            return false;
+        }else
+        {
+            if(listaDeProcedimentos != null) {
+                boolean valueExists = false;
+                for(Procedimento procedimentoSelecionado : listaDeProcedimentos)
+                {
+                    if(procedimentoSelecionado.toString().equals(valorDoCampo))
+                    { valueExists = true; break; }
+                }
+
+                if (valueExists)
+                {
+                    campoProcedimentoSelecionado.setError(null);
+                    return true;
+                }else
+                {
+                    campoProcedimentoSelecionado.setError("Insira uma opção de PROCEDIMENTO válida.");
+                    campoProcedimentoSelecionado.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds(campoProcedimentoSelecionado);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 }

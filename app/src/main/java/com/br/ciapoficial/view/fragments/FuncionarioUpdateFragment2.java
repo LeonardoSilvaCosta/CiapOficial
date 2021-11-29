@@ -1,5 +1,7 @@
 package com.br.ciapoficial.view.fragments;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
@@ -33,8 +35,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 public class FuncionarioUpdateFragment2 extends Fragment {
 
@@ -210,14 +210,13 @@ public class FuncionarioUpdateFragment2 extends Fragment {
     }
 
     public boolean validarCadastroFuncionario() {
-
         if (
                 FieldValidator.validarCep(textInputEditTextCep) &&
-                        FieldValidator.validarUf(autoCompleteTextViewUf, listaEstadosRecuperados) &&
-                        FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
-                        FieldValidator.validarBairro(textInputEditTextBairro) &&
-                        FieldValidator.validarLogradouro(textInputEditTextLogradouro) &&
-                        FieldValidator.validarNumero(textInputEditTextNumero))
+                FieldValidator.validarUF(autoCompleteTextViewUf, listaEstadosRecuperados) &&
+                FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextBairro, "BAIRRO") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextLogradouro, "LOGRADOURO") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumero, "NÚMERO"))
         {
             receberDadosFuncionarioPreenchidos();
             return true;

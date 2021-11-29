@@ -1,8 +1,7 @@
 package com.br.ciapoficial.view.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +9,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AcessoAtendimentoController;
-import com.br.ciapoficial.controller.FuncionarioController;
+import com.br.ciapoficial.controller.EspecialistaController;
 import com.br.ciapoficial.controller.ModalidadeController;
 import com.br.ciapoficial.controller.UnidadeController;
 import com.br.ciapoficial.controller.UsuarioController;
@@ -26,48 +26,60 @@ import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.Calendar;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
+import com.br.ciapoficial.validation.FieldValidator;
+import com.br.ciapoficial.helper.LocalDateDeserializer;
+import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
-import com.br.ciapoficial.model.Funcionario;
+import com.br.ciapoficial.model.Especialista;
 import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.in_atendimento.Acesso;
-import com.br.ciapoficial.model.in_atendimento.Modalidade;
+import com.br.ciapoficial.model.in_servico.Acesso;
+import com.br.ciapoficial.model.in_servico.Modalidade;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import lombok.SneakyThrows;
 
 public class AtendimentoRegisterFragment1 extends Fragment {
 
-    private LinearLayout linearLayoutOficialResponsavel, linearLayoutAtendido;
-    private AutoCompleteTextView autoCompleteTextViewDataAtendimento, autoCompleteTextViewOficialResponsavel,
-            autoCompleteTextViewAtendido, autoCompleteTextViewUnidadeAtendimento, autoCompleteTextViewModalidade,
-            autoCompleteTextViewAcessoAtendimento;
-    private Button btnAdicionarOficiail, btnAdicionarAtendido, btnProxima;
+    private LinearLayout linearLayoutEspecialista, linearLayoutAtendido;
+    private AutoCompleteTextView autoCompleteTextViewDataDoServico, autoCompleteTextViewEspecialista,
+            autoCompleteTextViewAtendido, autoCompleteTextViewUnidadeDoServico, autoCompleteTextViewModalidadeDoServico,
+            autoCompleteTextViewAcessoAoServico;
+    private Button btnAdicionarEspecialista, btnAdicionarAtendido, btnProxima;
 
     private AtendimentoRegisterFragment2 atendimentoRegisterFragment2;
 
-    private ArrayList<Funcionario> listaOficiaisRecuperados = new ArrayList<>();
-    private ArrayList<Usuario> listaAtendidosRecuperados = new ArrayList<>();
-    private ArrayList<Unidade> listaUnidadesRecuperadas = new ArrayList<>();
-    private ArrayList<Modalidade> listaModalidadesRecuperadas = new ArrayList<>();
-    private ArrayList<Acesso> listaAcessosAtendimentosRecuperados = new ArrayList<>();
+    private List<Especialista> listaDeEspecialistasRecuperados = new ArrayList<>();
+    private List<Usuario> listaDeAtendidosRecuperados = new ArrayList<>();
+    private List<Unidade> listaDeUnidadesRecuperadas = new ArrayList<>();
+    private List<Modalidade> listaDeModalidadesRecuperadas = new ArrayList<>();
+    private List<Acesso> listaAcessosAoServicoRecuperados = new ArrayList<>();
 
-    private ArrayList<Funcionario> arrayListOficiaisSelecionados;
-    private ArrayList<Usuario> arrayListAtendidosSelecionados;
-    private ArrayAdapter<Funcionario> adapterOficiais;
+    private List<Especialista> listaDeEspecialistasSelecionadosNaoValidados;
+    private List<Usuario> listaDeAtendidosSelecionadosNaoValidados;
+    private ArrayAdapter<Especialista> adapterEspecialistas;
     private ArrayAdapter<Usuario> adapterAtendidos;
 
-    private ArrayList<String> listaDeOficiaisSelecionados = new ArrayList<>();
-    private ArrayList<String> listaDeAtendidosSelecionados = new ArrayList<>();
-    private String dataAtendimento;
-    private String unidadeAtendimento;
-    private String modalidade;
-    private String acessoAtendimento;
-
+    private List<Especialista> listaDeEspecialistasSelecionadosValidados = new ArrayList<>();
+    private List<Usuario> listaDeAtendidosSelecionadosValidados = new ArrayList<>();
+    private LocalDate datatDoServico;
+    private Unidade unidadeDoServico;
+    private Modalidade modalidadeDoServico;
+    private Acesso acessoAoServico;
 
 
     public AtendimentoRegisterFragment1() {
@@ -80,84 +92,152 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_atendimento_register1, container, false);
 
         configurarComponentes(view);
+        configurarMascaraParaData();
+        adicionarDataAtualNoEditTextData();
+        adicionarCalendarioNoEditTextData();
+        popularCampoEspecialistaComDB();
+        popularCampoAtendidoComDB();
+        popularCampoUnidadeDoServicoComDB();
+        popularCampoModalidadeDoServicoComDB();
+        popularCampoAcessoAoServicoComDb();
         abrirProximaTela();
+
         return view;
     }
 
     private void configurarComponentes(View view) {
 
-        linearLayoutOficialResponsavel = view.findViewById(R.id.linearLayoutOficialResponsavel);
+        linearLayoutEspecialista = view.findViewById(R.id.linearLayoutEspecialista);
         linearLayoutAtendido = view.findViewById(R.id.linearLayoutAtendido);
-        autoCompleteTextViewDataAtendimento = view.findViewById(R.id.edtDataAtendimento);
-        autoCompleteTextViewOficialResponsavel = view.findViewById(R.id.edtOficialResponsavel);
+        autoCompleteTextViewDataDoServico = view.findViewById(R.id.edtDataDoServico);
+        autoCompleteTextViewEspecialista = view.findViewById(R.id.edtEspecialista);
         autoCompleteTextViewAtendido = view.findViewById(R.id.edtAtendido);
-        autoCompleteTextViewUnidadeAtendimento = view.findViewById(R.id.edtUnidadeAtendimento);
-        autoCompleteTextViewModalidade = view.findViewById(R.id.edtModalidade);
-        autoCompleteTextViewAcessoAtendimento = view.findViewById(R.id.edtAcessAtendimento);
-        btnAdicionarOficiail = view.findViewById(R.id.btnAdicionarOficial);
+        autoCompleteTextViewUnidadeDoServico = view.findViewById(R.id.edtUnidadeDoServico);
+        autoCompleteTextViewModalidadeDoServico = view.findViewById(R.id.edtModalidadeDoServico);
+        autoCompleteTextViewAcessoAoServico = view.findViewById(R.id.edtAcessoAoServico);
+        btnAdicionarEspecialista = view.findViewById(R.id.btnAdicionarEspecialista);
         btnAdicionarAtendido = view.findViewById(R.id.btnAdicionarAtendido);
         btnProxima = view.findViewById(R.id.btnProxima);
-
-        configurarMascaraData();
-        adicionarDataAtualNoEditTextData();
-        adicionarCalendarioNoEditTextData();
-        popularCampoOficialResponsavelComDB();
-        popularCampoAtendidoComDB();
-        popularCampoUnidadeAtendidoComDB();
-        popularCampoModalidadeComDB();
-        popularCampoAcessoAtendimentoComDb();
     }
 
-    private void configurarMascaraData()
+    private void configurarMascaraParaData()
     {
         Mascaras mascara = new Mascaras();
-        mascara.criarMascaraParaData(autoCompleteTextViewDataAtendimento);
+        mascara.criarMascaraParaData(autoCompleteTextViewDataDoServico);
     }
 
     private void adicionarDataAtualNoEditTextData()
     {
-        autoCompleteTextViewDataAtendimento.setText(DateFormater.dataAtual());
+        autoCompleteTextViewDataDoServico.setText(DateFormater.dataAtual());
     }
 
     private void adicionarCalendarioNoEditTextData()
     {
-        Calendar.pegarCalendarioDataAtual(getActivity(), autoCompleteTextViewDataAtendimento);
+        Calendar.pegarCalendarioDataAtual(getActivity(), autoCompleteTextViewDataDoServico);
     }
 
-    private void popularCampoOficialResponsavelComDB() {
+    private void criarTextViewParaEspecialistasSelecionados()
+    {
+        TextView textView = new TextView(getContext());
+            for(Especialista especialistaRecebido : listaDeEspecialistasSelecionadosValidados) {
+                String textoRecebido = especialistaRecebido.toString();
 
-        FuncionarioController funcionarioController = new FuncionarioController();
-        funcionarioController.listarOficiais(getActivity(), new IVolleyCallback() {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(textoRecebido);
+                textView.setTag("lista");
+
+                linearLayoutEspecialista.addView(textView);
+        }
+        removerItemDaListaDeOficiaisResponsaveis(textView, listaDeEspecialistasSelecionadosNaoValidados, adapterEspecialistas);
+    }
+
+    public static void removerItemDaListaDeOficiaisResponsaveis(TextView textView, List<Especialista> listaDisplay,
+                                                                ArrayAdapter<Especialista> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<Especialista> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    Especialista oficialSelecionado = iter.next();
+                    if(oficialSelecionado.toString().equals(string))
+                    {
+                        listaDisplay.remove(oficialSelecionado);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void criarTextViewParaAtendidosSelecionados()
+    {
+        TextView textView = new TextView(getContext());
+        for(Usuario usuarioRecebido : listaDeAtendidosSelecionadosValidados) {
+            String textoRecebido = usuarioRecebido.toString();
+
+            textView.setPadding(0, 10, 0, 10);
+            textView.setText(textoRecebido);
+            textView.setTag("lista");
+
+            linearLayoutAtendido.addView(textView);
+        }
+        removerItemDaListaDeAtendidosSelecionados(textView, listaDeAtendidosSelecionadosNaoValidados, adapterAtendidos);
+    }
+
+    public static void removerItemDaListaDeAtendidosSelecionados(TextView textView, List<Usuario> listaDisplay,
+                                                                ArrayAdapter<Usuario> adapter)
+    {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String string = textView.getText().toString();
+                for(Iterator<Usuario> iter = listaDisplay.iterator(); iter.hasNext();)
+                {
+                    Usuario atendidoSelecionado = iter.next();
+                    if(atendidoSelecionado.toString().equals(string))
+                    {
+                        listaDisplay.remove(atendidoSelecionado);
+                        adapter.notifyDataSetChanged();
+
+                        textView.setVisibility(View.GONE);
+                        break;
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void popularCampoEspecialistaComDB() {
+
+        EspecialistaController especialistaController = new EspecialistaController();
+        especialistaController.listar(getActivity(), new IVolleyCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSucess(String response) {
 
                 try {
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        GsonBuilder customGson = new GsonBuilder();
+                        customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                        customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                        Gson gson = customGson.create();
+                        Especialista especialista = gson.fromJson(String.valueOf(jsonObject), Especialista.class);
 
-                            JSONObject object = jsonArray.getJSONObject(i);
-
-                            Funcionario funcionario = new Funcionario();
-
-                            String quadro = object.getString("quadro");
-                            String especialidade = object.getString("especialidade");
-                            if(quadro.equals("QCOPM") && especialidade.equals("Psicólogo(a)") || especialidade.equals("Assistente Social")) {
-                                funcionario.setId(Integer.valueOf(object.getString("id")));
-                                //funcionario.setPostoGradCat(object.getString("postoGradCat"));
-                                funcionario.setNomeGuerra(object.getString("nomeGuerra"));
-                                funcionario.setRgMilitar(object.getString("rgMilitar"));
-
-                                listaOficiaisRecuperados.add(funcionario);
-                                configurarCampoOficialResponsavel(listaOficiaisRecuperados);
-                            }
-
-
-                        }
+                        listaDeEspecialistasRecuperados.add(especialista);
+                        configurarCampoOficialResponsavel(listaDeEspecialistasRecuperados);
                     }
 
                 }catch (JSONException e) {
@@ -168,61 +248,67 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoOficialResponsavel(ArrayList<Funcionario> listaOficiaisMySql) {
+    private void configurarCampoOficialResponsavel(List<Especialista> listaDeEspecialistasRecuperados) {
 
-        linearLayoutOficialResponsavel.removeAllViews();
+        linearLayoutEspecialista.removeAllViews();
 
-        adapterOficiais = new ArrayAdapter<Funcionario>(getActivity(),
+        adapterEspecialistas = new ArrayAdapter<Especialista>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
-                (listaOficiaisMySql));
-        autoCompleteTextViewOficialResponsavel.setAdapter(adapterOficiais);
-        autoCompleteTextViewOficialResponsavel.setThreshold(1);
+                (listaDeEspecialistasRecuperados));
+        autoCompleteTextViewEspecialista.setAdapter(adapterEspecialistas);
+        autoCompleteTextViewEspecialista.setThreshold(1);
 
-        arrayListOficiaisSelecionados = new ArrayList<Funcionario>();
-        adapterOficiais = new ArrayAdapter<Funcionario>(getActivity(),
+        listaDeEspecialistasSelecionadosNaoValidados = new ArrayList<Especialista>();
+        adapterEspecialistas = new ArrayAdapter<Especialista>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListOficiaisSelecionados);
+                listaDeEspecialistasSelecionadosNaoValidados);
 
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewOficialResponsavel);
+        if(listaDeEspecialistasSelecionadosValidados == null) {
+            linearLayoutEspecialista.removeAllViews();
+        }else{
+            criarTextViewParaEspecialistasSelecionados();
+            for(Especialista especialistaRecebido : listaDeEspecialistasSelecionadosValidados) {
+                listaDeEspecialistasSelecionadosNaoValidados.add(especialistaRecebido);
+            }
+        }
 
-        btnAdicionarOficiail.setOnClickListener(new View.OnClickListener() {
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewEspecialista);
+
+        btnAdicionarEspecialista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AddRemoveTextView.adicionarTextViewUsuario(getActivity(), autoCompleteTextViewOficialResponsavel,
-                        listaOficiaisRecuperados, arrayListOficiaisSelecionados, adapterOficiais, linearLayoutOficialResponsavel);
+                AddRemoveTextView.adicionarTextViewEspecialista(getActivity(), autoCompleteTextViewEspecialista,
+                        AtendimentoRegisterFragment1.this.listaDeEspecialistasRecuperados, listaDeEspecialistasSelecionadosNaoValidados,
+                        adapterEspecialistas, linearLayoutEspecialista);
             }
         });
     }
 
     private void popularCampoAtendidoComDB() {
 
-        UsuarioController usuarioController = new UsuarioController();
-        usuarioController.listar(getActivity(), new IVolleyCallback() {
+        UsuarioController atendidoController = new UsuarioController();
+        atendidoController.listar(getActivity(), new IVolleyCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSucess(String response) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        GsonBuilder customGson = new GsonBuilder();
+                        customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                        customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                        Gson gson = customGson.create();
+                        Usuario atendido = gson.fromJson(String.valueOf(jsonObject), Usuario.class);
 
-                            Usuario usuario = new Usuario();
-                            usuario.setId(Integer.valueOf(object.getString("id")));
-                            usuario.setNomeCompleto(object.getString("nomeCompleto"));
-                            usuario.setCpf(object.getString("cpf"));
+                        listaDeAtendidosRecuperados.add(atendido);
+                        configurarCampoAtendido(listaDeAtendidosRecuperados);
 
-                            listaAtendidosRecuperados.add(usuario);
-
-                            configurarCampoAtendido(listaAtendidosRecuperados);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -233,7 +319,7 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoAtendido(ArrayList<Usuario> listaAtendidosMySql) {
+    private void configurarCampoAtendido(List<Usuario> listaAtendidosMySql) {
 
         linearLayoutAtendido.removeAllViews();
 
@@ -243,10 +329,19 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         autoCompleteTextViewAtendido.setAdapter(adapterAtendidos);
         autoCompleteTextViewAtendido.setThreshold(1);
 
-        arrayListAtendidosSelecionados = new ArrayList<Usuario>();
+        listaDeAtendidosSelecionadosNaoValidados = new ArrayList<Usuario>();
         adapterAtendidos = new ArrayAdapter<Usuario>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                arrayListAtendidosSelecionados);
+                listaDeAtendidosSelecionadosNaoValidados);
+
+        if(listaDeAtendidosSelecionadosValidados == null) {
+            linearLayoutEspecialista.removeAllViews();
+        }else{
+            criarTextViewParaAtendidosSelecionados();
+            for(Usuario atendidoRecebido : listaDeAtendidosSelecionadosValidados) {
+                listaDeAtendidosSelecionadosNaoValidados.add(atendidoRecebido);
+            }
+        }
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewAtendido);
 
@@ -255,13 +350,13 @@ public class AtendimentoRegisterFragment1 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewAtendido(getActivity(), autoCompleteTextViewAtendido,
-                        listaAtendidosRecuperados, arrayListAtendidosSelecionados, adapterAtendidos, linearLayoutAtendido);
+                        listaDeAtendidosRecuperados, listaDeAtendidosSelecionadosNaoValidados, adapterAtendidos, linearLayoutAtendido);
             }
         });
     }
 
-    private void popularCampoUnidadeAtendidoComDB() {
-
+    private void popularCampoUnidadeDoServicoComDB()
+    {
         UnidadeController unidadeController = new UnidadeController();
         unidadeController.listar(getActivity(), new IVolleyCallback() {
             @Override
@@ -269,24 +364,19 @@ public class AtendimentoRegisterFragment1 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Unidade unidade = new Unidade();
-                            unidade.setId(Integer.valueOf(object.getString("id")));
-                            unidade.setNome(object.getString("nome"));
+                        Unidade unidade = new Unidade();
+                        unidade.setId(Integer.parseInt(object.getString("id")));
+                        unidade.setNome(object.getString("nome"));
 
-                            listaUnidadesRecuperadas.add(unidade);
+                        listaDeUnidadesRecuperadas.add(unidade);
+                        configurarCampoUnidadeServico(listaDeUnidadesRecuperadas);
 
-                            configurarCampoUnidadeAtendimento(listaUnidadesRecuperadas);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -297,20 +387,20 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoUnidadeAtendimento(ArrayList<Unidade> listaUnidadesRecuperadas) {
+    private void configurarCampoUnidadeServico(List<Unidade> listaUnidadesRecuperadas) {
 
         ArrayAdapter<Unidade> adapterUnidade= new ArrayAdapter<Unidade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 listaUnidadesRecuperadas);
-        autoCompleteTextViewUnidadeAtendimento.setAdapter(adapterUnidade);
-        autoCompleteTextViewUnidadeAtendimento.setThreshold(1);
+        autoCompleteTextViewUnidadeDoServico.setAdapter(adapterUnidade);
+        autoCompleteTextViewUnidadeDoServico.setThreshold(1);
 
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewUnidadeAtendimento);
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewUnidadeDoServico);
 
     }
 
-    private void popularCampoModalidadeComDB() {
-
+    private void popularCampoModalidadeDoServicoComDB()
+    {
         ModalidadeController modalidadeController = new ModalidadeController();
         modalidadeController.listar(getActivity(), new IVolleyCallback() {
             @Override
@@ -318,24 +408,19 @@ public class AtendimentoRegisterFragment1 extends Fragment {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Modalidade modalidade = new Modalidade();
-                            modalidade.setId(Integer.valueOf(object.getString("id")));
-                            modalidade.setDescricao(object.getString("descricao"));
+                        Modalidade modalidade = new Modalidade();
+                        modalidade.setId(Integer.parseInt(object.getString("id")));
+                        modalidade.setNome(object.getString("nome"));
 
-                            listaModalidadesRecuperadas.add(modalidade);
+                        listaDeModalidadesRecuperadas.add(modalidade);
+                        configurarCampoModalidadeDoServico(listaDeModalidadesRecuperadas);
 
-                            configurarCampoModalidade(listaModalidadesRecuperadas);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -346,47 +431,41 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoModalidade(ArrayList<Modalidade> listaModalidadesRecuperadas) {
+    private void configurarCampoModalidadeDoServico(List<Modalidade> listaModalidadesRecuperadas) {
 
         ArrayAdapter<Modalidade> adapterModalidade= new ArrayAdapter<Modalidade>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 listaModalidadesRecuperadas);
-        autoCompleteTextViewModalidade.setAdapter(adapterModalidade);
-        autoCompleteTextViewModalidade.setThreshold(1);
+        autoCompleteTextViewModalidadeDoServico.setAdapter(adapterModalidade);
+        autoCompleteTextViewModalidadeDoServico.setThreshold(1);
 
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewModalidade);
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewModalidadeDoServico);
 
     }
 
-    private void popularCampoAcessoAtendimentoComDb() {
-
+    private void popularCampoAcessoAoServicoComDb()
+    {
         AcessoAtendimentoController acessoAtendimentoController = new AcessoAtendimentoController();
+
         acessoAtendimentoController.listar(getActivity(), new IVolleyCallback() {
             @Override
             public void onSucess(String response) {
 
-                Log.e("Erro_Atendimento", response);
-
                 try {
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    String success = jsonObject.getString("success");
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if(success.equals("1")){
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Acesso acesso = new Acesso();
-                            acesso.setId(Integer.valueOf(object.getString("id")));
-                            acesso.setDescricao(object.getString("descricao"));
+                        Acesso acesso = new Acesso();
+                        acesso.setId(Integer.parseInt(object.getString("id")));
+                        acesso.setNome(object.getString("nome"));
 
-                            listaAcessosAtendimentosRecuperados.add(acesso);
+                        listaAcessosAoServicoRecuperados.add(acesso);
+                        configurarCampoAcessoAoServico(listaAcessosAoServicoRecuperados);
 
-                            configurarCampoAcessoAtendimento(listaAcessosAtendimentosRecuperados);
-
-                        }
                     }
 
                 }catch (JSONException e) {
@@ -397,144 +476,78 @@ public class AtendimentoRegisterFragment1 extends Fragment {
         });
     }
 
-    private void configurarCampoAcessoAtendimento(ArrayList<Acesso> listaAcessosAtendimentosRecuperados) {
+    private void configurarCampoAcessoAoServico(List<Acesso> listaAcessosAtendimentosRecuperados) {
 
         ArrayAdapter<Acesso> adapterAcessoServico= new ArrayAdapter<Acesso>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
-               listaAcessosAtendimentosRecuperados);
-        autoCompleteTextViewAcessoAtendimento.setAdapter(adapterAcessoServico);
-        autoCompleteTextViewAcessoAtendimento.setThreshold(1);
+                listaAcessosAtendimentosRecuperados);
+        autoCompleteTextViewAcessoAoServico.setAdapter(adapterAcessoServico);
+        autoCompleteTextViewAcessoAoServico.setThreshold(1);
 
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewAcessoAtendimento);
+        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewAcessoAoServico);
 
     }
 
-    private void receberDadosAtendimentoPreenchidos()
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean validarCadastroDoServico() throws ParseException
     {
-        dataAtendimento = autoCompleteTextViewDataAtendimento.getText().toString();
+        if (
+                FieldValidator.validarDataDoServico(autoCompleteTextViewDataDoServico) &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewEspecialista,
+                        listaDeEspecialistasSelecionadosNaoValidados, "ESPECIALISTA") &&
+                FieldValidator.isListEmptyOrNull(autoCompleteTextViewAtendido,
+                        listaDeAtendidosSelecionadosNaoValidados, "ATENDIDO") &&
+                FieldValidator.validarUnidade(autoCompleteTextViewUnidadeDoServico, listaDeUnidadesRecuperadas) &&
+                FieldValidator.validarModalidade(autoCompleteTextViewModalidadeDoServico, listaDeModalidadesRecuperadas) &&
+                FieldValidator.validarAcessoAtendimento(autoCompleteTextViewAcessoAoServico, listaAcessosAoServicoRecuperados))
+{
+            receberDadosDoServicoPreenchidos();
+            return true;
+        }else { return false; }
+    }
 
-        for(int i = 0; i < arrayListOficiaisSelecionados.size(); i++) {
-            Funcionario oficialSelecionado = arrayListOficiaisSelecionados.get(i);
-            listaDeOficiaisSelecionados.add(String.valueOf(oficialSelecionado.getId()));
-        }
 
-        for(int i = 0; i < arrayListAtendidosSelecionados.size(); i++) {
-            Usuario usuarioSelecionado = arrayListAtendidosSelecionados.get(i);
-            listaDeAtendidosSelecionados.add(String.valueOf(usuarioSelecionado.getId()));
-        }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void receberDadosDoServicoPreenchidos() throws ParseException {
+        datatDoServico = DateFormater.StringToLocalDate(autoCompleteTextViewDataDoServico.getText().toString().trim());
+        listaDeEspecialistasSelecionadosValidados = listaDeEspecialistasSelecionadosNaoValidados;
+        listaDeAtendidosSelecionadosValidados = listaDeAtendidosSelecionadosNaoValidados;
 
-        for(int i = 0; i < listaUnidadesRecuperadas.size(); i++)
+        for (Unidade unidadeSelecionada : listaDeUnidadesRecuperadas)
         {
-            Unidade unidadeSelecionada = listaUnidadesRecuperadas.get(i);
-            if(unidadeSelecionada.getNome().equals(autoCompleteTextViewUnidadeAtendimento.getText().toString())) {
-                unidadeAtendimento = String.valueOf(unidadeSelecionada.getId());
-            }
+            if (unidadeSelecionada.getNome().equals
+                    (autoCompleteTextViewUnidadeDoServico.getText().toString().trim()))
+                unidadeDoServico = unidadeSelecionada;
         }
 
-        for(int i = 0; i < listaModalidadesRecuperadas.size(); i++) {
-            Modalidade modalidadeSelecionada = listaModalidadesRecuperadas.get(i);
-            if(modalidadeSelecionada.getDescricao().equals(autoCompleteTextViewModalidade.getText().toString())) {
-                modalidade = String.valueOf(modalidadeSelecionada.getId());
-            }
+        for (Modalidade modalidadeSelecionado : listaDeModalidadesRecuperadas)
+        {
+            if (modalidadeSelecionado.getNome().equals
+                    (autoCompleteTextViewModalidadeDoServico.getText().toString().trim()))
+                modalidadeDoServico = modalidadeSelecionado;
         }
 
-        for(int i = 0; i < listaAcessosAtendimentosRecuperados.size(); i++) {
-            Acesso acessoSelecionado = listaAcessosAtendimentosRecuperados.get(i);
-            if(acessoSelecionado.getDescricao().equals(autoCompleteTextViewAcessoAtendimento.getText().toString())) {
-                acessoAtendimento = String.valueOf(acessoSelecionado.getId());
-            }
+
+        for (Acesso acessoSelecionado : listaAcessosAoServicoRecuperados)
+        {
+            if (acessoSelecionado.getNome().equals
+                    (autoCompleteTextViewAcessoAoServico.getText().toString().trim()))
+                acessoAoServico = acessoSelecionado;
         }
 
     }
 
-    private boolean validarCadastroAtendimento() {
-        receberDadosAtendimentoPreenchidos();
-
-        if (!TextUtils.isEmpty(dataAtendimento)) {
-
-            if (dataAtendimento.replaceAll("[/]", "").length() == 8) {
-
-                if (!listaDeOficiaisSelecionados.isEmpty()) {
-
-                    if (!listaDeAtendidosSelecionados.isEmpty()) {
-
-                        if (!TextUtils.isEmpty(unidadeAtendimento)) {
-
-                            if (!TextUtils.isEmpty(modalidade)) {
-
-                                if (!TextUtils.isEmpty(acessoAtendimento)) {
-
-                                encapsularValoresParaEnvio();
-                                return true;
-
-                                }
-                                else {
-                                    Toast.makeText(getActivity(),
-                                            "O campo ACESSO AO SERVIÇO é obrigatório.",
-                                            Toast.LENGTH_SHORT).show();
-                                    autoCompleteTextViewAcessoAtendimento.requestFocus();
-                                    return false; }
-
-                            }
-                            else {
-                                Toast.makeText(getActivity(),
-                                        "O campo MODALIDADE é obrigatório.",
-                                        Toast.LENGTH_SHORT).show();
-                                autoCompleteTextViewModalidade.requestFocus();
-                                return false; }
-
-
-                        }
-                        else {
-                            Toast.makeText(getActivity(),
-                                    "O campo UNIDADE DO SERVIÇO é obrigatório.",
-                                    Toast.LENGTH_SHORT).show();
-                            autoCompleteTextViewUnidadeAtendimento.requestFocus();
-                            return false; }
-
-                    }
-                    else {
-                        Toast.makeText(getActivity(),
-                                "É necessário adicionar ao menos um ATENDIDO.",
-                                Toast.LENGTH_SHORT).show();
-                        autoCompleteTextViewAtendido.requestFocus();
-                        return false; }
-
-                }
-                else {
-                    Toast.makeText(getActivity(),
-                            "É necessário adicionar ao menos um OFICIAL RESPONSÁVEL.",
-                            Toast.LENGTH_SHORT).show();
-                    autoCompleteTextViewOficialResponsavel.requestFocus();
-                    return false; }
-
-            }
-            else {
-                Toast.makeText(getActivity(),
-                        "Digite uma senha válida.",
-                        Toast.LENGTH_SHORT).show();
-                autoCompleteTextViewDataAtendimento.requestFocus();
-                return false; }
-
-        }
-        else {
-            Toast.makeText(getActivity(),
-                    "O campo DATA DE ATENDIMENTO é obrigatório.",
-                    Toast.LENGTH_SHORT).show();
-            autoCompleteTextViewDataAtendimento.requestFocus();
-            return false; }
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Bundle encapsularValoresParaEnvio()
     {
         Bundle bundle = new Bundle();
 
-        bundle.putString("data", dataAtendimento);
-        bundle.putStringArrayList("listaOficiais", listaDeOficiaisSelecionados);
-        bundle.putStringArrayList("listaAtendidos", listaDeAtendidosSelecionados);
-        bundle.putString("unidade", unidadeAtendimento);
-        bundle.putString("modalidade", modalidade);
-        bundle.putString("acesso", acessoAtendimento);
+        bundle.putString("data", DateFormater.localDateToString(datatDoServico));
+        bundle.putSerializable("listaDeEspecialistas", (Serializable) listaDeEspecialistasSelecionadosValidados);
+        bundle.putSerializable("listaDeAtendidos", (Serializable) listaDeAtendidosSelecionadosValidados);
+        bundle.putSerializable("unidade", unidadeDoServico);
+        bundle.putSerializable("modalidade", modalidadeDoServico);
+        bundle.putSerializable("acesso", acessoAoServico);
 
         return bundle;
     }
@@ -542,10 +555,12 @@ public class AtendimentoRegisterFragment1 extends Fragment {
     private void abrirProximaTela() {
 
         btnProxima.setOnClickListener(new View.OnClickListener() {
+            @SneakyThrows
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroAtendimento())
+                if(validarCadastroDoServico())
                 {
                     Bundle valoresEncapsuladosParaEnvio = encapsularValoresParaEnvio();
 
@@ -564,12 +579,11 @@ public class AtendimentoRegisterFragment1 extends Fragment {
 
     @Override
     public void onResume() {
-
-        listaOficiaisRecuperados.clear();
-        listaAtendidosRecuperados.clear();
-        listaUnidadesRecuperadas.clear();
-        listaModalidadesRecuperadas.clear();
-        listaAcessosAtendimentosRecuperados.clear();
+        listaDeEspecialistasRecuperados.clear();
+        listaDeAtendidosRecuperados.clear();
+        listaDeUnidadesRecuperadas.clear();
+        listaDeModalidadesRecuperadas.clear();
+        listaAcessosAoServicoRecuperados.clear();
         super.onResume();
     }
 }

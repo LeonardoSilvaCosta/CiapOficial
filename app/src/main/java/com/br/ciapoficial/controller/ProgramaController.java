@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class ProgramaController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/programas";
 
-        String url = Constants.BASE_API_URL + "/programas";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

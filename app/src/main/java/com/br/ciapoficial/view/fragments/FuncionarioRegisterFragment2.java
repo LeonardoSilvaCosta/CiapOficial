@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.UfController;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
@@ -140,14 +140,13 @@ public class FuncionarioRegisterFragment2 extends Fragment {
     }
 
     private boolean validarCadastroFuncionario() {
-
         if (
                 FieldValidator.validarCep(textInputEditTextCep) &&
-                FieldValidator.validarUf(autoCompleteTextViewUf, listaEstadosRecuperados) &&
+                FieldValidator.validarUF(autoCompleteTextViewUf, listaEstadosRecuperados) &&
                 FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
-                FieldValidator.validarBairro(textInputEditTextBairro) &&
-                FieldValidator.validarLogradouro(textInputEditTextLogradouro) &&
-                FieldValidator.validarNumero(textInputEditTextNumero))
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextBairro, "BAIRRO") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextLogradouro, "LOGRADOURO") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumero, "NÚMERO"))
         {
             receberDadosFuncionarioPreenchidos();
             return true;

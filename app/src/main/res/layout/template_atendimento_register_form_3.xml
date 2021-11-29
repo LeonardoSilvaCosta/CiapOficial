@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.4">
+
+    <TextView
+        android:id="@+id/textTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="center"
+        android:text="Cadastrar Atendimento"
+        android:textColor="@color/lightGray"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="jelly_bean" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutProcedimento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/procedimento_not_null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitulo">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtProcedimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtDocumentoProduzido"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutDocumentoProduzido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/documento_produzido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutProcedimento">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtDocumentoProduzido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtEncaminhamento"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/btnAdicionarDocumentoProduzido"
+            android:text="+"
+            android:textSize="20dp"
+            android:layout_gravity="right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/Widget.AppCompat.Button.Colored">
+        </Button>
+
+        <com.bskim.maxheightscrollview.widgets.MaxHeightScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="20dp"
+            app:maxHeight="85dp">
+            <LinearLayout
+                android:id="@+id/linearLayoutDocumentoProduzido"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/borda_retangular"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+            </LinearLayout>
+        </com.bskim.maxheightscrollview.widgets.MaxHeightScrollView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEncaminhamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:hint="Insira uma opção de encaminhamento"
+        android:paddingLeft="5dp"
+        android:background="@drawable/background_cartao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDocumentoProduzido">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtEncaminhamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtSinaisSintomas"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/btnAdicionarEncaminhamento"
+            android:text="+"
+            android:textSize="20dp"
+            android:layout_gravity="right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/Widget.AppCompat.Button.Colored">
+        </Button>
+
+        <com.bskim.maxheightscrollview.widgets.MaxHeightScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="20dp"
+            app:maxHeight="85dp">
+            <LinearLayout
+                android:id="@+id/linearLayoutEncaminhamento"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/borda_retangular"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+            </LinearLayout>
+        </com.bskim.maxheightscrollview.widgets.MaxHeightScrollView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSinaisSintomas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/sinais_sintomas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEncaminhamento">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtSinaisSintomas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/edtMedicacao"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/btnAdicionarSinaisSintomas"
+            android:text="+"
+            android:textSize="20dp"
+            android:layout_gravity="right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/Widget.AppCompat.Button.Colored">
+        </Button>
+
+        <com.bskim.maxheightscrollview.widgets.MaxHeightScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="20dp"
+            app:maxHeight="85dp">
+            <LinearLayout
+                android:id="@+id/linearLayoutSinaisSintomas"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/borda_retangular"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+            </LinearLayout>
+        </com.bskim.maxheightscrollview.widgets.MaxHeightScrollView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutMedicacao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/medicacao_psiquiatrica"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSinaisSintomas">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/edtMedicacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:inputType="text"
+            android:drawableRight="@mipmap/ic_seta_para_baixo"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/btnAdicionarMedicacao"
+            android:text="+"
+            android:textSize="20dp"
+            android:layout_gravity="right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            style="@style/Widget.AppCompat.Button.Colored">
+        </Button>
+
+        <com.bskim.maxheightscrollview.widgets.MaxHeightScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="20dp"
+            app:maxHeight="85dp">
+            <LinearLayout
+                android:id="@+id/linearLayoutMedicacao"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/borda_retangular"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+            </LinearLayout>
+        </com.bskim.maxheightscrollview.widgets.MaxHeightScrollView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroupAfastamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutMedicacao">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Houve afastamento?"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <RadioButton
+            android:id="@+id/rbtnAfastamentoSim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="Sim"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/rbtnAfastamentoNao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="Não"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEvolucao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/evolucao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupAfastamento">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEvolucao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:inputType="textMultiLine"
+            tools:targetApi="jelly_bean" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEvolucao" />
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/cadastrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress" />
+</androidx.constraintlayout.widget.ConstraintLayout>

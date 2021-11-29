@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class TipoAvaliacaoController {
 
+    private String url = Constants.BASE_API_URL + "/tipos+de+avaliacoes";
+    
     public void listar(Context context, final IVolleyCallback callback) {
-
-        String url = Constants.BASE_API_URL + "/tipos_de_avaliacao";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

@@ -167,7 +167,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/txtAtendimento"
-                                    android:text="Novo atendimento"
+                                    android:text="Novo servico"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"

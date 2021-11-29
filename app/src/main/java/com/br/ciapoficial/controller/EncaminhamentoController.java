@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class EncaminhamentoController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/encaminhamentos";
 
-        String url = Constants.BASE_API_URL + "/encaminhamentos";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

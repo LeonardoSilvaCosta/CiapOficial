@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class UnidadeController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/unidades";
 
-        String url = Constants.BASE_API_URL + "/unidades";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

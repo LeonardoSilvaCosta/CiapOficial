@@ -1,6 +1,7 @@
 package com.br.ciapoficial.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Usuario extends Pessoa {
     private SituacaoFuncional situacaoFuncional;
     private Usuario titular;
     private Vinculo tipoVinculo;
-    private Set<Especialista> especialista;
+    private Set<Servico> servicos = new HashSet<>();
 
     public Usuario() {
 

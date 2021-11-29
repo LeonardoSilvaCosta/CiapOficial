@@ -25,7 +25,7 @@ import com.br.ciapoficial.controller.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
@@ -299,14 +299,14 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private boolean validarCadastroDoUsuario() throws ParseException {
         if (
                 FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
-                        listaPostoGradCatRecuperados) &&
-                        FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
-                        FieldValidator.validarRgMilitar(textInputEditTextRgMilitar) &&
-                        FieldValidator.validarNomeGuerra(textInputEditTextNomeGuerra) &&
-                        FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
-                        FieldValidator.validarDataDeInclusao(textInputEditTextDataInclusao) &&
-                        FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
-                                listaSituacoesFuncionaisRecuperadas))
+                listaPostoGradCatRecuperados) &&
+                FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
+                FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
+                FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
+                FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
+                        listaSituacoesFuncionaisRecuperadas))
         {
             receberDadosDoUsuarioPreenchidos();
             return true;

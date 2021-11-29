@@ -30,7 +30,7 @@ import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
@@ -68,11 +68,11 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private LinearLayout linearLayoutConteudo, linearLayoutTelefone;
     private TextInputLayout textInputLayoutTitular, textInputLayoutVinculo, textInputLayoutDataNascimento;
     private TextInputEditText textInputEditTextNomeCompleto, textInputEditTextDataNascimento,
-    textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone,
-    textInputEditTextEmail;
+            textInputEditTextCpf, textInputEditTextNumeroFilhos, textInputEditTextTelefone,
+            textInputEditTextEmail;
     private AutoCompleteTextView autoCompleteTextViewUfNatal, autoCompleteTextViewCidadeNatal,
-    autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade,
-    autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
+            autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade,
+            autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
     private RadioGroup radioGroupSexo, radioGroupTipoAtendido;
     private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
     private Button btnAdicionarTelefone, btnProxima;
@@ -411,20 +411,20 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                 try {
 
-                   JSONArray jsonArray = new JSONArray(response);
+                    JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            GsonBuilder customGson = new GsonBuilder();
-                            customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-                            customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-                            Gson gson = customGson.create();
-                            Usuario titular = gson.fromJson(String.valueOf(jsonObject), Usuario.class);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        GsonBuilder customGson = new GsonBuilder();
+                        customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                        customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                        Gson gson = customGson.create();
+                        Usuario titular = gson.fromJson(String.valueOf(jsonObject), Usuario.class);
 
-                            listaTitularesRecuperados.add(titular);
-                            configurarCampoTitular(listaTitularesRecuperados);
-                            Log.d("listaTit", listaTitularesRecuperados.toString());
+                        listaTitularesRecuperados.add(titular);
+                        configurarCampoTitular(listaTitularesRecuperados);
+                        Log.d("listaTit", listaTitularesRecuperados.toString());
 
                     }
 
@@ -459,18 +459,18 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                     JSONArray jsonArray = new JSONArray(response);
 
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject object = jsonArray.getJSONObject(i);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-                            Vinculo vinculo = new Vinculo();
-                            vinculo.setId(Integer.parseInt(object.getString("id")));
-                            vinculo.setNome(object.getString("descricao"));
+                        Vinculo vinculo = new Vinculo();
+                        vinculo.setId(Integer.parseInt(object.getString("id")));
+                        vinculo.setNome(object.getString("descricao"));
 
-                            listaVinculosRecuperados.add(vinculo);
-                            configurarCampoVinculo(listaVinculosRecuperados);
+                        listaVinculosRecuperados.add(vinculo);
+                        configurarCampoVinculo(listaVinculosRecuperados);
 
-                        }
+                    }
 
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -496,19 +496,19 @@ public class UsuarioRegisterFragment1 extends Fragment {
     public boolean validarCadastroUsuario() throws ParseException
     {
         if (
-                FieldValidator.validarNomeCompleto(textInputEditTextNomeCompleto) &&
-                        FieldValidator.validarDataDeNascimento(textInputEditTextDataNascimento) &&
-                        FieldValidator.validarCpf(textInputEditTextCpf) &&
-                        FieldValidator.validarSexo(radioGroupSexo, rbtnMasculino) &&
-                        FieldValidator.validarUf(autoCompleteTextViewUfNatal, listaUfsRecuperadas) &&
-                        FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas) &&
-                        FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados) &&
-                        FieldValidator.validarNumeroDeFilhos(textInputEditTextNumeroFilhos) &&
-                        FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas) &&
-                        FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
-                        FieldValidator.validarEmail(textInputEditTextEmail) &&
-                        FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
-                        FieldValidator.validarVinculo(autoCompleteTextViewVinculo, listaVinculosRecuperados, rbtnDependente))
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeCompleto, "NOME COMPLETO") &&
+                FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
+                FieldValidator.validarCpf(textInputEditTextCpf) &&
+                FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
+                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaUfsRecuperadas) &&
+                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas) &&
+                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados) &&
+                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
+                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas) &&
+                FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
+                FieldValidator.validarEmail(textInputEditTextEmail) &&
+                FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
+                FieldValidator.validarVinculo(autoCompleteTextViewVinculo, listaVinculosRecuperados, rbtnDependente))
         {
             receberDadosFuncionarioPreenchidos();
             return true;

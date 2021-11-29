@@ -23,11 +23,11 @@ import java.util.Map;
 
 import lombok.SneakyThrows;
 
-public class TipoAtendimentoController {
+public class TipoServicoController {
+
+    private String url = Constants.BASE_API_URL + "/tipos+de+servicos";
 
     public void listar(Context context, final IVolleyCallback callback) {
-
-        String url = Constants.BASE_API_URL + "/tipos_de_atendimento.php";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

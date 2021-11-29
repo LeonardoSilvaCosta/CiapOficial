@@ -1,5 +1,7 @@
 package com.br.ciapoficial.view.fragments;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -36,7 +38,7 @@ import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
@@ -70,8 +72,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.SneakyThrows;
-
-import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 public class FuncionarioUpdateFragment3 extends Fragment {
 
@@ -555,17 +555,17 @@ public class FuncionarioUpdateFragment3 extends Fragment {
                 FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
                         listaPostoGradCatRecuperados) &&
                         FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
-                        FieldValidator.validarRgMilitar(textInputEditTextRgMilitar) &&
-                        FieldValidator.validarNomeGuerra(textInputEditTextNomeGuerra) &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
                         FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
-                        FieldValidator.validarDataDeInclusao(textInputEditTextDataInclusao) &&
+                        FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
                         FieldValidator.validarFuncaoAdministrativa(autoCompleteTextViewFuncaoAdministrativa,
                                 listaFuncoesAdministrativasRecuperadas) &&
                         FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
                                 listaSituacoesFuncionaisRecuperadas) &&
                         FieldValidator.validarEspecialidade(autoCompleteTextViewEspecialidade,
                                 listaEspecialidadesRecuperadas) &&
-                        FieldValidator.validarRegistroConselho(textInputEditTextRegistroConselho) &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRegistroConselho, "REGISTRO DO CONSELHO") &&
                         FieldValidator.validarConfirmacaoDeSenha(textInputEditTextConfirmarSenha,
                                 funcionarioRecebidoDoDb.getSenha()))
         {

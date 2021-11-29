@@ -33,7 +33,7 @@ import com.br.ciapoficial.enums.QuadroEnum;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.helper.FieldValidator;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
@@ -524,17 +524,17 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                 FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
                         listaPostoGradCatRecuperados) &&
                         FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
-                        FieldValidator.validarRgMilitar(textInputEditTextRgMilitar) &&
-                        FieldValidator.validarNomeGuerra(textInputEditTextNomeGuerra) &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
                         FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
-                        FieldValidator.validarDataDeInclusao(textInputEditTextDataInclusao) &&
+                        FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
                         FieldValidator.validarFuncaoAdministrativa(autoCompleteTextViewFuncaoAdministrativa,
                                 listaFuncoesAdministrativasRecuperadas) &&
                         FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
                                 listaSituacoesFuncionaisRecuperadas) &&
                         FieldValidator.validarEspecialidade(autoCompleteTextViewEspecialidade,
                                 listaEspecialidadesRecuperadas) &&
-                        FieldValidator.validarRegistroConselho(textInputEditTextRegistroConselho))
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRegistroConselho, "REGISTRO DO CONSELHO"))
         {
             receberDadosDoFuncionarioPreenchidos();
             return true;
@@ -731,8 +731,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(validarCadastroDoFuncionario())
-                {
+                if(validarCadastroDoFuncionario()) {
                     if(quadro.toString().equals(QuadroEnum.QCOPM.getNome()))
                     {
                         Especialista novoEspecialista;

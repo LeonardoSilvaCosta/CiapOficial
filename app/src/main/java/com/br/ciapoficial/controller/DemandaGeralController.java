@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class DemandaGeralController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL+ "/demandas+gerais";
 
-        String url = Constants.BASE_API_URL+ "/demandas+gerais";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

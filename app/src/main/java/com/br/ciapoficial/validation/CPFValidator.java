@@ -1,4 +1,4 @@
-package com.br.ciapoficial.helper;
+package com.br.ciapoficial.validation;
 
 public class CPFValidator {
 

@@ -20,7 +20,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.GsonLocalDateSerializer;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
@@ -41,11 +40,9 @@ public class EspecialistaController extends FuncionarioController {
 
     public void cadastrar(Context context, Especialista especialista, final IVolleyCallback callback) {
 
-        String url = Constants.BASE_API_URL + "/especialistas";
-
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlEspecialistas,
                 new Response.Listener<String>() {
                     @SneakyThrows
                     @Override
@@ -102,6 +99,60 @@ public class EspecialistaController extends FuncionarioController {
                 Gson gson = gsonBuilder.setPrettyPrinting().create();
 
                 return gson.toJson(especialista).getBytes();
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+    public void listar(Context context, final IVolleyCallback callback) {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlEspecialistas,
+                new Response.Listener<String>() {
+                    @SneakyThrows
+                    @Override
+                    public void onResponse(String response) {
+
+                        callback.onSucess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                return headers;
             }
         };
 

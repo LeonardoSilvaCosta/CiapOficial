@@ -25,9 +25,9 @@ import lombok.SneakyThrows;
 
 public class DocumentoProduzidoController {
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    private String url = Constants.BASE_API_URL + "/documentos+produzidos";
 
-        String url = Constants.BASE_API_URL + "/documentos+produzidos";
+    public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
 

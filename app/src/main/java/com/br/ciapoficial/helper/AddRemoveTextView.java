@@ -9,92 +9,77 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.br.ciapoficial.model.Funcionario;
+import com.br.ciapoficial.model.Especialista;
 import com.br.ciapoficial.model.PessoaTelefoneId;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
-import com.br.ciapoficial.model.in_atendimento.Deslocamento;
-import com.br.ciapoficial.model.in_atendimento.DocumentoProduzido;
-import com.br.ciapoficial.model.in_atendimento.Encaminhamento;
-import com.br.ciapoficial.model.in_atendimento.MedicacaoPsiquiatrica;
-import com.br.ciapoficial.model.in_atendimento.SinalSintoma;
+import com.br.ciapoficial.model.in_servico.Deslocamento;
+import com.br.ciapoficial.model.in_servico.DocumentoProduzido;
+import com.br.ciapoficial.model.in_servico.Encaminhamento;
+import com.br.ciapoficial.model.in_servico.MedicacaoPsiquiatrica;
+import com.br.ciapoficial.model.in_servico.SinalSintoma;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class AddRemoveTextView {
 
-    public static void adicionarTextViewUsuario(Context context, AutoCompleteTextView campo,
-                                                List<Funcionario> oficiasRecuperados, List<Funcionario> listaDisplay,
-                                                ArrayAdapter<Funcionario> adapter, LinearLayout linearLayout)
+    public static void adicionarTextViewEspecialista(Context context, AutoCompleteTextView campo,
+                                                     List<Especialista> oficiasRecuperados, List<Especialista> listaDisplay,
+                                                     ArrayAdapter<Especialista> adapter, LinearLayout linearLayout)
     {
 
         String textoRecebido = campo.getText().toString();
-
         TextView textView = new TextView(context);
+        if (textoRecebido.isEmpty()) {
+            campo.setError("O campo para inserção de OFICIAL RESPONSÁVEL está vazio.");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+        } else {
+            if (!(listaDisplay.toString().contains(textoRecebido))) {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(textoRecebido);
+                textView.setTag("lista");
 
-        if(textoRecebido.equals(""))
-        {
-            Toast.makeText(context,
-                    "Você precisa selecionar um item para poder adicionar à lista.",
-                    Toast.LENGTH_SHORT).show();
-        }else if(!(listaDisplay.toString().contains(textoRecebido)))
-        {
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
+                linearLayout.addView(textView);
 
-            linearLayout.addView(textView);
+                campo.setText("");
 
-            campo.setText("");
-
-            String textoRecebidoSemEspacos = textoRecebido.replace(" ", "");
-            String [] splitTextoRecebidoSemEspacos = textoRecebidoSemEspacos.split("-");
-            String rgMilitar = splitTextoRecebidoSemEspacos[1];
-
-            for(int i = 0; i < oficiasRecuperados.size(); i++) {
-                Funcionario oficialSelecionado = oficiasRecuperados.get(i);
-                if(oficialSelecionado.getRgMilitar().equals(rgMilitar)) {
-                    listaDisplay.add(oficialSelecionado);
+                for(Especialista oficial : oficiasRecuperados) {
+                    if(oficial.toString().equals(textoRecebido)) {
+                        listaDisplay.add(oficial);
+                    }
+                    adapter.notifyDataSetChanged();
                     break;
                 }
-            }
-            adapter.notifyDataSetChanged();
-        }
-        else
-        {
-            Toast.makeText(context,
-                    "Esse item já foi adicionado.",
-                    Toast.LENGTH_SHORT).show();
-            campo.setText("");
-        }
 
+            } else {
+                campo.setError("Esse OFICIAL já foi inserido.");
+                campo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campo);
+                campo.setText("");
+            }
+        }
         removerItemDaListaDeOficiaisResponsaveis(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeOficiaisResponsaveis(TextView textView, List<Funcionario> listaDisplay,
-                                                                ArrayAdapter<Funcionario> adapter)
+    public static void removerItemDaListaDeOficiaisResponsaveis(TextView textView, List<Especialista> listaDisplay,
+                                                                ArrayAdapter<Especialista> adapter)
     {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        textView.setOnClickListener(v -> {
 
-                String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
-                {
-                    Funcionario oficialSelecionado = listaDisplay.get(i);
-                    String dadosOficialSelecionado = oficialSelecionado.toString();
-                    if(dadosOficialSelecionado.equals(string))
-                    {
-                        listaDisplay.remove(oficialSelecionado);
-                        adapter.notifyDataSetChanged();
+            String string = textView.getText().toString();
+            for (Especialista oficialSelecionado : listaDisplay) {
+                if (oficialSelecionado.toString().equals(string)) {
+                    listaDisplay.remove(oficialSelecionado);
+                    adapter.notifyDataSetChanged();
 
-                        textView.setVisibility(View.GONE);
-                        break;
+                    textView.setVisibility(View.GONE);
+                    break;
 
-                    }
                 }
             }
         });
@@ -109,7 +94,7 @@ public class AddRemoveTextView {
 //            listaDeTelefonesRecebidosParaAtualizar.add(telefone.next());
 //        }
 
-        String textoRecebido = Mascaras.removerMascaras(campo.getText().toString());
+        String textoRecebido = Mascaras.removerMascaras(Objects.requireNonNull(campo.getText()).toString());
         TextView textView = new TextView(context);
 
         if (textoRecebido.isEmpty()) {
@@ -152,22 +137,19 @@ public class AddRemoveTextView {
 
     public static void removerItemDaListaDeTelefonesObjeto(TextView textView, List<Telefone> listaDisplay)
     {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        textView.setOnClickListener(v -> {
 
-                String string = textView.getText().toString();
-                for(Iterator<Telefone> iter = listaDisplay.iterator(); iter.hasNext();)
+            String string = textView.getText().toString();
+            for(Iterator<Telefone> iter = listaDisplay.iterator(); iter.hasNext();)
+            {
+                String telefoneSelecionado = iter.next().getPessoaTelefoneId().getTelefone();
+                if(telefoneSelecionado.equals(string))
                 {
-                    String telefoneSelecionado = iter.next().getPessoaTelefoneId().getTelefone();
-                    if(telefoneSelecionado.equals(string))
-                    {
-                        listaDisplay.remove(telefoneSelecionado);
+                    listaDisplay.remove(telefoneSelecionado);
 
-                        textView.setVisibility(View.GONE);
-                        break;
+                    textView.setVisibility(View.GONE);
+                    break;
 
-                    }
                 }
             }
         });
@@ -265,53 +247,45 @@ public class AddRemoveTextView {
 
     }
 
-    public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo, ArrayList<Usuario> atendidosRecuperados, ArrayList<Usuario> listaDisplay,
+    public static void adicionarTextViewAtendido(Context context, AutoCompleteTextView campo,
+                                                 List<Usuario> usuariosRecuperados, List<Usuario> listaDisplay,
                                                  ArrayAdapter<Usuario> adapter, LinearLayout linearLayout)
     {
 
         String textoRecebido = campo.getText().toString();
-
         TextView textView = new TextView(context);
+        if (textoRecebido.isEmpty()) {
+            campo.setError("O campo para inserção de ATENDIDO está vazio.");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+        } else {
+            if (!(listaDisplay.toString().contains(textoRecebido))) {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(textoRecebido);
+                textView.setTag("lista");
 
-        if(textoRecebido.equals(""))
-        {
-            Toast.makeText(context,
-                    "Você precisa selecionar um item para poder adicionar à lista.",
-                    Toast.LENGTH_SHORT).show();
-        }else if(!(listaDisplay.toString().contains(textoRecebido)))
-        {
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
+                linearLayout.addView(textView);
 
-            linearLayout.addView(textView);
-            campo.setText("");
+                campo.setText("");
 
-            String textoRecebidoSemEspacos = textoRecebido.replace(" ", "");
-            String [] splitTextoRecebidoSemEspacos = textoRecebidoSemEspacos.split("-");
-            String cpf = splitTextoRecebidoSemEspacos[1];
-
-            for(int i = 0; i < atendidosRecuperados.size(); i++) {
-                Usuario usuarioSelecionado = atendidosRecuperados.get(i);
-                if(usuarioSelecionado.getCpf().equals(cpf)) {
-                    listaDisplay.add(usuarioSelecionado);
-                    break;
+                for(Usuario atendido : usuariosRecuperados) {
+                    if(atendido.toString().equals(textoRecebido)) {
+                        listaDisplay.add(atendido);
+                        break;
+                    }
                 }
-            }
-            adapter.notifyDataSetChanged();
-        }
-        else
-        {
-            Toast.makeText(context,
-                    "Esse item já foi adicionado.",
-                    Toast.LENGTH_SHORT).show();
-            campo.setText("");
-        }
 
+            } else {
+                campo.setError("Esse ATENDIDO já foi inserido.");
+                campo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campo);
+                campo.setText("");
+            }
+        }
         removerItemDaListaDeAtendidos(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeAtendidos(TextView textView, ArrayList<Usuario> listaDisplay,
+    public static void removerItemDaListaDeAtendidos(TextView textView, List<Usuario> listaDisplay,
                                                      ArrayAdapter<Usuario> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
@@ -319,13 +293,12 @@ public class AddRemoveTextView {
             public void onClick(View v) {
 
                 String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
+                for(Iterator<Usuario> iter = listaDisplay.iterator(); iter.hasNext();)
                 {
-                    Usuario usuarioSelecionado = listaDisplay.get(i);
-                    String dadosAtendidoSelecionado = usuarioSelecionado.toString();
-                    if(dadosAtendidoSelecionado.equals(string))
+                    Usuario oficialSelecionado = iter.next();
+                    if(oficialSelecionado.toString().equals(string))
                     {
-                        listaDisplay.remove(usuarioSelecionado);
+                        listaDisplay.remove(oficialSelecionado);
                         adapter.notifyDataSetChanged();
 
                         textView.setVisibility(View.GONE);
@@ -338,50 +311,45 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewDeslocamento(Context context, AutoCompleteTextView campo,
-                                                     ArrayList<Deslocamento> deslocamentosRecuperados,
-                                                     ArrayList<Deslocamento> listaDisplay,
+                                                     List<Deslocamento> deslocamentosRecuperados,
+                                                     List<Deslocamento> listaDisplay,
                                                      ArrayAdapter<Deslocamento> adapter, LinearLayout linearLayout)
     {
 
         String textoRecebido = campo.getText().toString();
-
         TextView textView = new TextView(context);
+        if (textoRecebido.isEmpty()) {
+            campo.setError("O campo para inserção de DESLOCAMENTO está vazio.");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+        } else {
+            if (!(listaDisplay.toString().contains(textoRecebido))) {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(textoRecebido);
+                textView.setTag("lista");
 
-        if(textoRecebido.equals(""))
-        {
-            Toast.makeText(context,
-                    "Você precisa selecionar um item para poder adicionar à lista.",
-                    Toast.LENGTH_SHORT).show();
-        }else if(!(listaDisplay.toString().contains(textoRecebido)))
-        {
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
+                linearLayout.addView(textView);
 
-            linearLayout.addView(textView);
-            campo.setText("");
+                campo.setText("");
 
-            for(int i = 0; i < deslocamentosRecuperados.size(); i++) {
-                Deslocamento deslocamentoSelecionado = deslocamentosRecuperados.get(i);
-                if(deslocamentoSelecionado.getDescricao().equals(textoRecebido)) {
-                    listaDisplay.add(deslocamentoSelecionado);
-                    break;
+                for(Deslocamento deslocamento : deslocamentosRecuperados) {
+                    if(deslocamento.toString().equals(textoRecebido)) {
+                        listaDisplay.add(deslocamento);
+                        break;
+                    }
                 }
-            }
-            adapter.notifyDataSetChanged();
-        }
-        else
-        {
-            Toast.makeText(context,
-                    "Esse item já foi adicionado.",
-                    Toast.LENGTH_SHORT).show();
-            campo.setText("");
-        }
 
+            } else {
+                campo.setError("Esse DESLOCAMENTO já foi inserido.");
+                campo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campo);
+                campo.setText("");
+            }
+        }
         removerItemDaListaDeDeslocamento(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeDeslocamento(TextView textView, ArrayList<Deslocamento> listaDisplay,
+    public static void removerItemDaListaDeDeslocamento(TextView textView, List<Deslocamento> listaDisplay,
                                                         ArrayAdapter<Deslocamento> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
@@ -389,11 +357,10 @@ public class AddRemoveTextView {
             public void onClick(View v) {
 
                 String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
+                for(Iterator<Deslocamento> iter = listaDisplay.iterator(); iter.hasNext();)
                 {
-                    Deslocamento deslocamentoSelecionado = listaDisplay.get(i);
-                    String dadosDeslocamentoSelecionado = deslocamentoSelecionado.toString();
-                    if(dadosDeslocamentoSelecionado.equals(string))
+                    Deslocamento deslocamentoSelecionado = iter.next();
+                    if(deslocamentoSelecionado.toString().equals(string))
                     {
                         listaDisplay.remove(deslocamentoSelecionado);
                         adapter.notifyDataSetChanged();
@@ -408,8 +375,8 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewDocumentoProduzido(Context context, AutoCompleteTextView campo,
-                                                           ArrayList<DocumentoProduzido> documentosRecuperados,
-                                                           ArrayList<DocumentoProduzido> listaDisplay,
+                                                           List<DocumentoProduzido> documentosRecuperados,
+                                                           List<DocumentoProduzido> listaDisplay,
                                                            ArrayAdapter<DocumentoProduzido> adapter, LinearLayout linearLayout)
     {
 
@@ -433,7 +400,7 @@ public class AddRemoveTextView {
 
             for(int i = 0; i < documentosRecuperados.size(); i++) {
                 DocumentoProduzido documentoSelecionado = documentosRecuperados.get(i);
-                if(documentoSelecionado.getDescricao().equals(textoRecebido)) {
+                if(documentoSelecionado.getNome().equals(textoRecebido)) {
                     listaDisplay.add(documentoSelecionado);
                     break;
                 }
@@ -451,7 +418,7 @@ public class AddRemoveTextView {
         removerItemDaListaDeDocumento(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeDocumento(TextView textView, ArrayList<DocumentoProduzido> listaDisplay,
+    public static void removerItemDaListaDeDocumento(TextView textView, List<DocumentoProduzido> listaDisplay,
                                                      ArrayAdapter<DocumentoProduzido> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
@@ -478,69 +445,66 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewEncaminhamento(Context context, AutoCompleteTextView campo,
-                                                       ArrayList<Encaminhamento> encaminhamentosRecuperados,
-                                                       ArrayList<Encaminhamento> listaDisplay,
-                                                       ArrayAdapter<Encaminhamento> adapter, LinearLayout linearLayout)
+                                                       List<Encaminhamento> encaminhamentosRecuperados,
+                                                       List<Encaminhamento> listaDisplay,
+                                                       ArrayAdapter<Encaminhamento> adapterEncaminhamento,
+                                                       LinearLayout linearLayout)
     {
 
-        String textoRecebido = campo.getText().toString();
+        String encaminhamentoDigitado = campo.getText().toString();
 
         TextView textView = new TextView(context);
+        if(encaminhamentoDigitado.isEmpty()) {
+            campo.setError(
+                    "O campo para inserção de ENCAMINHAMENTO está vazio.");
+            campo.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campo);
+        }else {
+            if (!(listaDisplay.toString().contains(encaminhamentoDigitado))) {
+                textView.setPadding(0, 10, 0, 10);
+                textView.setText(encaminhamentoDigitado);
+                textView.setTag("lista");
 
-        if(textoRecebido.equals(""))
-        {
-            Toast.makeText(context,
-                    "Você precisa selecionar um item para poder adicionar à lista.",
-                    Toast.LENGTH_SHORT).show();
-        }else if(!(listaDisplay.toString().contains(textoRecebido)))
-        {
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
+                linearLayout.addView(textView);
+                campo.setText("");
 
-            linearLayout.addView(textView);
-            campo.setText("");
+                for (Encaminhamento encaminhamentoSelecionado : encaminhamentosRecuperados) {
+                    if (encaminhamentoSelecionado.toString().equals(encaminhamentoDigitado)) {
 
-            for(int i = 0; i < encaminhamentosRecuperados.size(); i++) {
-                Encaminhamento encaminhamentoSelecionado = encaminhamentosRecuperados.get(i);
-                if((encaminhamentoSelecionado.getDestino() + " - " + encaminhamentoSelecionado.getTipo()).equals(textoRecebido)) {
-                    listaDisplay.add(encaminhamentoSelecionado);
-                    break;
+                        listaDisplay.add(encaminhamentoSelecionado);
+                        break;
+                    }
                 }
+                adapterEncaminhamento.notifyDataSetChanged();
+            } else {
+                campo.setError("Essa opção de ENCAMINHAMENTO já foi inserida.");
+                campo.requestFocus();
+                DellayAction.clearErrorAfter2Seconds(campo);
+                campo.setText("");
             }
-            adapter.notifyDataSetChanged();
-        }
-        else
-        {
-            Toast.makeText(context,
-                    "Esse item já foi adicionado.",
-                    Toast.LENGTH_SHORT).show();
-            campo.setText("");
         }
 
-        removerItemDaListaDeEncaminhamento(textView, listaDisplay, adapter);
+        removerItemDaListaDeEncaminhamento(textView, listaDisplay, adapterEncaminhamento);
     }
 
-    public static void removerItemDaListaDeEncaminhamento(TextView textView, ArrayList<Encaminhamento> listaDisplay,
-                                                          ArrayAdapter<Encaminhamento> adapter)
+    public static void removerItemDaListaDeEncaminhamento(TextView textView, List<Encaminhamento> listaDisplay,
+                                                          ArrayAdapter<Encaminhamento> adapterEncaminhamento)
     {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String string = textView.getText().toString();
-                for(int i = 0; i < listaDisplay.size(); i++)
-                {
-                    Encaminhamento encaminhamentoSelecionado = listaDisplay.get(i);
+                String conteudoDoTextView = textView.getText().toString();
+                for(Encaminhamento encaminhamentoSelecionado : listaDisplay) {
                     String dadosEncaminhamentoSelecionado = encaminhamentoSelecionado.toString();
-                    if(dadosEncaminhamentoSelecionado.equals(string))
+                    if(dadosEncaminhamentoSelecionado.equals(conteudoDoTextView))
                     {
                         listaDisplay.remove(encaminhamentoSelecionado);
-                        adapter.notifyDataSetChanged();
+
+                        adapterEncaminhamento.notifyDataSetChanged();
 
                         textView.setVisibility(View.GONE);
                         break;
-
                     }
                 }
             }
@@ -548,8 +512,8 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewSinalSintoma(Context context, AutoCompleteTextView campo,
-                                                     ArrayList<SinalSintoma> sinaisSintomasRecuperados,
-                                                     ArrayList<SinalSintoma> listaDisplay,
+                                                     List<SinalSintoma> sinaisSintomasRecuperados,
+                                                     List<SinalSintoma> listaDisplay,
                                                      ArrayAdapter<SinalSintoma> adapter, LinearLayout linearLayout)
     {
 
@@ -573,7 +537,7 @@ public class AddRemoveTextView {
 
             for(int i = 0; i < sinaisSintomasRecuperados.size(); i++) {
                 SinalSintoma sinalSintomaSelecionado = sinaisSintomasRecuperados.get(i);
-                if(sinalSintomaSelecionado.getDescricao().equals(textoRecebido)) {
+                if(sinalSintomaSelecionado.getNome().equals(textoRecebido)) {
                     listaDisplay.add(sinalSintomaSelecionado);
                     break;
                 }
@@ -591,7 +555,7 @@ public class AddRemoveTextView {
         removerItemDaListaDeSinalSintoma(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeSinalSintoma(TextView textView, ArrayList<SinalSintoma> listaDisplay,
+    public static void removerItemDaListaDeSinalSintoma(TextView textView, List<SinalSintoma> listaDisplay,
                                                         ArrayAdapter<SinalSintoma> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {
@@ -618,8 +582,8 @@ public class AddRemoveTextView {
     }
 
     public static void adicionarTextViewMedicacaoPsiquiatrica(Context context, AutoCompleteTextView campo,
-                                                              ArrayList<MedicacaoPsiquiatrica> medicacoesRecuperadas,
-                                                              ArrayList<MedicacaoPsiquiatrica> listaDisplay,
+                                                              List<MedicacaoPsiquiatrica> medicacoesRecuperadas,
+                                                              List<MedicacaoPsiquiatrica> listaDisplay,
                                                               ArrayAdapter<MedicacaoPsiquiatrica> adapter, LinearLayout linearLayout)
     {
 
@@ -643,7 +607,7 @@ public class AddRemoveTextView {
 
             for(int i = 0; i < medicacoesRecuperadas.size(); i++) {
                 MedicacaoPsiquiatrica medicacaoSelecionada = medicacoesRecuperadas.get(i);
-                if(medicacaoSelecionada.getDescricao().equals(textoRecebido)) {
+                if(medicacaoSelecionada.getNome().equals(textoRecebido)) {
                     listaDisplay.add(medicacaoSelecionada);
                     break;
                 }
@@ -661,7 +625,7 @@ public class AddRemoveTextView {
         removerItemDaListaDeMedicacaoPsiquiatrica(textView, listaDisplay, adapter);
     }
 
-    public static void removerItemDaListaDeMedicacaoPsiquiatrica(TextView textView, ArrayList<MedicacaoPsiquiatrica> listaDisplay,
+    public static void removerItemDaListaDeMedicacaoPsiquiatrica(TextView textView, List<MedicacaoPsiquiatrica> listaDisplay,
                                                                  ArrayAdapter<MedicacaoPsiquiatrica> adapter)
     {
         textView.setOnClickListener(new View.OnClickListener() {

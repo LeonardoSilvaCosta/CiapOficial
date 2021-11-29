@@ -73,7 +73,9 @@ public class UsuarioController extends PessoaController {
                             "504 Timeout Error",
                             Toast.LENGTH_SHORT).show();
                 }else{
-
+                    Toast.makeText(context,
+                            error.getStackTrace().toString(),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         }){
