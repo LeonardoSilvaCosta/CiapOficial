@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -82,7 +83,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     private List<Deslocamento> listaDeDeslocamentosSelecionadosValidados = new ArrayList<>();
     private List<DemandaEspecifica> listaDeDemandasEspecificasSelecionadasValidadas = new ArrayList<>();
     private String tipoServico;
-    private TipoAvaliacao tipoAvaliacao;
+    private TipoAvaliacao tipoAvaliacao = new TipoAvaliacao();
     private Programa programa;
     private DemandaGeral demandaGeral;
     private CondicaoLaboral condicaoLaboral;
@@ -258,7 +259,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
                     List<String> tiposDeServico = gson.fromJson(response, List.class);
                     listaTiposServicosRecuperados = tiposDeServico;
 
-                        configurarCampoTipoServico(listaTiposServicosRecuperados);
+                    configurarCampoTipoServico(listaTiposServicosRecuperados);
 
             }catch (Exception e) {
                     e.printStackTrace();
@@ -271,10 +272,10 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void configurarCampoTipoServico(List<String> listaTiposServicosRecuperados) {
 
-        ArrayAdapter<String> adapterTipoAtendimento= new ArrayAdapter<>(getActivity(),
+        ArrayAdapter<String> adapterTipoDeServico= new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 listaTiposServicosRecuperados);
-        autoCompleteTextViewTipoServico.setAdapter(adapterTipoAtendimento);
+        autoCompleteTextViewTipoServico.setAdapter(adapterTipoDeServico);
         autoCompleteTextViewTipoServico.setThreshold(1);
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewTipoServico);
@@ -677,28 +678,19 @@ public class AtendimentoRegisterFragment2 extends Fragment {
 
     private void receberDadosAtendimentoPreenchidos() {
 
-        for (String tipoServicoSelecionado : listaTiposServicosRecuperados)
-        {
-            if (tipoServicoSelecionado.equals
-                    (autoCompleteTextViewTipoServico.getText().toString().trim()))
-                tipoServico = tipoServicoSelecionado;
-            break;
-        }
+        tipoServico = autoCompleteTextViewTipoServico.getText().toString().trim();
 
         if (autoCompleteTextViewTipoServico.getText().toString().contains("Avaliação")) {
             for (TipoAvaliacao tipoAvaliacaoSelecionada : listaTiposAvaliacaoRecuperadas)
             {
-                if (tipoAvaliacaoSelecionada.getNome().equals
-                        (autoCompleteTextViewTipoServico.getText().toString().trim()))
+                if (tipoAvaliacaoSelecionada.getNome().equals(autoCompleteTextViewTipoAvaliacao.getText().toString().trim()))
                     tipoAvaliacao = tipoAvaliacaoSelecionada;
-                break;
             }
         } else {
             for (TipoAvaliacao tipoAvaliacaoSelecionada : listaTiposAvaliacaoRecuperadas)
             {
                 if (tipoAvaliacaoSelecionada.getNome().equals("Não se aplica")) {
                     tipoAvaliacao = tipoAvaliacaoSelecionada;
-                    break;
                 }
             }
         }
@@ -708,7 +700,6 @@ public class AtendimentoRegisterFragment2 extends Fragment {
             if (programaSelecionado.getNome().equals
                     (autoCompleteTextViewPrograma.getText().toString().trim()))
                 programa = programaSelecionado;
-            break;
         }
 
         listaDeDeslocamentosSelecionadosValidados = listaDeDeslocamentosSelecionadosNaoValidados;
@@ -719,7 +710,6 @@ public class AtendimentoRegisterFragment2 extends Fragment {
             if (demandaGeralSelecionada.getNome().equals
                     (autoCompleteTextViewDemandaGeral.getText().toString().trim()))
             demandaGeral = demandaGeralSelecionada;
-            break;
         }
 
         listaDeDemandasEspecificasSelecionadasValidadas = listaDeDemandasEspecificasSelecionadasNaoValidadas;
@@ -729,14 +719,12 @@ public class AtendimentoRegisterFragment2 extends Fragment {
                 if (condicaoLaboralSelecionada.getNome().equals
                         (autoCompleteTextViewCondicaoLaboral.getText().toString().trim()))
                     condicaoLaboral = condicaoLaboralSelecionada;
-                break;
             }
         } else {
             for (CondicaoLaboral condicaoLaboralSelecionada : listaCondicoesLaboraisRecuperadas)
             {
                 if (condicaoLaboralSelecionada.getNome().equals("Não se aplica")) {
                     condicaoLaboral = condicaoLaboralSelecionada;
-                    break;
                 }
             }
         }
@@ -756,6 +744,8 @@ public class AtendimentoRegisterFragment2 extends Fragment {
         bundle.putSerializable("demandaGeral", (Serializable) demandaGeral);
         bundle.putSerializable("listaDeDemandasEspecificas", (Serializable) listaDeDemandasEspecificasSelecionadasValidadas);
         bundle.putSerializable("condicaoLaboral", (Serializable) condicaoLaboral);
+
+        Toast.makeText(getContext(), tipoAvaliacao.toString(), Toast.LENGTH_SHORT).show();
 
         return bundle;
     }

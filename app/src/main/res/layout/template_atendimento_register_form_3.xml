@@ -113,7 +113,6 @@
         android:layout_marginRight="30dp"
         android:hint="Insira uma opção de encaminhamento"
         android:paddingLeft="5dp"
-        android:background="@drawable/background_cartao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

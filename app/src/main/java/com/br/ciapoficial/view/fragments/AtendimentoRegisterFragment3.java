@@ -66,7 +66,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import lombok.SneakyThrows;
 
@@ -682,7 +681,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             if (procedimentoSelecionado.getNome().equals
                     (autoCompleteTextViewProcedimento.getText().toString().trim()))
                 procedimento = procedimentoSelecionado;
-            break;
         }
 
         listaDeDocumentosSelecionadosValidados = listaDeDocumentosSelecionadosNaoValidados;
@@ -759,19 +757,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         avaliacao = new Avaliacao();
 
         avaliacao.setData(data);
-        avaliacao.setEspecialistas((Set<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas"));
-        avaliacao.setUsuarios((Set<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos"));
+        avaliacao.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
+        avaliacao.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
         avaliacao.setUnidade( (Unidade) valoresRecebidosFragment1.getSerializable("unidade"));
         avaliacao.setModalidade( (Modalidade)(valoresRecebidosFragment1.getSerializable("modalidade")));
         avaliacao.setAcesso( (Acesso) (valoresRecebidosFragment1.getSerializable("acesso")));
         avaliacao.setTipoAvaliacao( (TipoAvaliacao) (valoresRecebidosFragment1e2.getSerializable("tipoAvaliacao")));
         avaliacao.setPrograma( (Programa) (valoresRecebidosFragment1e2.getSerializable("programa")));
-        avaliacao.setDeslocamentos( (Set<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos"));
+        avaliacao.setDeslocamentos(new HashSet<> ((ArrayList<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos")));
         avaliacao.setDemandaGeral( (DemandaGeral) (valoresRecebidosFragment1e2.getSerializable("demandaGeral")));
-        avaliacao.setDemandasEspecificas( (Set<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas"));
+        avaliacao.setDemandasEspecificas(new HashSet<> ((ArrayList<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas")));
         avaliacao.setProcedimento((procedimento));
-        avaliacao.setDocumentosProduzidos((Set<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados);
-        avaliacao.setEncaminhamentos((Set<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados);
+        avaliacao.setDocumentosProduzidos(new HashSet<>((ArrayList<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados));
+        avaliacao.setEncaminhamentos(new HashSet<>((ArrayList<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados));
         avaliacao.setAfastamento(afastamento);
         avaliacao.setEvolucao(evolucao);
 
@@ -788,19 +786,19 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         sae = new ServicoDeAssistenciaEspecial();
 
         sae.setData(data);
-        sae.setEspecialistas((Set<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas"));
-        sae.setUsuarios((Set<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos"));
+        sae.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
+        sae.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
         sae.setUnidade( (Unidade) valoresRecebidosFragment1.getSerializable("unidade"));
         sae.setModalidade( (Modalidade)(valoresRecebidosFragment1.getSerializable("modalidade")));
         sae.setAcesso( (Acesso) (valoresRecebidosFragment1.getSerializable("acesso")));
         sae.setPrograma( (Programa) (valoresRecebidosFragment1e2.getSerializable("programa")));
-        sae.setDeslocamentos( (Set<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos"));
+        sae.setDeslocamentos(new HashSet<> ((ArrayList<Deslocamento>) valoresRecebidosFragment1e2.getSerializable("listaDeDeslocamentos")));
         sae.setDemandaGeral( (DemandaGeral) (valoresRecebidosFragment1e2.getSerializable("demandaGeral")));
-        sae.setDemandasEspecificas( (Set<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas"));
+        sae.setDemandasEspecificas(new HashSet<> ((ArrayList<DemandaEspecifica>) valoresRecebidosFragment1e2.getSerializable("listaDeDemandasEspecificas")));
         sae.setCondicaoLaboral( (CondicaoLaboral) (valoresRecebidosFragment1e2.getSerializable("condicaoLaboral")));
         sae.setProcedimento((procedimento));
-        sae.setDocumentosProduzidos((Set<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados);
-        sae.setEncaminhamentos((Set<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados);
+        sae.setDocumentosProduzidos(new HashSet<>((ArrayList<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados));
+        sae.setEncaminhamentos(new HashSet<>((ArrayList<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados));
         sae.setAfastamento(afastamento);
         sae.setEvolucao(evolucao);
 
@@ -909,7 +907,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                         registrarAvaliacao(novaAvaliacao);
                         Toast.makeText(getContext(), "avaliacao", Toast.LENGTH_SHORT).show();
                     } else {
-
                         ServicoDeAssistenciaEspecial novoSae;
                         novoSae = encapsularValoresParaRegistroDeSae();
                         registrarSae(novoSae);
