@@ -11,7 +11,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -723,7 +722,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
         } else {
             for (CondicaoLaboral condicaoLaboralSelecionada : listaCondicoesLaboraisRecuperadas)
             {
-                if (condicaoLaboralSelecionada.getNome().equals("Não se aplica")) {
+                if (condicaoLaboralSelecionada.getNome().equals("N/A")) {
                     condicaoLaboral = condicaoLaboralSelecionada;
                 }
             }
@@ -744,8 +743,6 @@ public class AtendimentoRegisterFragment2 extends Fragment {
         bundle.putSerializable("demandaGeral", (Serializable) demandaGeral);
         bundle.putSerializable("listaDeDemandasEspecificas", (Serializable) listaDeDemandasEspecificasSelecionadasValidadas);
         bundle.putSerializable("condicaoLaboral", (Serializable) condicaoLaboral);
-
-        Toast.makeText(getContext(), tipoAvaliacao.toString(), Toast.LENGTH_SHORT).show();
 
         return bundle;
     }

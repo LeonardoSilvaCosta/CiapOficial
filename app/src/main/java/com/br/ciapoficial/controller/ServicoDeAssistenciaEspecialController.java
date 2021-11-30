@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.helper.GsonLocalDateSerializer;
+import com.br.ciapoficial.helper.GsonLocalDateTimeSerializer;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ import lombok.SneakyThrows;
 public class ServicoDeAssistenciaEspecialController {
     private static String TAG = ServicoDeAssistenciaEspecialController.class.getName();
 
-    private String url = BASE_API_URL + "/servicos+de+atencao+especial";
+    private String url = BASE_API_URL + "/servicos+de+assistencia+especial";
 
     public void registrar(Context context, ServicoDeAssistenciaEspecial servicoDeAssistenciaEspecial, final IVolleyCallback callback) {
 
@@ -96,6 +98,7 @@ public class ServicoDeAssistenciaEspecialController {
 
                 GsonBuilder gsonBuilder = new GsonBuilder();
                 gsonBuilder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+                gsonBuilder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
                 Gson gson = gsonBuilder.setPrettyPrinting().create();
 
                 return gson.toJson(servicoDeAssistenciaEspecial).getBytes();
