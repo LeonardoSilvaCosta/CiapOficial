@@ -25,7 +25,7 @@ import lombok.SneakyThrows;
 
 public class VinculoController {
 
-    String url = Constants.BASE_API_URL + "/tipos_vinculo";
+    String url = Constants.BASE_API_URL + "/tipos-vinculo";
 
     public void listar(Context context, final IVolleyCallback callback) {
 

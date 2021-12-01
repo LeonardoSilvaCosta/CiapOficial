@@ -1,6 +1,8 @@
 package com.br.ciapoficial.model.in_servico;
 
 
+import java.io.Serializable;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Procedimento {
+public class Procedimento implements Serializable {
     @EqualsAndHashCode.Include
     private int id;
     private String nome;

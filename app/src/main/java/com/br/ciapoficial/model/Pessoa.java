@@ -7,12 +7,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class Pessoa implements Serializable {
 
@@ -33,6 +31,8 @@ public abstract class Pessoa implements Serializable {
     private Funcionario responsavelCadastro;
     private LocalDateTime dataEdicao;
     private Funcionario responsavelEdicao;
+
+
 
 }
 

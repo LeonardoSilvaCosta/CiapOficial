@@ -54,15 +54,15 @@
                     android:orientation="vertical"
                     android:layout_marginTop="210dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    >
+                    android:layout_marginRight="10dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cardUpdateUser"
+                            android:id="@+id/cardAddFuncionario"
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_weight="1"
@@ -75,33 +75,33 @@
                                 <ImageView
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-                                    android:id="@+id/imgAtualizarPerfil"
-                                    android:src="@drawable/icon_man_police"
+                                    android:id="@+id/imgNovoFuncionario"
+                                    android:src="@drawable/icon_new_employee"
                                     android:layout_centerInParent="true">
                                 </ImageView>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/txtAtualizarPerfil"
-                                    android:text="Atualizar Perfil"
+                                    android:text="Novo funcionário"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="10dp"
                                     android:textColor="#000"
-                                    android:layout_below="@+id/imgAtualizarPerfil">
+                                    android:layout_below="@+id/imgNovoFuncionario">
                                 </TextView>
 
                                 <Button
-                                    android:id="@+id/btnAtualizarPerfil"
+                                    android:id="@+id/btnNovoFuncionario"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@android:color/transparent"></Button>
                             </RelativeLayout>
-
                         </androidx.cardview.widget.CardView>
+
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cardNewPatient"
+                            android:id="@+id/cardAtualizarFuncionario"
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_weight="1"
@@ -114,39 +114,39 @@
                                 <ImageView
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-                                    android:id="@+id/imgNovoAtendido"
-                                    android:src="@drawable/icon_new_patient"
+                                    android:id="@+id/imgAtualizarFuncionario"
+                                    android:src="@drawable/icon_man_police"
                                     android:layout_centerInParent="true">
                                 </ImageView>
+
                                 <TextView
+                                    android:id="@+id/txtAtualizarFuncionario"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/txtNovoAtendido"
-                                    android:text="Novo usuario"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
+                                    android:layout_below="@+id/imgAtualizarFuncionario"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="10dp"
+                                    android:text="Atualizar perfil"
                                     android:textColor="#000"
-                                    android:layout_below="@+id/imgNovoAtendido">
-                                </TextView>
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"></TextView>
+
                                 <Button
+                                    android:id="@+id/btnAtualizarFuncionario"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:id="@+id/btnNovoAtendido"
                                     android:background="@android:color/transparent"></Button>
                             </RelativeLayout>
-
                         </androidx.cardview.widget.CardView>
-
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cardAtendimento"
+                            android:id="@+id/cardNovoUsuario"
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_weight="1"
@@ -159,32 +159,77 @@
                                 <ImageView
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-                                    android:id="@+id/imgAtendimento"
+                                    android:id="@+id/imgNovoUsuario"
+                                    android:src="@drawable/icon_new_patient"
+                                    android:layout_centerInParent="true">
+                                </ImageView>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/txtNovoUsuario"
+                                    android:text="Novo Usuário"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="10dp"
+                                    android:textColor="#000"
+                                    android:layout_below="@+id/imgNovoUsuario">
+                                </TextView>
+                                <Button
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/btnNovoUsuario"
+                                    android:background="@android:color/transparent"></Button>
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardRegistraServico"
+                            android:layout_width="0dp"
+                            android:layout_height="160dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            app:cardCornerRadius="20dp">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:id="@+id/imgRegistrarServico"
                                     android:src="@drawable/icon_novo_atendimento"
                                     android:layout_centerInParent="true">
                                 </ImageView>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/txtAtendimento"
-                                    android:text="Novo servico"
+                                    android:id="@+id/txtNovoServico"
+                                    android:text="Registrar Servico"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="10dp"
                                     android:textColor="#000"
-                                    android:layout_below="@+id/imgAtendimento">
+                                    android:layout_below="@+id/imgRegistrarServico">
                                 </TextView>
+
                                 <Button
+                                    android:id="@+id/btnRegistrarServico"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:id="@+id/btnNovoAtendimento"
                                     android:background="@android:color/transparent"></Button>
                             </RelativeLayout>
-
                         </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:orientation="horizontal">
+
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cardSearch"
+                            android:id="@+id/cardPesquisar"
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_weight="1"
@@ -197,21 +242,21 @@
                                 <ImageView
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-                                    android:id="@+id/imgSearch"
+                                    android:id="@+id/imgPesquisar"
                                     android:src="@drawable/icon_search"
                                     android:layout_centerInParent="true">
                                 </ImageView>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/txtReport"
+                                    android:id="@+id/txtPesquisar"
                                     android:text="Pesquisar"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="10dp"
                                     android:textColor="#000"
-                                    android:layout_below="@+id/imgSearch">
+                                    android:layout_below="@+id/imgPesquisar">
                                 </TextView>
                                 <Button
                                     android:layout_width="match_parent"
@@ -220,16 +265,10 @@
                                     android:background="@android:color/transparent"></Button>
                             </RelativeLayout>
                         </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="180dp"
-                        android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cardReport"
-                            android:layout_width="170dp"
+                            android:id="@+id/cardRelatorio"
+                            android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_weight="1"
                             android:layout_marginLeft="8dp"
@@ -241,30 +280,28 @@
                                 <ImageView
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-                                    android:id="@+id/imgReport"
+                                    android:id="@+id/imgRelatorio"
                                     android:src="@drawable/icon_report"
                                     android:layout_centerInParent="true">
                                 </ImageView>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/txtRelatorio"
-                                    android:text="Relatório"
+                                    android:id="@+id/txtReport"
+                                    android:text="Relatórios"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="10dp"
                                     android:textColor="#000"
-                                    android:layout_below="@+id/imgReport">
+                                    android:layout_below="@+id/imgRelatorio">
                                 </TextView>
-
                                 <Button
-                                    android:id="@+id/btnRelatorio"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:id="@+id/btnRelatorio"
                                     android:background="@android:color/transparent"></Button>
                             </RelativeLayout>
-
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
 

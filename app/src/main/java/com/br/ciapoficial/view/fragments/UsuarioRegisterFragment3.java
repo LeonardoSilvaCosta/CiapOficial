@@ -359,8 +359,11 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
         usuario = new Usuario();
 
+        Toast.makeText(getContext(), valoresRecebidosFragment1.getString("cpf"), Toast.LENGTH_SHORT).show();
+
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);
+        usuario.setCpf(valoresRecebidosFragment1.getString("cpf"));
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
         usuario.setNaturalidade( (Cidade)valoresRecebidosFragment1.getSerializable("naturalidade"));
         usuario.setEstadoCivil( (EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));

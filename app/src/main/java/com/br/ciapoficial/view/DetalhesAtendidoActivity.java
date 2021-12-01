@@ -1,12 +1,16 @@
 package com.br.ciapoficial.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.br.ciapoficial.R;
+import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.model.Usuario;
 
 public class DetalhesAtendidoActivity extends AppCompatActivity {
@@ -22,6 +26,7 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
     private Usuario usuarioSelecionado;
     private Usuario titularRecuperado = new Usuario();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,33 +66,32 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
         txtDataHoraCadastro= (TextView) findViewById(R.id.txtDataHoraCadastro);
         txtDataHoraAtualizacao= (TextView) findViewById(R.id.txtDataHoraAtualizacao);
 
-//        getExtras();
+        getExtras();
 //        solicitarProntuarioDoTitular();
 
 
     }
 
-//    public void getExtras()
-//    {
-//        Bundle bundle = getIntent().getExtras();
-//
-//        if(bundle.getSerializable("atendidoSelecionado") != null)
-//        {
-//            usuarioSelecionado = (Usuario) bundle.getSerializable("atendidoSelecionado");
-//            txtTipoAtendido.setText(usuarioSelecionado.getTipoAtendido());
-//            txtNomeCompleto.setText(usuarioSelecionado.getNomeCompleto());
-//            txtDataNascimento.setText(usuarioSelecionado.getDataNascimento());
-//            txtCpf.setText(usuarioSelecionado.getCpf());
-//            txtSexo.setText(usuarioSelecionado.getSexo());
-//            txtEmail.setText(usuarioSelecionado.getEmail());
-//            txtEstadoCivil.setText(usuarioSelecionado.getEstadoCivil());
-//            txtNaturalidade.setText(usuarioSelecionado.getCidadeNatal() + "-" + usuarioSelecionado.getUfNatal());
-//            txtEscolaridade.setText(usuarioSelecionado.getEscolaridade());
-//            txtNumeroFilhos.setText(usuarioSelecionado.getNumeroFilhos());
-//            txtEndereco.setText(usuarioSelecionado.getLogradouro() + ", " + usuarioSelecionado.getNumero() + ", " +
-//                    usuarioSelecionado.getBairro() + ", " + usuarioSelecionado.getCidade() + "-" + usuarioSelecionado.getUf());
-//            txtDataHoraCadastro.setText(usuarioSelecionado.getDataHoraCadastro());
-//
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void getExtras()
+    {
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle.getSerializable("atendidoSelecionado") != null)
+        {
+            usuarioSelecionado = (Usuario) bundle.getSerializable("atendidoSelecionado");
+            txtNomeCompleto.setText(usuarioSelecionado.getNomeCompleto());
+            txtDataNascimento.setText(DateFormater.localDateToString(usuarioSelecionado.getDataNascimento()));
+            txtCpf.setText(usuarioSelecionado.getCpf());
+            txtSexo.setText(usuarioSelecionado.getSexo().getNome());
+            txtEmail.setText(usuarioSelecionado.getEmail());
+            txtEstadoCivil.setText(usuarioSelecionado.getEstadoCivil().getNome());
+            txtNaturalidade.setText(usuarioSelecionado.getNaturalidade().getNome());
+            txtEscolaridade.setText(usuarioSelecionado.getEscolaridade().getNome());
+            txtNumeroFilhos.setText(String.valueOf(usuarioSelecionado.getNumeroFilhos()));
+            txtEndereco.setText(usuarioSelecionado.getEndereco().toString());
+//            txtDataHoraCadastro.setText(DateFormater.localDateToString(usuarioSelecionado.getDataCadastro()));
+
 //            String atualizacao = usuarioSelecionado.getDataHoraAtualizacao();
 //            if(atualizacao != null && !atualizacao.isEmpty()) {
 //                txtDataHoraAtualizacao.setText(usuarioSelecionado.getDataHoraAtualizacao());
@@ -95,47 +99,53 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
 //            }else {
 //                linearLayoutDataHoraAtualizacao.setVisibility(View.GONE);
 //            }
-//
-//
-//            if(usuarioSelecionado.getTipoAtendido().equals("Policial Militar")) {
-//                txtNomeGuerra.setText(usuarioSelecionado.getNomeGuerra());
-//                txtRgMilitar.setText(usuarioSelecionado.getRgMilitar());
-//                txtPostoGradCat.setText(usuarioSelecionado.getPostoGradCat());
-//                txtUnidade.setText(usuarioSelecionado.getUnidade());
-//                txtQuadro.setText(usuarioSelecionado.getQuadro());
-//                txtDataInclusao.setText(usuarioSelecionado.getDataInclusao());
-//                txtSituacaoFuncional.setText(usuarioSelecionado.getSituacaoFuncional());
-//
-//                linearLayoutIdTitular.setVisibility(View.GONE);
-//                linearLayoutVinculo.setVisibility(View.GONE);
-//            }else if(usuarioSelecionado.getTipoAtendido().equals("Dependente")) {
-//                txtIdTitular.setText((usuarioSelecionado.getTitular().getNome()));
-//                txtVinculo.setText(usuarioSelecionado.getVinculo());
-//
-//                linearLayoutNomeGuerra.setVisibility(View.GONE);
-//                linearLayoutRgMilitar.setVisibility(View.GONE);
-//                linearLayoutPostoGradCat.setVisibility(View.GONE);
-//                linearLayoutUnidade.setVisibility(View.GONE);
-//                linearLayoutQuadro.setVisibility(View.GONE);
-//                linearLayoutDataInclusao.setVisibility(View.GONE);
-//                linearLayoutSituacaoFuncional.setVisibility(View.GONE);
-//
-//            }else {
-//                linearLayoutNomeGuerra.setVisibility(View.GONE);
-//                linearLayoutRgMilitar.setVisibility(View.GONE);
-//                linearLayoutPostoGradCat.setVisibility(View.GONE);
-//                linearLayoutUnidade.setVisibility(View.GONE);
-//                linearLayoutQuadro.setVisibility(View.GONE);
-//                linearLayoutDataInclusao.setVisibility(View.GONE);
-//                linearLayoutSituacaoFuncional.setVisibility(View.GONE);
-//                linearLayoutIdTitular.setVisibility(View.GONE);
-//                linearLayoutVinculo.setVisibility(View.GONE);
-//            }
-//
-//        }
-//
-//    }
-//
+
+
+            if(usuarioSelecionado.getRgMilitar() != null && !usuarioSelecionado.getRgMilitar().isEmpty()) {
+                txtNomeGuerra.setText(usuarioSelecionado.getNomeGuerra());
+                txtRgMilitar.setText(usuarioSelecionado.getRgMilitar());
+                txtPostoGradCat.setText(usuarioSelecionado.getPostoGradCat().getNome());
+                txtUnidade.setText(usuarioSelecionado.getUnidade().getNome());
+                txtQuadro.setText(usuarioSelecionado.getQuadro().getNome());
+                txtDataInclusao.setText(DateFormater.localDateToString(usuarioSelecionado.getDataInclusao()));
+                txtSituacaoFuncional.setText(usuarioSelecionado.getSituacaoFuncional().getNome());
+
+                txtTipoAtendido.setText("PM");
+
+                linearLayoutIdTitular.setVisibility(View.GONE);
+                linearLayoutVinculo.setVisibility(View.GONE);
+            }else if(usuarioSelecionado.getTipoVinculo() != null && !usuarioSelecionado.getTipoVinculo().getNome().isEmpty()) {
+                txtIdTitular.setText((usuarioSelecionado.getTitular().toString()));
+                txtVinculo.setText(usuarioSelecionado.getTipoVinculo().getNome());
+
+                txtTipoAtendido.setText("Dependente");
+
+                linearLayoutNomeGuerra.setVisibility(View.GONE);
+                linearLayoutRgMilitar.setVisibility(View.GONE);
+                linearLayoutPostoGradCat.setVisibility(View.GONE);
+                linearLayoutUnidade.setVisibility(View.GONE);
+                linearLayoutQuadro.setVisibility(View.GONE);
+                linearLayoutDataInclusao.setVisibility(View.GONE);
+                linearLayoutSituacaoFuncional.setVisibility(View.GONE);
+
+            }else {
+                txtTipoAtendido.setText("Civil");
+
+                linearLayoutNomeGuerra.setVisibility(View.GONE);
+                linearLayoutRgMilitar.setVisibility(View.GONE);
+                linearLayoutPostoGradCat.setVisibility(View.GONE);
+                linearLayoutUnidade.setVisibility(View.GONE);
+                linearLayoutQuadro.setVisibility(View.GONE);
+                linearLayoutDataInclusao.setVisibility(View.GONE);
+                linearLayoutSituacaoFuncional.setVisibility(View.GONE);
+                linearLayoutIdTitular.setVisibility(View.GONE);
+                linearLayoutVinculo.setVisibility(View.GONE);
+            }
+
+        }
+
+    }
+
 //    public void solicitarProntuarioDoTitular() {
 //        txtTitularHyperlink.setOnClickListener(new View.OnClickListener() {
 //            @Override

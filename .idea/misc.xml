@@ -3,12 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_detalhes_atendido.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/activity_detalhes_atendimento.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/activity_pesquisar.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/adapter_atendidos.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/adapter_atendimentos.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/app_bar.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register1.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register2.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register3.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_funcionario_register1.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_funcionario_register2.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_funcionario_register3.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/fragment_funcionario_update3.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/fragment_pesquisar_atendido.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/fragment_principal.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_usuario_register1.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_usuario_register2.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_usuario_register3.xml" value="0.18" />
@@ -17,8 +26,11 @@
         <entry key="app/src/main/res/layout/template_atendimento_register_form_3.xml" value="0.1" />
         <entry key="app/src/main/res/layout/template_funcionario_register_form_1.xml" value="0.12152777777777778" />
         <entry key="app/src/main/res/layout/template_funcionario_register_form_2.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/template_funcionario_update_form_3.xml" value="0.13680555555555557" />
         <entry key="app/src/main/res/layout/template_usuario_register_form_1.xml" value="0.15" />
         <entry key="app/src/main/res/layout/template_usuario_register_form_3.xml" value="0.18" />
+        <entry key="app/src/main/res/menu/ciap_menu.xml" value="0.146875" />
+        <entry key="app/src/main/res/xml/searchable.xml" value="0.146875" />
       </map>
     </option>
   </component>

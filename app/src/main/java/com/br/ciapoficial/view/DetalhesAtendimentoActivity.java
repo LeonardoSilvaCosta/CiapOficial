@@ -1,73 +1,88 @@
 package com.br.ciapoficial.view;
 
+import android.os.Build;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.br.ciapoficial.R;
+import com.br.ciapoficial.helper.DateFormater;
+import com.br.ciapoficial.model.Servico;
 
 public class DetalhesAtendimentoActivity extends AppCompatActivity {
 
-//    private TextView txtData, txtOficialResponsavel, txtAtendido, txtUnidade, txtModalidade, txtAcesso,
-//    txtTipo, txtAvaliacao, txtPrograma, txtDeslocamento, txtDemandaGeral, txtDemandaEspecifica,
-//            txtCondicaoLaboral, txtProcedimento, txtDocumentoProduzido,
-//            txtAfastamento, txtEvolucao, txtDataHoraCadastro;
-//    private Atendimento atendimentoSelecionado;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_detalhes_atendimento);
-//
-//        txtData = findViewById(R.id.txtData);
-//        txtOficialResponsavel = findViewById(R.id.txtOficialResponsavel);
-//        txtAtendido = findViewById(R.id.txtAtendido);
-//        txtUnidade = findViewById(R.id.txtUnidade);
-//        txtModalidade = findViewById(R.id.txtModalidade);
-//        txtAcesso = findViewById(R.id.txtAcesso);
-//        txtTipo = findViewById(R.id.txtTipo);
-//        txtAvaliacao = findViewById(R.id.txtAvaliacao);
-//        txtPrograma = findViewById(R.id.txtPrograma);
-//        txtDeslocamento = findViewById(R.id.txtDeslocamento);
-//        txtDemandaGeral = findViewById(R.id.txtDemandaGeral);
-//        txtDemandaEspecifica = findViewById(R.id.txtDemandaEspecifica);
-//        txtCondicaoLaboral = findViewById(R.id.txtCondicaoLaboral);
-//        txtProcedimento = findViewById(R.id.txtProcedimento);
-//        txtDocumentoProduzido = findViewById(R.id.txtDocumentoProduzido);
-//        txtAfastamento = findViewById(R.id.txtAfastamento);
-//        txtEvolucao = findViewById(R.id.txtEvolucao);
-//        txtDataHoraCadastro = findViewById(R.id.txtDataHoraCadastro);
-//
-//        Bundle bundle = getIntent().getExtras();
-//        if(bundle != null)
-//        {
-//            atendimentoSelecionado = (Atendimento) bundle.getSerializable("atendimentoSelecionado");
-//
-//            txtData.setText(atendimentoSelecionado.getData());
-//            txtUnidade.setText(atendimentoSelecionado.getUnidade());
-//            txtModalidade.setText(atendimentoSelecionado.getModalidade());
-//            txtAcesso.setText(atendimentoSelecionado.getAcesso());
-//            txtTipo.setText(atendimentoSelecionado.getTipo());
+    private TextView txtData, txtOficialResponsavel, txtAtendido, txtUnidade, txtModalidade, txtAcesso,
+    txtTipo, txtAvaliacao, txtPrograma, txtDeslocamento, txtDemandaGeral, txtDemandaEspecifica,
+            txtCondicaoLaboral, txtProcedimento, txtDocumentoProduzido,
+            txtAfastamento, txtEvolucao, txtDataHoraCadastro;
+    private Servico servicoSelecionado;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detalhes_atendimento);
+
+        txtData = findViewById(R.id.txtData);
+        txtOficialResponsavel = findViewById(R.id.txtOficialResponsavel);
+        txtAtendido = findViewById(R.id.txtAtendido);
+        txtUnidade = findViewById(R.id.txtUnidade);
+        txtModalidade = findViewById(R.id.txtModalidade);
+        txtAcesso = findViewById(R.id.txtAcesso);
+        txtTipo = findViewById(R.id.txtTipo);
+        txtAvaliacao = findViewById(R.id.txtAvaliacao);
+        txtPrograma = findViewById(R.id.txtPrograma);
+        txtDeslocamento = findViewById(R.id.txtDeslocamento);
+        txtDemandaGeral = findViewById(R.id.txtDemandaGeral);
+        txtDemandaEspecifica = findViewById(R.id.txtDemandaEspecifica);
+        txtCondicaoLaboral = findViewById(R.id.txtCondicaoLaboral);
+        txtProcedimento = findViewById(R.id.txtProcedimento);
+        txtDocumentoProduzido = findViewById(R.id.txtDocumentoProduzido);
+        txtAfastamento = findViewById(R.id.txtAfastamento);
+        txtEvolucao = findViewById(R.id.txtEvolucao);
+        txtDataHoraCadastro = findViewById(R.id.txtDataHoraCadastro);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null)
+        {
+            servicoSelecionado = (Servico) bundle.getSerializable("servicoSelecionado");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                txtData.setText(DateFormater.localDateToString(servicoSelecionado.getData())); }
+            servicoSelecionado.getEspecialistas().forEach(e -> txtOficialResponsavel.setText(e.toString()));
+            servicoSelecionado.getUsuarios().forEach(e -> txtAtendido.setText(e.toString()));
+            txtUnidade.setText(servicoSelecionado.getUnidade().toString());
+            txtModalidade.setText(servicoSelecionado.getModalidade().toString());
+            txtAcesso.setText(servicoSelecionado.getAcesso().toString());
+            txtTipo.setText("ainda implementando...");
 //            txtAvaliacao.setText(atendimentoSelecionado.getTipoAvaliacao());
-//            txtPrograma.setText(atendimentoSelecionado.getPrograma());
-//            txtDemandaGeral.setText(atendimentoSelecionado.getDemandaGeral());
+            txtPrograma.setText(servicoSelecionado.getPrograma().toString());
+            txtDemandaGeral.setText(servicoSelecionado.getDemandaGeral().toString());
+            servicoSelecionado.getDemandasEspecificas().forEach(e -> txtDemandaEspecifica.setText(e.toString()));
 //            txtCondicaoLaboral.setText(atendimentoSelecionado.getCondicaoLaboral());
-//            txtProcedimento.setText(atendimentoSelecionado.getProcedimento());
-//            if(atendimentoSelecionado.isAfastamento())
-//            {
-//                txtAfastamento.setText("Sim");
-//            }else
-//            {
-//                txtAfastamento.setText("Não");
-//            }
-//            txtEvolucao.setText(atendimentoSelecionado.getEvolucao());
-//            txtDataHoraCadastro.setText(atendimentoSelecionado.getDataHoraCadastro());
-//        }
-//
+            txtProcedimento.setText(servicoSelecionado.getProcedimento().toString());
+            servicoSelecionado.getDocumentosProduzidos().forEach(e -> txtDocumentoProduzido.setText(e.toString()));
+            if(servicoSelecionado.isAfastamento())
+            {
+                txtAfastamento.setText("Sim");
+            }else
+            {
+                txtAfastamento.setText("Não");
+            }
+            txtEvolucao.setText(servicoSelecionado.getEvolucao());
+//            txtDataHoraCadastro.setText(servicoSelecionado.getDataHoraCadastro().toString());
+        }
+
 //        recuperarAtendimentosOficiais();
 //        recuperarAtendimentosAtendidos();
 //        recuperarAtendimentosDeslocamentos();
 //        recuperarAtendimentosDocumentosProduzidos();
 //        recuperarAtendimentosDemandasEspecificas();
-//
-//    }
-//
+
+    }
+
 //    public void recuperarAtendimentosOficiais()
 //    {
 //        AtendimentoController atendimentoController = new AtendimentoController();

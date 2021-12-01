@@ -1,5 +1,7 @@
 package com.br.ciapoficial.view.fragments;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,17 +29,16 @@ import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
-
 public class PrincipalFragment extends Fragment {
 
+    private FuncionarioRegisterFragment1 funcionarioRegisterFragment1;
     private FuncionarioUpdateFragment1 funcionarioUpdateFragment1;
     private UsuarioRegisterFragment1 usuarioRegisterFragment1;
     private AtendimentoRegisterFragment1 atendimentoRegisterFragment1;
     private SharedPreferences sharedPreferences;
     private CircleImageView fotoPerfil;
     private ImageView imageAtualizarPerfil;
-    private Button btnAtualizarPerfil, btnNovoAtendido, btnNovoAtendimento, btnPesquisar;
+    private Button btnNovoFuncionario, btnAtualizaFuncionario, btnNovoUsuario, btnRegistrarServico, btnPesquisar;
 
     public PrincipalFragment() {
         // Required empty public constructor
@@ -51,15 +52,17 @@ public class PrincipalFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         fotoPerfil = view.findViewById(R.id.imgUsuario);
-        imageAtualizarPerfil = view.findViewById(R.id.imgAtualizarPerfil);
-        btnAtualizarPerfil = view.findViewById(R.id.btnAtualizarPerfil);
-        btnNovoAtendido = view.findViewById(R.id.btnNovoAtendido);
-        btnNovoAtendimento = view.findViewById(R.id.btnNovoAtendimento);
+        imageAtualizarPerfil = view.findViewById(R.id.imgAtualizarFuncionario);
+        btnNovoFuncionario = view.findViewById(R.id.btnNovoFuncionario);
+        btnAtualizaFuncionario = view.findViewById(R.id.btnAtualizarFuncionario);
+        btnNovoUsuario = view.findViewById(R.id.btnNovoUsuario);
+        btnRegistrarServico = view.findViewById(R.id.btnRegistrarServico);
         btnPesquisar = view.findViewById(R.id.btnPesquisar);
 
 
         configurarImagemAtualizarPerfil();
         recuperarImagem();
+        abrirTelaParaNovoFuncionario();
         abrirTelaAtualizarCadastro();
         abrirTelaNovoAtendido();
         abrirTelaNovoAtendimento();
@@ -135,8 +138,22 @@ public class PrincipalFragment extends Fragment {
         });
     }
 
+    private void abrirTelaParaNovoFuncionario() {
+        btnNovoFuncionario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                funcionarioRegisterFragment1 = new FuncionarioRegisterFragment1();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameConteudo, funcionarioRegisterFragment1);
+                transaction.addToBackStack(null).commit();
+            }
+        });
+
+    }
+
     private void abrirTelaAtualizarCadastro() {
-        btnAtualizarPerfil.setOnClickListener(new View.OnClickListener() {
+        btnAtualizaFuncionario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 funcionarioUpdateFragment1 = new FuncionarioUpdateFragment1();
@@ -149,7 +166,7 @@ public class PrincipalFragment extends Fragment {
     }
 
     private void abrirTelaNovoAtendido() {
-        btnNovoAtendido.setOnClickListener(new View.OnClickListener() {
+        btnNovoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 usuarioRegisterFragment1 = new UsuarioRegisterFragment1();
@@ -162,7 +179,7 @@ public class PrincipalFragment extends Fragment {
     }
 
     private void abrirTelaNovoAtendimento() {
-        btnNovoAtendimento.setOnClickListener(new View.OnClickListener() {
+        btnRegistrarServico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 atendimentoRegisterFragment1 = new AtendimentoRegisterFragment1();

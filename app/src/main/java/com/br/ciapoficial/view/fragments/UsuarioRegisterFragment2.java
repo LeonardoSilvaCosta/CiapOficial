@@ -284,7 +284,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);
-        usuario.setCpf(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
+        usuario.setCpf(valoresRecebidosFragment1.getString("cpf"));
         usuario.setSexo((SexoEnum) valoresRecebidosFragment1.getSerializable("sexo"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));

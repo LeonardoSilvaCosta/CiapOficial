@@ -656,6 +656,7 @@ public class FuncionarioRegisterFragment3 extends Fragment {
         especialista.setFuncaoAdministrativa((funcaoAdministrativa));
         especialista.setSituacaoFuncional((situacaoFuncional));
         especialista.setEspecialidade(especialidade);
+        especialista.setRegistroConselho(registroConselho);
         especialista.setSenha(Mascaras.removerMascaras(valoresRecebidosFragment1.getString("cpf")));
 
         if(quadro.toString().equals(QuadroEnum.QCOPM.getNome()))
@@ -663,9 +664,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
             especialista.setEspecialidade((especialidade));
 
             if(especialidade.toString().equals(EspecialidadeEnum.PSICOLOGO.getNome())) {
-                especialista.setRegistroConselho("10/" + registroConselho); }
+                especialista.setRegiaoConselho("10"); }
             else if(especialidade.toString().equals(EspecialidadeEnum.ASSISTENTE_SOCIAL.getNome())) {
-                especialista.setRegistroConselho("1/" + registroConselho); }
+                especialista.setRegiaoConselho("1"); }
             else {
                 especialista.setRegistroConselho("Não se aplica");
             }

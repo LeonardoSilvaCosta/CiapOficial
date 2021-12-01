@@ -2,12 +2,10 @@ package com.br.ciapoficial.model;
 
 import java.io.Serializable;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Endereco implements Serializable {
 
@@ -20,4 +18,9 @@ public class Endereco implements Serializable {
     private String logradouro;
     private Integer numero;
 
+    @Override
+    public String toString() {
+        return logradouro + ", n° " + numero + ", " + bairro +
+                ", " + cidade + "+" + estado + ", " + cep + ".";
+    }
 }

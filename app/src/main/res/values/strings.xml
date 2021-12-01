@@ -44,6 +44,7 @@
     <string name="dependente">Dependente</string>
     <string name="civil">Civil</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_label">ciapOficial</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="funcao_administrativa">Função administrativa*</string>
     <string name="registro_conselho">Registro do Conselho sem a região*</string>

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -30,7 +31,6 @@ import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.Mascaras;
@@ -43,6 +43,7 @@ import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Vinculo;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -465,7 +466,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
 
                         Vinculo vinculo = new Vinculo();
                         vinculo.setId(Integer.parseInt(object.getString("id")));
-                        vinculo.setNome(object.getString("descricao"));
+                        vinculo.setNome(object.getString("nome"));
 
                         listaVinculosRecuperados.add(vinculo);
                         configurarCampoVinculo(listaVinculosRecuperados);
@@ -590,6 +591,8 @@ public class UsuarioRegisterFragment1 extends Fragment {
         bundle.putString("email", email);
         bundle.putSerializable("titular", titular);
         bundle.putSerializable("vinculo", vinculo);
+
+        Toast.makeText(getContext(), titular.toString(), Toast.LENGTH_SHORT).show();
 
         return bundle;
     }

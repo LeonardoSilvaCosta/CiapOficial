@@ -1,5 +1,7 @@
 package com.br.ciapoficial.model.in_servico;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Encaminhamento {
+public class Encaminhamento implements Serializable {
     @EqualsAndHashCode.Include
     private int id;
     private String destino;

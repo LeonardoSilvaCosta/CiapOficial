@@ -15,10 +15,4 @@
     android:title="@string/desconectar"
     app:showAsAction="never" />
 
-    <item
-    android:id="@+id/new_user"
-    android:orderInCategory="100"
-    android:title="Novo usuário"
-    app:showAsAction="never" />
-
 </menu>

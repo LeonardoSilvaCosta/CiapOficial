@@ -1,5 +1,7 @@
 package com.br.ciapoficial.view;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,16 +22,14 @@ import com.br.ciapoficial.helper.PersistentCookieStore;
 import com.br.ciapoficial.view.fragments.FuncionarioRegisterFragment1;
 import com.br.ciapoficial.view.fragments.PrincipalFragment;
 
-import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
-
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar ciapToolbar;
     private PrincipalFragment principalFragment;
     private FuncionarioRegisterFragment1 funcionarioRegisterFragment1;
 
-    SharedPreferences sharedPreferencesCookie;
-    SharedPreferences sharedPreferencesUser;
+    private SharedPreferences sharedPreferencesCookie;
+    private SharedPreferences sharedPreferencesUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 desconectarFuncionario();
                 abrirTelaLogin();
                 break;
-            case R.id.new_user:
-                callFuncionarioRegisterForm();
-                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void callFuncionarioRegisterForm() {
-
-        funcionarioRegisterFragment1 = new FuncionarioRegisterFragment1();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameConteudo, funcionarioRegisterFragment1);
-        transaction.addToBackStack(null).commit();
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

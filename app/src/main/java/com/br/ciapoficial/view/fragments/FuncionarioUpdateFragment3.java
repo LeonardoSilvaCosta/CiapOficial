@@ -549,7 +549,6 @@ public class FuncionarioUpdateFragment3 extends Fragment {
         Bundle valoresRecebidosFragment1 = valoresRecebidosFragment1e2.getBundle("valoresRecebidosFragment1");
         Funcionario funcionarioRecebidoDoDb = (Funcionario) valoresRecebidosFragment1.getSerializable(
                 "funcionarioRecebidoDoDB");
-        Log.d("senhaAtual", funcionarioRecebidoDoDb.getSenha());
 
         if (
                 FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
