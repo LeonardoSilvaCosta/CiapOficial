@@ -27,7 +27,7 @@ public class Usuario extends Pessoa {
     @Override
     public String toString () {
         if(rgMilitar != null) {
-            return postoGradCat + " " + " " + quadro + " " + rgMilitar + " " + nomeGuerra;
+            return postoGradCat + " " + quadro + " " + rgMilitar + " " + getNomeCompleto();
         }else if (tipoVinculo != null){
             return this.getNomeCompleto() + "(dependente)";
         }else {

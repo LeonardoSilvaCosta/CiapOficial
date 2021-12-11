@@ -37,10 +37,12 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
         Usuario usuario = usuarios.get(position);
 
         if(usuario.getNomeCompleto() != null)
-            holder.nome.setText(usuario.getNomeCompleto());
+            holder.nome.setText(usuario.toString());
 
-        if(usuario.getCpf() != null)
-        holder.cpf.setText(usuario.getCpf());
+        if(usuario.getCpf() != null){
+            holder.cpf.setText(usuario.getCpf());
+            holder.legendaCpf.setVisibility(View.VISIBLE);
+            holder.cpf.setVisibility(View.VISIBLE); }
     }
 
     @Override
@@ -51,13 +53,16 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView nome;
-        TextView cpf;
+        TextView legendaCpf, cpf;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             nome = itemView.findViewById(R.id.txtNome);
+            legendaCpf = itemView.findViewById(R.id.txtLegendaCpf);
             cpf = itemView.findViewById(R.id.txtCpf);
+
+            cpf.setVisibility(View.GONE);
         }
     }
 }

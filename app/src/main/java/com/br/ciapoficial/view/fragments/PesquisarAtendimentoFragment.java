@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.adapters.ServicosAdapter;
 import com.br.ciapoficial.controller.ServicoController;
+import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.RecyclerItemClickListener;
@@ -32,16 +33,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PesquisarAtendimentoFragment extends Fragment {
 
     private RecyclerView recyclerViewAtendimentos;
 
     private ArrayList<Servico> listaDeServicos = new ArrayList<>();
+    private ArrayList<Servico> listaAtualizada;
     private ServicosAdapter adapter;
 
     public PesquisarAtendimentoFragment() {
@@ -58,6 +60,7 @@ public class PesquisarAtendimentoFragment extends Fragment {
         recyclerViewAtendimentos = view.findViewById(R.id.recyclerViewListaAtendimentos);
 
         adapter = new ServicosAdapter(listaDeServicos, getActivity());
+        listaAtualizada = listaDeServicos;
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewAtendimentos.setLayoutManager(layoutManager);
@@ -72,7 +75,7 @@ public class PesquisarAtendimentoFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
 
-                                Servico servicoSelecionado = listaDeServicos.get(position);
+                                Servico servicoSelecionado = listaAtualizada.get(position);
                                 Intent i = new Intent(getActivity(), DetalhesAtendimentoActivity.class);
                                 i.putExtra("servicoSelecionado", servicoSelecionado);
                                 startActivity(i);
@@ -98,20 +101,28 @@ public class PesquisarAtendimentoFragment extends Fragment {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void pesquisarAtendimentos(String texto)
     {
 
-        List<Servico> listaAtendimentosBusca = new ArrayList<>();
-        for(Servico servico : listaDeServicos)
-        {
-            String data = String.valueOf(servico.getData()).toLowerCase();
-            if(data.contains(texto))
+        ArrayList<Servico> listaAtendimentosBusca = new ArrayList<>();
+        listaDeServicos.forEach(e -> {
+            String data = (DateFormater.localDateToString(e.getData()).toLowerCase());
+            String especialista = Normalizer
+                    .normalize(e.getEspecialistas().toString().toLowerCase(), Normalizer.Form.NFD)
+                    .replaceAll("[^\\p{ASCII}]", "");
+            String atendido = Normalizer
+                    .normalize(e.getUsuarios().toString().toLowerCase(), Normalizer.Form.NFD)
+                    .replaceAll("[^\\p{ASCII}]", "");
+
+            if(data.contains(texto) || especialista.contains(texto) || atendido.contains(texto))
             {
-                listaAtendimentosBusca.add(servico);
+                listaAtendimentosBusca.add(e);
             }
-        }
+        });
 
         adapter = new ServicosAdapter(listaAtendimentosBusca, getActivity());
+        listaAtualizada = listaAtendimentosBusca;
         recyclerViewAtendimentos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -119,6 +130,7 @@ public class PesquisarAtendimentoFragment extends Fragment {
     public void recarregarAtendimentos()
     {
         adapter = new ServicosAdapter(listaDeServicos, getActivity());
+        listaAtualizada = listaDeServicos;
         recyclerViewAtendimentos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

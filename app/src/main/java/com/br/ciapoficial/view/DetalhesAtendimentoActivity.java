@@ -64,7 +64,7 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
             servicoSelecionado = (Servico) bundle.getSerializable("servicoSelecionado");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                txtTipo.setText(servicoSelecionado.getTipoServico().toString());
+                txtTipo.setText(servicoSelecionado.getTipo().toString());
                 txtData.setText(DateFormater.localDateToString(servicoSelecionado.getData())); }
             txtOficialResponsavel.setText(servicoSelecionado.getEspecialistas().toString()
                     .replace("[", "").replace("]", ""));

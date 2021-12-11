@@ -702,7 +702,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         atendimento = new Atendimento();
 
-        atendimento.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
+        atendimento.setTipo((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         atendimento.setData(data);
         atendimento.setEspecialistas(new HashSet<>(
                 (ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
@@ -741,7 +741,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         avaliacao = new Avaliacao();
 
-        avaliacao.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
+        avaliacao.setTipo((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         avaliacao.setData(data);
         avaliacao.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
         avaliacao.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
@@ -771,7 +771,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         sae = new ServicoDeAssistenciaEspecial();
 
-        sae.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
+        sae.setTipo((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         sae.setData(data);
         sae.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
         sae.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));

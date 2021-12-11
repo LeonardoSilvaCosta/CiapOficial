@@ -29,16 +29,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class PesquisarAtendidoFragment extends Fragment {
 
     private RecyclerView recyclerViewAtendidos;
 
     private ArrayList<Usuario> listaDeUsuarios = new ArrayList<>();
+    private ArrayList<Usuario> listaAtualizada = new ArrayList<>();
     private AtendidosAdapter adapter;
 
     public PesquisarAtendidoFragment() {
@@ -54,6 +56,7 @@ public class PesquisarAtendidoFragment extends Fragment {
         recyclerViewAtendidos = view.findViewById(R.id.recyclerViewListaAtendidos);
 
         adapter = new AtendidosAdapter(listaDeUsuarios, getActivity());
+        listaAtualizada = listaDeUsuarios;
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewAtendidos.setLayoutManager(layoutManager);
@@ -68,7 +71,7 @@ public class PesquisarAtendidoFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
 
-                                        Usuario usuarioSelecionado = listaDeUsuarios.get(position);
+                                        Usuario usuarioSelecionado = listaAtualizada.get(position);
                                         Intent i = new Intent(getActivity(), DetalhesAtendidoActivity.class);
                                         i.putExtra("atendidoSelecionado", usuarioSelecionado);
                                         startActivity(i);
@@ -95,22 +98,31 @@ public class PesquisarAtendidoFragment extends Fragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void pesquisarAtendidos(String texto)
     {
+        ArrayList<Usuario> listaAtendidosBusca = new ArrayList<>();
+        listaDeUsuarios.forEach(e -> {
+            String nome = Normalizer
+                    .normalize(e.getNomeCompleto()
+                            .toLowerCase(), Normalizer.Form.NFD)
+                    .replaceAll("[^\\p{ASCII}]", "");
+            String cpf = "";
+            String rg = "";
+            if(e.getCpf() != null)
+                cpf = e.getCpf();
+            
+            if(e.getRgMilitar() != null)
+                rg = Objects.requireNonNull(e.getRgMilitar());
 
-        List<Usuario> listaAtendidosBusca = new ArrayList<>();
-        for(Usuario usuario : listaDeUsuarios)
-        {
-            String nome = usuario.getNomeCompleto().toLowerCase();
-            String cpf = usuario.getCpf().toLowerCase();
-
-            if(nome.contains(texto) || cpf.contains(texto))
+            if(nome.contains(texto) || cpf.contains(texto) || rg.contains(texto))
             {
-                listaAtendidosBusca.add(usuario);
+                listaAtendidosBusca.add(e);
             }
-        }
+        });
 
         adapter = new AtendidosAdapter(listaAtendidosBusca, getActivity());
+        listaAtualizada = listaAtendidosBusca;
         recyclerViewAtendidos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -118,6 +130,7 @@ public class PesquisarAtendidoFragment extends Fragment {
     public void recarregarAtendidos()
     {
         adapter = new AtendidosAdapter(listaDeUsuarios, getActivity());
+        listaAtualizada = listaDeUsuarios;
         recyclerViewAtendidos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

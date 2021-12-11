@@ -1,10 +1,12 @@
 package com.br.ciapoficial.view;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -16,6 +18,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import java.text.Normalizer;
 
 public class PesquisarActivity extends AppCompatActivity {
 
@@ -72,6 +76,7 @@ public class PesquisarActivity extends AppCompatActivity {
                 return false;
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextChange(String newText) {
 
@@ -82,17 +87,22 @@ public class PesquisarActivity extends AppCompatActivity {
                     PesquisarAtendidoFragment fragment = (PesquisarAtendidoFragment) adapter.getPage(0);
                     if(newText != null && !newText.isEmpty())
                     {
-                        fragment.pesquisarAtendidos(newText.toLowerCase());
+                        String text = Normalizer.normalize(newText, Normalizer.Form.NFD)
+                                .replaceAll("[^\\p{ASCII}]", "");
+                        fragment.pesquisarAtendidos(text.toLowerCase());
                     }
                 }else if (viewPager.getCurrentItem() == fragmentAtendimento)
                 {
                     PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
                     if(newText != null && !newText.isEmpty())
                     {
-                        fragment.pesquisarAtendimentos(newText.toLowerCase());
+                        String text = Normalizer.normalize(newText, Normalizer.Form.NFD)
+                                .replaceAll("[^\\p{ASCII}]", "");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            fragment.pesquisarAtendimentos(text.toLowerCase());
+                        }
                     }
                 }
-
 
                 return true;
             }
