@@ -64,6 +64,7 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
             servicoSelecionado = (Servico) bundle.getSerializable("servicoSelecionado");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                txtTipo.setText(servicoSelecionado.getTipoServico().toString());
                 txtData.setText(DateFormater.localDateToString(servicoSelecionado.getData())); }
             txtOficialResponsavel.setText(servicoSelecionado.getEspecialistas().toString()
                     .replace("[", "").replace("]", ""));
@@ -105,7 +106,6 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
             txtMedicaoPsiquiatrica.setText(((Atendimento) servicoSelecionado).getMedicacoesPsiquiatricas().toString()
                     .replace("[", "")
                     .replace("]", ""));
-            txtTipo.setText("Atendimento");
 
             legendaAvaliacao.setVisibility(View.GONE);
             txtAvaliacao.setVisibility(View.GONE);
@@ -113,7 +113,6 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
             txtCondicaoLaboral.setVisibility(View.GONE);
         }else if(servicoSelecionado instanceof Avaliacao) {
             txtAvaliacao.setText(((Avaliacao) servicoSelecionado).getTipoAvaliacao().toString());
-            txtTipo.setText("Avaliação");
 
             legendaSinalSintoma.setVisibility(View.GONE);
             txtSinalSintoma.setVisibility(View.GONE);
@@ -123,7 +122,6 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
             txtCondicaoLaboral.setVisibility(View.GONE);
         }else {
             txtCondicaoLaboral.setText(((ServicoDeAssistenciaEspecial) servicoSelecionado).getCondicaoLaboral().toString());
-            txtTipo.setText("SAE");
 
             legendaSinalSintoma.setVisibility(View.GONE);
             txtSinalSintoma.setVisibility(View.GONE);

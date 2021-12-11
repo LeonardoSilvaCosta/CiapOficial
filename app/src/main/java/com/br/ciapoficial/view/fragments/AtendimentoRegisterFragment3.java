@@ -53,6 +53,7 @@ import com.br.ciapoficial.model.in_servico.Programa;
 import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
 import com.br.ciapoficial.model.in_servico.SinalSintoma;
 import com.br.ciapoficial.model.in_servico.TipoAvaliacao;
+import com.br.ciapoficial.model.in_servico.TipoServico;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -701,6 +702,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         atendimento = new Atendimento();
 
+        atendimento.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         atendimento.setData(data);
         atendimento.setEspecialistas(new HashSet<>(
                 (ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
@@ -727,24 +729,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         atendimento.setAfastamento(afastamento);
         atendimento.setEvolucao(evolucao);
 
-        Log.d("resultado de dados",
-                atendimento.getEspecialistas().toString() + " " +
-                        atendimento.getUsuarios().toString() + " " +
-                        atendimento.getData().toString() + " " +
-                                atendimento.getUnidade().toString() + " " +
-                                atendimento.getModalidade().toString() + " " +
-                                atendimento.getAcesso().toString() + " " +
-                                atendimento.getPrograma().toString() + " " +
-                                atendimento.getDeslocamentos().toString() + " " +
-                                atendimento.getDemandaGeral().toString() + " " +
-                                atendimento.getDemandasEspecificas().toString() + " " +
-                                atendimento.getProcedimento().toString() + " " +
-                                atendimento.getEncaminhamentos().toString() + " " +
-                                atendimento.getDocumentosProduzidos().toString() + " " +
-                                atendimento.isAfastamento() + " " +
-                                atendimento.getEvolucao() + " " +
-                                atendimento.getSinaisSintomas().toString() + " " +
-                                atendimento.getMedicacoesPsiquiatricas().toString());
         return atendimento;
     }
 
@@ -757,6 +741,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         avaliacao = new Avaliacao();
 
+        avaliacao.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         avaliacao.setData(data);
         avaliacao.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
         avaliacao.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
@@ -786,6 +771,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         sae = new ServicoDeAssistenciaEspecial();
 
+        sae.setTipoServico((TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico"));
         sae.setData(data);
         sae.setEspecialistas(new HashSet<>((ArrayList<Especialista>) valoresRecebidosFragment1.getSerializable("listaDeEspecialistas")));
         sae.setUsuarios(new HashSet<>((ArrayList<Usuario>) valoresRecebidosFragment1.getSerializable("listaDeAtendidos")));
@@ -886,7 +872,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
     private void enviarFormulario() {
         Bundle valoresRecebidosFragment1e2 =  recuperarDadosAtendimentoRegisterFragment2();
-        String tipo = valoresRecebidosFragment1e2.getString("tipoServico");
+        TipoServico tipo = (TipoServico) valoresRecebidosFragment1e2.getSerializable("tipoServico");
 
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @SneakyThrows
@@ -895,14 +881,14 @@ public class AtendimentoRegisterFragment3 extends Fragment {
             public void onClick(View v) {
 
                 if(validarCadastroAtendimento()) {
-                    if(tipo.equals(TipoServicoEnum.ATENDIMENTO_PSICOLOGICO.getNome()) ||
-                            tipo.equals(TipoServicoEnum.ATENDIMENTO_SOCIAL.getNome())) {
+                    if(tipo.getNome().equals(TipoServicoEnum.ATENDIMENTO_PSICOLOGICO.getNome()) ||
+                            tipo.getNome().equals(TipoServicoEnum.ATENDIMENTO_SOCIAL.getNome())) {
                         Atendimento novoAtendimento;
                         novoAtendimento = encapsularValoresParaRegistroDeAtendimento();
                         registrarAtendimento(novoAtendimento);
                         Toast.makeText(getContext(), "atendimento", Toast.LENGTH_SHORT).show();
-                    } else if (tipo.equals(TipoServicoEnum.AVALIACAO_PSICOLOGICA.getNome()) ||
-                            tipo.equals(TipoServicoEnum.AVALIACAO_SOCIAL.getNome())) {
+                    } else if (tipo.getNome().equals(TipoServicoEnum.AVALIACAO_PSICOLOGICA.getNome()) ||
+                            tipo.getNome().equals(TipoServicoEnum.AVALIACAO_SOCIAL.getNome())) {
                         Avaliacao novaAvaliacao;
                         novaAvaliacao = encapsularValoresParaRegistroDeAvaliacao();
                         registrarAvaliacao(novaAvaliacao);

@@ -38,10 +38,9 @@ import com.br.ciapoficial.model.in_servico.DemandaGeral;
 import com.br.ciapoficial.model.in_servico.Deslocamento;
 import com.br.ciapoficial.model.in_servico.Programa;
 import com.br.ciapoficial.model.in_servico.TipoAvaliacao;
+import com.br.ciapoficial.model.in_servico.TipoServico;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +65,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
             autoCompleteTextViewDemandaEspecifica, autoCompleteTextViewCondicaoLaboral;
     private Button btnAdicionarDeslocamento, btnAdicionarDemandaEspecifica, btnProxima;
 
-    private List<String> listaTiposServicosRecuperados = new ArrayList<>();
+    private List<TipoServico> listaTiposServicosRecuperados = new ArrayList<>();
     private List<TipoAvaliacao> listaTiposAvaliacaoRecuperadas = new ArrayList<>();
     private List<Programa> listaProgramasRecuperados = new ArrayList<>();
     private List<Deslocamento> listaDeslocamentosRecuperados = new ArrayList<>();
@@ -81,7 +80,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
 
     private List<Deslocamento> listaDeDeslocamentosSelecionadosValidados = new ArrayList<>();
     private List<DemandaEspecifica> listaDeDemandasEspecificasSelecionadasValidadas = new ArrayList<>();
-    private String tipoServico;
+    private TipoServico tipoServico;
     private TipoAvaliacao tipoAvaliacao = new TipoAvaliacao();
     private Programa programa;
     private DemandaGeral demandaGeral;
@@ -253,14 +252,22 @@ public class AtendimentoRegisterFragment2 extends Fragment {
 
                 try {
 
-                    Gson gson = new GsonBuilder().create();
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    List<String> tiposDeServico = gson.fromJson(response, List.class);
-                    listaTiposServicosRecuperados = tiposDeServico;
+                    for(int i = 0; i < jsonArray.length(); i++) {
 
-                    configurarCampoTipoServico(listaTiposServicosRecuperados);
+                        JSONObject object = jsonArray.getJSONObject(i);
 
-            }catch (Exception e) {
+                        TipoServico tipoServico = new TipoServico();
+                        tipoServico.setId(Integer.parseInt(object.getString("id")));
+                        tipoServico.setNome(object.getString("nome"));
+
+                        listaTiposServicosRecuperados.add(tipoServico);
+                        configurarCampoTipoServico(listaTiposServicosRecuperados);
+
+                    }
+
+                }catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -269,9 +276,9 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void configurarCampoTipoServico(List<String> listaTiposServicosRecuperados) {
+    private void configurarCampoTipoServico(List<TipoServico> listaTiposServicosRecuperados) {
 
-        ArrayAdapter<String> adapterTipoDeServico= new ArrayAdapter<>(getActivity(),
+        ArrayAdapter<TipoServico> adapterTipoDeServico= new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line,
                 listaTiposServicosRecuperados);
         autoCompleteTextViewTipoServico.setAdapter(adapterTipoDeServico);
@@ -678,59 +685,47 @@ public class AtendimentoRegisterFragment2 extends Fragment {
         } else { return false; }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void receberDadosAtendimentoPreenchidos() {
 
-        tipoServico = autoCompleteTextViewTipoServico.getText().toString().trim();
+        listaTiposServicosRecuperados.forEach(e -> {
+            if(e.getNome().equals(autoCompleteTextViewTipoServico.getText().toString().trim()))
+                tipoServico = e; });
 
         if (autoCompleteTextViewTipoServico.getText().toString().contains("Avaliação")) {
-            for (TipoAvaliacao tipoAvaliacaoSelecionada : listaTiposAvaliacaoRecuperadas)
-            {
-                if (tipoAvaliacaoSelecionada.getNome().equals(autoCompleteTextViewTipoAvaliacao.getText().toString().trim()))
-                    tipoAvaliacao = tipoAvaliacaoSelecionada;
-            }
-        } else {
-            for (TipoAvaliacao tipoAvaliacaoSelecionada : listaTiposAvaliacaoRecuperadas)
-            {
-                if (tipoAvaliacaoSelecionada.getNome().equals("Não se aplica")) {
-                    tipoAvaliacao = tipoAvaliacaoSelecionada;
-                }
-            }
-        }
+            listaTiposAvaliacaoRecuperadas.forEach(e -> {
+                if(e.getNome().equals(autoCompleteTextViewTipoAvaliacao.getText().toString().trim())) {
+                    tipoAvaliacao = e;
+                }else{
+                    listaTiposAvaliacaoRecuperadas.forEach(element -> {
+                        if(e.getNome().equals("Não se aplica")) {
+                            tipoAvaliacao = element; } }); }
+            }); }
 
-        for (Programa programaSelecionado : listaProgramasRecuperados)
-        {
-            if (programaSelecionado.getNome().equals
-                    (autoCompleteTextViewPrograma.getText().toString().trim()))
-                programa = programaSelecionado;
-        }
+        listaProgramasRecuperados.forEach(e -> {
+            if(e.getNome().equals(autoCompleteTextViewPrograma.getText().toString().trim()))
+                programa = e; });
 
         listaDeDeslocamentosSelecionadosValidados = listaDeDeslocamentosSelecionadosNaoValidados;
 
-
-        for (DemandaGeral demandaGeralSelecionada : listaDemandasGeraisRecuperadas)
-        {
-            if (demandaGeralSelecionada.getNome().equals
-                    (autoCompleteTextViewDemandaGeral.getText().toString().trim()))
-            demandaGeral = demandaGeralSelecionada;
-        }
+        listaDemandasGeraisRecuperadas.forEach(e -> {
+            if(e.getNome().equals(autoCompleteTextViewDemandaGeral.getText().toString().trim()))
+                demandaGeral = e; });
 
         listaDeDemandasEspecificasSelecionadasValidadas = listaDeDemandasEspecificasSelecionadasNaoValidadas;
 
         if(listaDeDemandasEspecificasSelecionadasValidadas.toString().contains("Óbito(militar)")) {
-            for (CondicaoLaboral condicaoLaboralSelecionada : listaCondicoesLaboraisRecuperadas) {
-                if (condicaoLaboralSelecionada.getNome().equals
+            listaCondicoesLaboraisRecuperadas.forEach(e -> {
+                if(e.getNome().equals
                         (autoCompleteTextViewCondicaoLaboral.getText().toString().trim()))
-                    condicaoLaboral = condicaoLaboralSelecionada;
-            }
+                    condicaoLaboral = e;
+            });
         } else {
-            for (CondicaoLaboral condicaoLaboralSelecionada : listaCondicoesLaboraisRecuperadas)
-            {
-                if (condicaoLaboralSelecionada.getNome().equals("N/A")) {
-                    condicaoLaboral = condicaoLaboralSelecionada;
-                }
-            }
+            listaCondicoesLaboraisRecuperadas.forEach(element -> {
+                if(element.getNome().equals("N/A"))
+                    condicaoLaboral = element;
+            });
         }
-
     }
 
     private Bundle encapsularValoresParaEnvio()
@@ -739,7 +734,7 @@ public class AtendimentoRegisterFragment2 extends Fragment {
         Bundle bundle = new Bundle();
 
         bundle.putBundle("valoresRecebidosFragment1", valoresRecebidosFragment1);
-        bundle.putString("tipoServico", tipoServico);
+        bundle.putSerializable("tipoServico", (Serializable) tipoServico);
         bundle.putSerializable("tipoAvaliacao", (Serializable) tipoAvaliacao);
         bundle.putSerializable("programa", (Serializable) programa);
         bundle.putSerializable("listaDeDeslocamentos", (Serializable) listaDeDeslocamentosSelecionadosValidados);

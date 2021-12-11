@@ -9,6 +9,7 @@ import com.br.ciapoficial.model.in_servico.Encaminhamento;
 import com.br.ciapoficial.model.in_servico.Modalidade;
 import com.br.ciapoficial.model.in_servico.Procedimento;
 import com.br.ciapoficial.model.in_servico.Programa;
+import com.br.ciapoficial.model.in_servico.TipoServico;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import lombok.Setter;
 public class Servico implements Serializable {
     @EqualsAndHashCode.Include
     private Integer id;
+    private TipoServico tipoServico;
     private LocalDate data;
     private Set<Especialista> especialistas = new HashSet<>();
     private Set<Usuario> usuarios = new HashSet<>();
