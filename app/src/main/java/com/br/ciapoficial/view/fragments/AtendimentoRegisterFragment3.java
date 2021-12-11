@@ -656,8 +656,9 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroAtendimento() throws ParseException {
         if (
-                FieldValidator.validarProcedimento(autoCompleteTextViewProcedimento,
-                        listaProcedimentosRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewProcedimento,
+                        listaProcedimentosRecuperados, "O campo PROCEDIMENTO é obrigatório.",
+                        "Insira uma opção de PROCEDIMENTO válida.") &&
                 FieldValidator.isListEmptyOrNull(autoCompleteTextViewDocumentoProduzido,
                         listaDeDocumentosSelecionadosNaoValidados, "DOCUMENTO PRODUZIDO") &&
                 FieldValidator.isListEmptyOrNull(autoCompleteTextViewEncaminhamento,

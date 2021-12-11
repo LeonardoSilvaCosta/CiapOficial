@@ -2,6 +2,7 @@ package com.br.ciapoficial.view;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -10,13 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.model.Servico;
+import com.br.ciapoficial.model.in_servico.Atendimento;
+import com.br.ciapoficial.model.in_servico.Avaliacao;
+import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
 
 public class DetalhesAtendimentoActivity extends AppCompatActivity {
 
-    private TextView txtData, txtOficialResponsavel, txtAtendido, txtUnidade, txtModalidade, txtAcesso,
-    txtTipo, txtAvaliacao, txtPrograma, txtDeslocamento, txtDemandaGeral, txtDemandaEspecifica,
-            txtCondicaoLaboral, txtProcedimento, txtDocumentoProduzido,
-            txtAfastamento, txtEvolucao, txtDataHoraCadastro;
+    private TextView txtData, txtOficialResponsavel, txtAtendido, txtUnidade, txtModalidade,
+            txtAcesso, txtTipo, txtPrograma, txtDeslocamento, txtDemandaGeral,
+            txtDemandaEspecifica, txtProcedimento, txtDocumentoProduzido,
+            txtAfastamento, txtEvolucao, txtDataHoraCadastro, txtResponsavelCadastro,
+            txtSinalSintoma, txtMedicaoPsiquiatrica, txtAvaliacao, txtCondicaoLaboral;
+    private TextView legendaSinalSintoma, legendaMedicacaoPsiquiatrica, legendaAvaliacao,
+            legendaCondicaoLaboral;
     private Servico servicoSelecionado;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -25,24 +32,31 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_atendimento);
 
+        legendaSinalSintoma = findViewById(R.id.txtLegendaSinalSintoma);
+        legendaMedicacaoPsiquiatrica = findViewById(R.id.txtLegendaMedicacaoPsiquiatrica);
+        legendaAvaliacao = findViewById(R.id.txtLegendaAvaliacao);
+        legendaCondicaoLaboral = findViewById(R.id.txtLegendaCondicaoLaboral);
+        txtTipo = findViewById(R.id.txtTipo);
         txtData = findViewById(R.id.txtData);
         txtOficialResponsavel = findViewById(R.id.txtOficialResponsavel);
         txtAtendido = findViewById(R.id.txtAtendido);
         txtUnidade = findViewById(R.id.txtUnidade);
         txtModalidade = findViewById(R.id.txtModalidade);
         txtAcesso = findViewById(R.id.txtAcesso);
-        txtTipo = findViewById(R.id.txtTipo);
-        txtAvaliacao = findViewById(R.id.txtAvaliacao);
         txtPrograma = findViewById(R.id.txtPrograma);
         txtDeslocamento = findViewById(R.id.txtDeslocamento);
         txtDemandaGeral = findViewById(R.id.txtDemandaGeral);
         txtDemandaEspecifica = findViewById(R.id.txtDemandaEspecifica);
-        txtCondicaoLaboral = findViewById(R.id.txtCondicaoLaboral);
         txtProcedimento = findViewById(R.id.txtProcedimento);
         txtDocumentoProduzido = findViewById(R.id.txtDocumentoProduzido);
         txtAfastamento = findViewById(R.id.txtAfastamento);
         txtEvolucao = findViewById(R.id.txtEvolucao);
         txtDataHoraCadastro = findViewById(R.id.txtDataHoraCadastro);
+        txtResponsavelCadastro = findViewById(R.id.txtResponsavelCadastro);
+        txtAvaliacao = findViewById(R.id.txtAvaliacao);
+        txtCondicaoLaboral = findViewById(R.id.txtCondicaoLaboral);
+        txtSinalSintoma = findViewById(R.id.txtSinalSintoma);
+        txtMedicaoPsiquiatrica = findViewById(R.id.txtMedicacaoPsiquiatrica);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null)
@@ -51,19 +65,25 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 txtData.setText(DateFormater.localDateToString(servicoSelecionado.getData())); }
-            servicoSelecionado.getEspecialistas().forEach(e -> txtOficialResponsavel.setText(e.toString()));
-            servicoSelecionado.getUsuarios().forEach(e -> txtAtendido.setText(e.toString()));
+            txtOficialResponsavel.setText(servicoSelecionado.getEspecialistas().toString()
+                    .replace("[", "").replace("]", ""));
+            txtAtendido.setText(servicoSelecionado.getUsuarios().toString()
+                    .replace("[", "").replace("]", ""));
             txtUnidade.setText(servicoSelecionado.getUnidade().toString());
             txtModalidade.setText(servicoSelecionado.getModalidade().toString());
             txtAcesso.setText(servicoSelecionado.getAcesso().toString());
-            txtTipo.setText("ainda implementando...");
-//            txtAvaliacao.setText(atendimentoSelecionado.getTipoAvaliacao());
             txtPrograma.setText(servicoSelecionado.getPrograma().toString());
+            txtDeslocamento.setText(servicoSelecionado.getDeslocamentos().toString()
+                    .replace("[", "")
+                    .replace("]", ""));
             txtDemandaGeral.setText(servicoSelecionado.getDemandaGeral().toString());
-            servicoSelecionado.getDemandasEspecificas().forEach(e -> txtDemandaEspecifica.setText(e.toString()));
-//            txtCondicaoLaboral.setText(atendimentoSelecionado.getCondicaoLaboral());
+            txtDeslocamento.setText(servicoSelecionado.getDemandasEspecificas().toString()
+                    .replace("[", "")
+                    .replace("]", ""));
             txtProcedimento.setText(servicoSelecionado.getProcedimento().toString());
-            servicoSelecionado.getDocumentosProduzidos().forEach(e -> txtDocumentoProduzido.setText(e.toString()));
+            txtDocumentoProduzido.setText(servicoSelecionado.getDocumentosProduzidos().toString()
+                    .replace("[", "")
+                    .replace("]", ""));
             if(servicoSelecionado.isAfastamento())
             {
                 txtAfastamento.setText("Sim");
@@ -72,7 +92,45 @@ public class DetalhesAtendimentoActivity extends AppCompatActivity {
                 txtAfastamento.setText("Não");
             }
             txtEvolucao.setText(servicoSelecionado.getEvolucao());
-//            txtDataHoraCadastro.setText(servicoSelecionado.getDataHoraCadastro().toString());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                txtDataHoraCadastro.setText(DateFormater.localDateTimeToString(servicoSelecionado.getDataCadastro()));
+            }
+            txtResponsavelCadastro.setText(servicoSelecionado.getResponsavelCadastroServico().toString());
+        }
+
+        if(servicoSelecionado instanceof Atendimento) {
+            txtSinalSintoma.setText(((Atendimento) servicoSelecionado).getSinaisSintomas().toString()
+                    .replace("[", "")
+                    .replace("]", ""));
+            txtMedicaoPsiquiatrica.setText(((Atendimento) servicoSelecionado).getMedicacoesPsiquiatricas().toString()
+                    .replace("[", "")
+                    .replace("]", ""));
+            txtTipo.setText("Atendimento");
+
+            legendaAvaliacao.setVisibility(View.GONE);
+            txtAvaliacao.setVisibility(View.GONE);
+            legendaCondicaoLaboral.setVisibility(View.GONE);
+            txtCondicaoLaboral.setVisibility(View.GONE);
+        }else if(servicoSelecionado instanceof Avaliacao) {
+            txtAvaliacao.setText(((Avaliacao) servicoSelecionado).getTipoAvaliacao().toString());
+            txtTipo.setText("Avaliação");
+
+            legendaSinalSintoma.setVisibility(View.GONE);
+            txtSinalSintoma.setVisibility(View.GONE);
+            legendaMedicacaoPsiquiatrica.setVisibility(View.GONE);
+            txtMedicaoPsiquiatrica.setVisibility(View.GONE);
+            legendaCondicaoLaboral.setVisibility(View.GONE);
+            txtCondicaoLaboral.setVisibility(View.GONE);
+        }else {
+            txtCondicaoLaboral.setText(((ServicoDeAssistenciaEspecial) servicoSelecionado).getCondicaoLaboral().toString());
+            txtTipo.setText("SAE");
+
+            legendaSinalSintoma.setVisibility(View.GONE);
+            txtSinalSintoma.setVisibility(View.GONE);
+            legendaMedicacaoPsiquiatrica.setVisibility(View.GONE);
+            txtMedicaoPsiquiatrica.setVisibility(View.GONE);
+            legendaAvaliacao.setVisibility(View.GONE);
+            txtAvaliacao.setVisibility(View.GONE);
         }
 
 //        recuperarAtendimentosOficiais();

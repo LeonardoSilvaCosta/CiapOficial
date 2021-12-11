@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -501,11 +500,15 @@ public class UsuarioRegisterFragment1 extends Fragment {
                 FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
                 FieldValidator.validarCpf(textInputEditTextCpf) &&
                 FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
-                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaUfsRecuperadas) &&
-                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas) &&
-                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUfNatal, listaUfsRecuperadas,
+                        "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas,
+                        "O campo CIDADE é obrigatório.", "Insira uma opção de CIDADE válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados,
+                        "O campo ESTADO CIVIL é obrigatório.", "Insira uma pção de ESTADO CIVIL válida.") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
-                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas,
+                        "O campo ESCOLARIDADE é obrigatório.", "Insira uma opção de ESCOLARIDADE válida.") &&
                 FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
                 FieldValidator.validarEmail(textInputEditTextEmail) &&
                 FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
@@ -591,8 +594,6 @@ public class UsuarioRegisterFragment1 extends Fragment {
         bundle.putString("email", email);
         bundle.putSerializable("titular", titular);
         bundle.putSerializable("vinculo", vinculo);
-
-        Toast.makeText(getContext(), titular.toString(), Toast.LENGTH_SHORT).show();
 
         return bundle;
     }

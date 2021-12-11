@@ -298,15 +298,19 @@ public class UsuarioRegisterFragment3 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroDoUsuario() throws ParseException {
         if (
-                FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
-                listaPostoGradCatRecuperados) &&
-                FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewPostGradCat,
+                listaPostoGradCatRecuperados, "O campo POSTO/GRAD/CAT é obrigatório.",
+                        "Insira uma opção de POSTO/GRAD/CAT válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewQuadro, listaQuadrosRecuperados,
+                        "O campo QUADRO é obrigatório.", "Insira uma opção de QUADRO válida.") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
-                FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUnidade, listaUnidadesRecuperadas,
+                        "O campo UNIDADE é obrigatório.", "Insira uma opção de UNIDADE válida.") &&
                 FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
-                FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
-                        listaSituacoesFuncionaisRecuperadas))
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewSituacaoFuncional,
+                        listaSituacoesFuncionaisRecuperadas, "O campo SITUAÇÃO FUNCIONAL é obrigatório.",
+                        "Insira uma opção de SITUAÇÃO FUNCIONAL válida."))
         {
             receberDadosDoUsuarioPreenchidos();
             return true;

@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.helper.GsonLocalDateSerializer;
+import com.br.ciapoficial.helper.GsonLocalDateTimeSerializer;
 import com.br.ciapoficial.helper.VolleySingleton;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Usuario;
@@ -27,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,6 +99,7 @@ public class UsuarioController extends PessoaController {
 
                 GsonBuilder gsonBuilder = new GsonBuilder();
                 gsonBuilder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+                gsonBuilder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
                 Gson gson = gsonBuilder.setPrettyPrinting().create();
 
                 return gson.toJson(usuario).getBytes();

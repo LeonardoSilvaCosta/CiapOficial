@@ -41,19 +41,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
 
         Servico servico = servicos.get(position);
 
-        if(!servico.getEspecialistas().isEmpty() && servico.getEspecialistas() != null) {
-            String resumoOficiais = new ArrayList<>(servico.getEspecialistas()).get(0).toString().
-                    replace("[", "").replace("]", "");
-
-            if(servico.getEspecialistas().size() > 1)
-            {
-                holder.nomeOficiais.setText(resumoOficiais + "...+(" + (servico.getEspecialistas().size() - 1) + ")");
-            }else
-            {
-                holder.nomeOficiais.setText(servico.getEspecialistas().toString().
-                        replace("[", "").replace("]", ""));
-            }
-        }
+        holder.data.setText(DateFormater.localDateToString(servico.getData()));
 
         if(!servico.getUsuarios().isEmpty() && servico.getUsuarios() != null) {
 
@@ -72,9 +60,19 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
 
         }
 
+        if(!servico.getEspecialistas().isEmpty() && servico.getEspecialistas() != null) {
+            String resumoOficiais = new ArrayList<>(servico.getEspecialistas()).get(0).toString().
+                    replace("[", "").replace("]", "");
 
-
-        holder.data.setText(DateFormater.localDateToString(servico.getData()));
+            if(servico.getEspecialistas().size() > 1)
+            {
+                holder.nomeOficiais.setText(resumoOficiais + "...+(" + (servico.getEspecialistas().size() - 1) + ")");
+            }else
+            {
+                holder.nomeOficiais.setText(servico.getEspecialistas().toString().
+                        replace("[", "").replace("]", ""));
+            }
+        }
 
     }
 

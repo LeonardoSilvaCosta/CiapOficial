@@ -32,6 +32,35 @@
             android:paddingLeft="5dp">
 
             <TextView
+                android:id="@+id/txtLegendaTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="• Tipo"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="tipo"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+
+            <TextView
                 android:id="@+id/txtLegendaData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -194,35 +223,6 @@
                 android:layout_marginLeft="37dp"
                 android:paddingBottom="10dp"
                 android:text="acesso"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="5dp">
-
-            <TextView
-                android:id="@+id/txtLegendaTipo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="27dp"
-                android:layout_marginLeft="27dp"
-                android:layout_marginBottom="10dp"
-                android:text="• Tipo"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/txtTipo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="37dp"
-                android:layout_marginLeft="37dp"
-                android:paddingBottom="10dp"
-                android:text="tipo"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -436,6 +436,62 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="5dp">
+         <TextView
+                android:id="@+id/txtLegendaSinalSintoma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="Sinais e sintomas"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtSinalSintoma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="Sinais e sintomas"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+            <TextView
+                android:id="@+id/txtLegendaMedicacaoPsiquiatrica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginBottom="10dp"
+                android:text="Medicação psiquiátrica"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtMedicacaoPsiquiatrica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginLeft="37dp"
+                android:paddingBottom="10dp"
+                android:text="Medicação psiquiátrica"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
 
             <TextView
                 android:id="@+id/txtLegendaDocumentoProduzido"
@@ -545,6 +601,33 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            android:textStyle="bold"
+            <TextView
+                android:id="@+id/txtResponsavelCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:text="@string/responsavel_cadastro_underline"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/txtLegendaResponsavelCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-3dp"
+                android:paddingBottom="10dp"
+                android:text="Responsável pelo cadastro"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

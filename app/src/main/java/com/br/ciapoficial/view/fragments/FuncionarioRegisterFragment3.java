@@ -521,19 +521,25 @@ public class FuncionarioRegisterFragment3 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroDoFuncionario() throws ParseException {
         if (
-                FieldValidator.validarPostoGradCat(autoCompleteTextViewPostGradCat,
-                        listaPostoGradCatRecuperados) &&
-                        FieldValidator.validarQuadro(autoCompleteTextViewQuadro, listaQuadrosRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewPostGradCat,
+                        listaPostoGradCatRecuperados, "O campo POSTO/GRAD/CAT é obrigatório.",
+                        "Insira uma opção de POSTO/GRAD/CAT válida.") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewQuadro, listaQuadrosRecuperados,
+                                "O campo QUADRO é obrigatório.", "Insira uma opção de QUADRO válida.") &&
                         FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
                         FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
-                        FieldValidator.validarUnidade(autoCompleteTextViewUnidade, listaUnidadesRecuperadas) &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUnidade, listaUnidadesRecuperadas,
+                                "O campo UNIDADE é obrigatório.", "Insira uma opção de UNIDADE válida.") &&
                         FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
-                        FieldValidator.validarFuncaoAdministrativa(autoCompleteTextViewFuncaoAdministrativa,
-                                listaFuncoesAdministrativasRecuperadas) &&
-                        FieldValidator.validarSituacaoFuncional(autoCompleteTextViewSituacaoFuncional,
-                                listaSituacoesFuncionaisRecuperadas) &&
-                        FieldValidator.validarEspecialidade(autoCompleteTextViewEspecialidade,
-                                listaEspecialidadesRecuperadas) &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewFuncaoAdministrativa,
+                                listaFuncoesAdministrativasRecuperadas, "O campo FUNCAO ADMINISTRATIVA é obrigatório.",
+                                "Insira uma opção de FUNÇÃO ADMINISTRATIVA válida.") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewSituacaoFuncional,
+                                listaSituacoesFuncionaisRecuperadas, "o campo SITUAÇÃO FUNCIONAL é obrigatório",
+                                "Insira uma SITUAÇÃO FUNCIONAL válida.") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEspecialidade,
+                                listaEspecialidadesRecuperadas, "O campo ESPECIALIDADE é obrigatório.",
+                                "Insira uma opção de ESPECIALIDADE válida.") &&
                         FieldValidator.isFieldEmptyOrNull(textInputEditTextRegistroConselho, "REGISTRO DO CONSELHO"))
         {
             receberDadosDoFuncionarioPreenchidos();

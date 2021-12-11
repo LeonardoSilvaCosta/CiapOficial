@@ -560,11 +560,15 @@ public class FuncionarioUpdateFragment1 extends Fragment {
                 FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
                 FieldValidator.validarCpf(textInputEditTextCpf) &&
                 FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
-                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
-                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
-                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas,
+                        "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas,
+                        "O campo Cidade é obrigatório.", "Insira uma opção de Cidade válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados,
+                        "O campo ESTADO CIVIL é obrigatório.", "Insira uma opção de ESTADO CIVIL válida.") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
-                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas,
+                        "O campo ESCOLARIDADE é obrigatório.", "Insira uma opção de ESCOLARIDADE válida.") &&
                 FieldValidator.validarTelefones(textInputEditTextTelefone, listaDeTelefonesAdicionados) &&
                 FieldValidator.validarEmail(textInputEditTextEmail) &&
                 FieldValidator.validarSenhaUpdate(textInputEditTextSenha, rbtnAtualizarSenhaSim.isChecked()))

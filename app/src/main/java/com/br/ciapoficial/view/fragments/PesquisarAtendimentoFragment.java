@@ -3,7 +3,6 @@ package com.br.ciapoficial.view.fragments;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,9 @@ import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
 import com.br.ciapoficial.helper.RecyclerItemClickListener;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Servico;
+import com.br.ciapoficial.model.in_servico.Atendimento;
+import com.br.ciapoficial.model.in_servico.Avaliacao;
+import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
 import com.br.ciapoficial.view.DetalhesAtendimentoActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -129,8 +131,6 @@ public class PesquisarAtendimentoFragment extends Fragment {
             @Override
             public void onSucess(String response) {
 
-                Log.e("ResAtd", response);
-
                 listaDeServicos.clear();
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -142,12 +142,19 @@ public class PesquisarAtendimentoFragment extends Fragment {
                         customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
                         customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
                         Gson gson = customGson.create();
-                        Servico servico = gson.fromJson(String.valueOf(jsonObject), Servico.class);
+                        Avaliacao avaliacao = gson.fromJson(String.valueOf(jsonObject), Avaliacao.class);
+                        ServicoDeAssistenciaEspecial sae = gson.fromJson(String.valueOf(jsonObject), ServicoDeAssistenciaEspecial.class);
 
-                        listaDeServicos.add(servico);
+                        if(avaliacao.getTipoAvaliacao() != null) {
+                            listaDeServicos.add(avaliacao);
+                        }else if(sae.getCondicaoLaboral() != null) {
+                            listaDeServicos.add(sae);
+                        }else {
+                            Atendimento atendimento = gson.fromJson(String.valueOf(jsonObject), Atendimento.class);
+                            listaDeServicos.add(atendimento);
+                        }
 
                     }
-
                     adapter.notifyDataSetChanged();
 
                 }catch (JSONException e) {

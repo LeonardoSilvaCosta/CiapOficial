@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,11 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AuthenticationController;
 import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.PersistentCookieStore;
-import com.br.ciapoficial.interfaces.IVolleyCallback;
+import com.br.ciapoficial.model.Funcionario;
 import com.br.ciapoficial.model.UserModel;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +29,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.util.List;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -73,12 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
         configurarComponentes();
 
-        txtRecuperarSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recuperarSenha();
-            }
-        });
+        txtRecuperarSenha.setOnClickListener(v -> recuperarSenha());
 
         entrar();
     }
@@ -94,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validarCampos() {
 
-        String senha = textInputEditTextSenha.getText().toString();
+        String senha = Objects.requireNonNull(textInputEditTextSenha.getText()).toString().trim();
 
         if(FieldValidator.validarEmail(textInputEditTextEmail)) {
             if(!senha.isEmpty()) {
@@ -116,43 +112,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void entrar() {
 
-        btnEntrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnEntrar.setOnClickListener(v -> {
 
-                if(validarCampos()) {
-                    UserModel usuario = new UserModel();
-                    usuario.setEmail(textInputEditTextEmail.getText().toString().trim());
-                    usuario.setSenha(textInputEditTextSenha.getText().toString().trim());
+            if(validarCampos()) {
+                UserModel usuario = new UserModel();
+                usuario.setEmail(Objects.requireNonNull(textInputEditTextEmail.getText()).toString().trim());
+                usuario.setSenha(Objects.requireNonNull(textInputEditTextSenha.getText()).toString().trim());
 
-                    AuthenticationController authenticationController = new AuthenticationController();
-                    authenticationController.logarUsuario(getApplicationContext(), usuario, new IVolleyCallback() {
-                        @Override
-                        public void onSucess(String response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
+                AuthenticationController authenticationController = new AuthenticationController();
+                authenticationController.logarUsuario(getApplicationContext(), usuario, response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
 
-                                int id = jsonObject.getInt("id");
-                                String sexo = jsonObject.getString("sexo");
+                        Gson gson = new Gson();
+                        Funcionario funcionario;
+                        funcionario = gson.fromJson(jsonObject.toString(), Funcionario.class);
 
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(USER_ID, String.valueOf(id));
-                                editor.putString(USER_SEX, sexo);
-                                editor.commit();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(USER_ID, String.valueOf(funcionario.getId()));
+                        editor.putString(USER_SEX, funcionario.getSexo().getNome());
+                        editor.apply();
 
-                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(i);
-                                finish();
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    });
-                }
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
+
         });
 
     }
@@ -162,50 +152,36 @@ public class LoginActivity extends AppCompatActivity {
 
         dialog.setContentView(R.layout.alert_dialog_recuperar_senha);
 
-        TextInputEditText edtEnviarEmail = (TextInputEditText) dialog.findViewById(R.id.txtInputEdtEnviarEmail);
-        Button btnEnviarEmail = (Button) dialog.findViewById(R.id.btnEnviarEmail);
-        Button btnCancelar = (Button) dialog.findViewById(R.id.btnCancelar);
+        TextInputEditText edtEnviarEmail = dialog.findViewById(R.id.txtInputEdtEnviarEmail);
+        Button btnEnviarEmail = dialog.findViewById(R.id.btnEnviarEmail);
+        Button btnCancelar = dialog.findViewById(R.id.btnCancelar);
 
-        btnEnviarEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnEnviarEmail.setOnClickListener(v -> {
 
-                String email = edtEnviarEmail.getText().toString();
+            String email = Objects.requireNonNull(edtEnviarEmail.getText()).toString();
 
-                FuncionarioController funcionarioController = new FuncionarioController();
-                funcionarioController.recuperarSenha(getApplicationContext(), email, new IVolleyCallback() {
-                    @Override
-                    public void onSucess(String response) {
+            FuncionarioController funcionarioController = new FuncionarioController();
+            funcionarioController.recuperarSenha(getApplicationContext(), email, response -> {
 
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String mensagem = jsonObject.getString("resposta");
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String mensagem = jsonObject.getString("resposta");
 
-                                Toast.makeText(LoginActivity.this,
-                                        mensagem,
-                                        Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,
+                                mensagem,
+                                Toast.LENGTH_LONG).show();
 
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
 
-                });
+            dialog.dismiss();
 
-                dialog.dismiss();
-
-            }
         });
 
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-
-            }
-        });
+        btnCancelar.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
 

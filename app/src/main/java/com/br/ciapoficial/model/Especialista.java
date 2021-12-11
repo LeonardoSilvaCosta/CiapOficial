@@ -17,6 +17,7 @@ public class Especialista extends Funcionario{
 
     @Override
     public String toString () {
-        return this.getPostoGradCat() + " " + this.getEspecialidade() + " - " + this.getRgMilitar();
+        return this.getPostoGradCat() + " " + this.getQuadro() + " " +
+               " " + this.getRgMilitar() + " " + this.getNomeGuerra();
     }
 }

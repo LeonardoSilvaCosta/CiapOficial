@@ -142,8 +142,10 @@ public class FuncionarioRegisterFragment2 extends Fragment {
     private boolean validarCadastroFuncionario() {
         if (
                 FieldValidator.validarCep(textInputEditTextCep) &&
-                FieldValidator.validarUF(autoCompleteTextViewUf, listaEstadosRecuperados) &&
-                FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUf, listaEstadosRecuperados,
+                        "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidade, listaCidadesRecuperadas,
+                        "O campo CIDADE é obrigatório.", "Insira uma opção de CIDADE válida. ") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextBairro, "BAIRRO") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextLogradouro, "LOGRADOURO") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNumero, "NÚMERO"))

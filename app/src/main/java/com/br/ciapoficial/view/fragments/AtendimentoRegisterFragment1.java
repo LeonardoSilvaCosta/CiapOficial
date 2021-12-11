@@ -267,9 +267,7 @@ public class AtendimentoRegisterFragment1 extends Fragment {
             linearLayoutEspecialista.removeAllViews();
         }else{
             criarTextViewParaEspecialistasSelecionados();
-            for(Especialista especialistaRecebido : listaDeEspecialistasSelecionadosValidados) {
-                listaDeEspecialistasSelecionadosNaoValidados.add(especialistaRecebido);
-            }
+            listaDeEspecialistasSelecionadosNaoValidados.addAll(listaDeEspecialistasSelecionadosValidados);
         }
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewEspecialista);
@@ -279,7 +277,7 @@ public class AtendimentoRegisterFragment1 extends Fragment {
             public void onClick(View v) {
 
                 AddRemoveTextView.adicionarTextViewEspecialista(getActivity(), autoCompleteTextViewEspecialista,
-                        AtendimentoRegisterFragment1.this.listaDeEspecialistasRecuperados, listaDeEspecialistasSelecionadosNaoValidados,
+                        listaDeEspecialistasRecuperados, listaDeEspecialistasSelecionadosNaoValidados,
                         adapterEspecialistas, linearLayoutEspecialista);
             }
         });
@@ -338,9 +336,7 @@ public class AtendimentoRegisterFragment1 extends Fragment {
             linearLayoutEspecialista.removeAllViews();
         }else{
             criarTextViewParaAtendidosSelecionados();
-            for(Usuario atendidoRecebido : listaDeAtendidosSelecionadosValidados) {
-                listaDeAtendidosSelecionadosNaoValidados.add(atendidoRecebido);
-            }
+            listaDeAtendidosSelecionadosNaoValidados.addAll(listaDeAtendidosSelecionadosValidados);
         }
 
         DropDownClick.showDropDown(getActivity(), autoCompleteTextViewAtendido);
@@ -497,9 +493,12 @@ public class AtendimentoRegisterFragment1 extends Fragment {
                         listaDeEspecialistasSelecionadosNaoValidados, "ESPECIALISTA") &&
                 FieldValidator.isListEmptyOrNull(autoCompleteTextViewAtendido,
                         listaDeAtendidosSelecionadosNaoValidados, "ATENDIDO") &&
-                FieldValidator.validarUnidade(autoCompleteTextViewUnidadeDoServico, listaDeUnidadesRecuperadas) &&
-                FieldValidator.validarModalidade(autoCompleteTextViewModalidadeDoServico, listaDeModalidadesRecuperadas) &&
-                FieldValidator.validarAcessoAtendimento(autoCompleteTextViewAcessoAoServico, listaAcessosAoServicoRecuperados))
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUnidadeDoServico, listaDeUnidadesRecuperadas,
+                        "O campo UNIDADE é obrigatório.", "Insira uma opção de UNIDADE válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewModalidadeDoServico, listaDeModalidadesRecuperadas,
+                        "O campo MODALIDADE é obrigatório.", "Insira uma opção de MODALIDADE válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewAcessoAoServico, listaAcessosAoServicoRecuperados,
+                        "O campo ACESSO é obrigatório.", "Insira uma opção de ACESSO válida."))
 {
             receberDadosDoServicoPreenchidos();
             return true;

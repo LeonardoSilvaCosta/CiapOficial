@@ -31,8 +31,5 @@ public abstract class Pessoa implements Serializable {
     private Funcionario responsavelCadastro;
     private LocalDateTime dataEdicao;
     private Funcionario responsavelEdicao;
-
-
-
 }
 

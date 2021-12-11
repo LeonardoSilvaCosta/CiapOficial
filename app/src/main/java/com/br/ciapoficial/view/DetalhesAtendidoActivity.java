@@ -90,16 +90,13 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
             txtEscolaridade.setText(usuarioSelecionado.getEscolaridade().getNome());
             txtNumeroFilhos.setText(String.valueOf(usuarioSelecionado.getNumeroFilhos()));
             txtEndereco.setText(usuarioSelecionado.getEndereco().toString());
-//            txtDataHoraCadastro.setText(DateFormater.localDateToString(usuarioSelecionado.getDataCadastro()));
-
-//            String atualizacao = usuarioSelecionado.getDataHoraAtualizacao();
-//            if(atualizacao != null && !atualizacao.isEmpty()) {
-//                txtDataHoraAtualizacao.setText(usuarioSelecionado.getDataHoraAtualizacao());
-//
-//            }else {
-//                linearLayoutDataHoraAtualizacao.setVisibility(View.GONE);
-//            }
-
+            txtDataHoraCadastro.setText(DateFormater.localDateTimeToString(usuarioSelecionado.getDataCadastro()));
+            if(usuarioSelecionado.getDataEdicao() != null) {
+                txtDataHoraAtualizacao.setText(DateFormater.localDateTimeToString(usuarioSelecionado.getDataEdicao()));
+            }else {
+                linearLayoutDataHoraAtualizacao.setVisibility(View.GONE);
+                txtDataHoraAtualizacao.setVisibility(View.GONE);
+            }
 
             if(usuarioSelecionado.getRgMilitar() != null && !usuarioSelecionado.getRgMilitar().isEmpty()) {
                 txtNomeGuerra.setText(usuarioSelecionado.getNomeGuerra());

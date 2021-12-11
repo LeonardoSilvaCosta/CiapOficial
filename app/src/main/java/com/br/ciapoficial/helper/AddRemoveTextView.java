@@ -27,6 +27,66 @@ import java.util.Objects;
 
 public class AddRemoveTextView {
 
+//    public static void adicionarAutoCompletTextView(Context context, EditText campo, List<Object> listaDeDadosRecuperados,
+//                                                    List<Type> listaDisplay, ArrayAdapter<Type> adapter, LinearLayout linearLayout,
+//                                                    String mensagemParaCampoVazio, String mensagemParaDadoJaInserido)
+//    {
+//
+//        String textoRecebido = campo.getText().toString().trim();
+//        TextView textView = new TextView(context);
+//        if (textoRecebido.isEmpty()) {
+//            campo.setError(mensagemParaCampoVazio);
+//            campo.requestFocus();
+//            DellayAction.clearErrorAfter2Seconds((AutoCompleteTextView) campo);
+//        } else {
+//            if (!(listaDisplay.toString().contains(textoRecebido))) {
+//                textView.setPadding(0, 10, 0, 10);
+//                textView.setText(textoRecebido);
+//                textView.setTag("lista");
+//
+//                linearLayout.addView(textView);
+//
+//                campo.setText("");
+//
+//                for(Object objeto : listaDeDadosRecuperados) {
+//                    if(objeto.toString().equals(textoRecebido)) {
+//                        listaDisplay.add(objeto);
+//                        break;
+//                    }
+//                }
+//
+//            } else {
+//                campo.setError(mensagemParaDadoJaInserido);
+//                campo.requestFocus();
+//                DellayAction.clearErrorAfter2Seconds((AutoCompleteTextView) campo);
+//                campo.setText("");
+//            }
+//        }
+//        removerItemDaListaDeObjetos(textView, listaDisplay, adapter);
+//    }
+
+    public static void removerItemDaListaDeObjetos(TextView textView, List<Object> listaDisplay,
+                                                   ArrayAdapter<Object> adapter)
+    {
+        textView.setOnClickListener(v -> {
+
+            String string = textView.getText().toString().trim();
+            for(Iterator<Object> iter = listaDisplay.iterator(); iter.hasNext();)
+            {
+                Object objetoSelecionado = iter.next();
+                if(objetoSelecionado.toString().equals(string))
+                {
+                    listaDisplay.remove(objetoSelecionado);
+                    adapter.notifyDataSetChanged();
+
+                    textView.setVisibility(View.GONE);
+                    break;
+
+                }
+            }
+        });
+    }
+
     public static void adicionarTextViewEspecialista(Context context, AutoCompleteTextView campo,
                                                      List<Especialista> oficiasRecuperados, List<Especialista> listaDisplay,
                                                      ArrayAdapter<Especialista> adapter, LinearLayout linearLayout)
@@ -51,9 +111,8 @@ public class AddRemoveTextView {
                 for(Especialista oficial : oficiasRecuperados) {
                     if(oficial.toString().equals(textoRecebido)) {
                         listaDisplay.add(oficial);
+                        break;
                     }
-                    adapter.notifyDataSetChanged();
-                    break;
                 }
 
             } else {
@@ -72,8 +131,11 @@ public class AddRemoveTextView {
         textView.setOnClickListener(v -> {
 
             String string = textView.getText().toString();
-            for (Especialista oficialSelecionado : listaDisplay) {
-                if (oficialSelecionado.toString().equals(string)) {
+            for(Iterator<Especialista> iter = listaDisplay.iterator(); iter.hasNext();)
+            {
+                Especialista oficialSelecionado = iter.next();
+                if(oficialSelecionado.toString().equals(string))
+                {
                     listaDisplay.remove(oficialSelecionado);
                     adapter.notifyDataSetChanged();
 

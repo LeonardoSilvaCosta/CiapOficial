@@ -21,6 +21,6 @@ public class Endereco implements Serializable {
     @Override
     public String toString() {
         return logradouro + ", n° " + numero + ", " + bairro +
-                ", " + cidade + "+" + estado + ", " + cep + ".";
+                ", " + cidade + "-" + cidade.getEstado() + ", " + cep + ".";
     }
 }

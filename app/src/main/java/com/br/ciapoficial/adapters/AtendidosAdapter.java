@@ -36,7 +36,10 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
 
         Usuario usuario = usuarios.get(position);
 
-        holder.nome.setText(usuario.getNomeCompleto());
+        if(usuario.getNomeCompleto() != null)
+            holder.nome.setText(usuario.getNomeCompleto());
+
+        if(usuario.getCpf() != null)
         holder.cpf.setText(usuario.getCpf());
     }
 

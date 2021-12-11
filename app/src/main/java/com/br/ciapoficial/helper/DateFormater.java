@@ -7,8 +7,8 @@ import androidx.annotation.RequiresApi;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class DateFormater {
 
@@ -44,6 +44,13 @@ public class DateFormater {
         LocalDate localDate = LocalDate.parse(data, df);
         return localDate;
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String localDateTimeToString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
+        String formattedString = dateTime.format(formatter);
+        return formattedString;
     }
 
 }

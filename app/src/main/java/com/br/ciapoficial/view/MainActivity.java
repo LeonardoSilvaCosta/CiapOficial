@@ -19,14 +19,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.helper.PersistentCookieStore;
-import com.br.ciapoficial.view.fragments.FuncionarioRegisterFragment1;
 import com.br.ciapoficial.view.fragments.PrincipalFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Toolbar ciapToolbar;
-    private PrincipalFragment principalFragment;
-    private FuncionarioRegisterFragment1 funcionarioRegisterFragment1;
 
     private SharedPreferences sharedPreferencesCookie;
     private SharedPreferences sharedPreferencesUser;
@@ -36,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ciapToolbar =  findViewById(R.id.includedToolbar);
+        Toolbar ciapToolbar = findViewById(R.id.includedToolbar);
         setSupportActionBar(ciapToolbar);
 
         sharedPreferencesCookie = getSharedPreferences(PersistentCookieStore.PREFS_NAME, Context.MODE_PRIVATE);
         sharedPreferencesUser = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
-        principalFragment = new PrincipalFragment();
+        PrincipalFragment principalFragment = new PrincipalFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameConteudo, principalFragment);
         transaction.commit();
@@ -71,20 +66,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public boolean desconectarFuncionario() {
+    public void desconectarFuncionario() {
 
         SharedPreferences.Editor editor = sharedPreferencesCookie.edit();
         editor.remove("Authorization");
-        editor.commit();
+        editor.apply();
 
         SharedPreferences.Editor editor2 = sharedPreferencesUser.edit();
         editor2.remove(FILE_NAME);
-        editor2.commit();
+        editor2.apply();
 
         abrirTelaLogin();
         finish();
-
-        return true;
     }
 
     private void abrirTelaLogin() {

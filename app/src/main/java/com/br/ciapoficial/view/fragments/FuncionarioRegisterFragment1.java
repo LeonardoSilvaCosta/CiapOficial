@@ -324,11 +324,15 @@ public class FuncionarioRegisterFragment1 extends Fragment {
                 FieldValidator.validarData(textInputEditTextDataDeNascimento, "DATA DE NASCIMENTO") &&
                 FieldValidator.validarCpf(textInputEditTextCpf) &&
                 FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
-                FieldValidator.validarUF(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas) &&
-                FieldValidator.validarCidade(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas) &&
-                FieldValidator.validarEstadoCivil(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUfNatal, listaDeUfsRecuperadas,
+                        "O Campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidadeNatal, listaDeCidadesRecuperadas,
+                        "O campo Cidade é obrigatório.", "Insira uma opção de Cidade válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEstadoCivil, listaDeEstadosCivisRecuperados,
+                        "O campo Estado Civil é obrigatório.", "Insira uma opção de Estado Civil válida.") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroDeFilhos, "NÚMERO DE FILHOS") &&
-                FieldValidator.validarEscolaridade(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEscolaridade, listaDeEscolaridadesRecuperadas,
+                        "O campo Escolaridade é obrigatório.", "Insira uma opção de Escolaridade válida.") &&
                 FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListDeTelefonesAdicionados) &&
                 FieldValidator.validarEmail(textInputEditTextEmail))
         {

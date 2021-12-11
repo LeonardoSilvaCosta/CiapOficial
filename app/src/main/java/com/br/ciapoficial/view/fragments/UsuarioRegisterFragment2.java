@@ -22,7 +22,6 @@ import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.helper.MunicipioComBaseNaUF;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
@@ -34,6 +33,7 @@ import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Vinculo;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -189,8 +189,10 @@ public class UsuarioRegisterFragment2 extends Fragment {
 
         if (
                 FieldValidator.validarCep(textInputEditTextCep) &&
-                FieldValidator.validarUF(autoCompleteTextViewUf, listaEstadosRecuperados) &&
-                FieldValidator.validarCidade(autoCompleteTextViewCidade, listaCidadesRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUf, listaEstadosRecuperados,
+                        "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidade, listaCidadesRecuperadas,
+                        "O campo CIDADE é obrigatório.", "Insira uma opção de CIDADE válida.") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextBairro, "BAIRRO") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextLogradouro, "LOGRADOURO") &&
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNumero, "NÚMERO"))
@@ -278,7 +280,6 @@ public class UsuarioRegisterFragment2 extends Fragment {
         Bundle valoresRecebidosFragment1 = recuperarDadosUsuarioRegisterFragment1();
 
        Usuario usuario = new Usuario();
-       Usuario titular = new Usuario();
 
        LocalDate dataNascimento = DateFormater.StringToLocalDate(valoresRecebidosFragment1.getString("dataNascimento"));
 
@@ -289,10 +290,10 @@ public class UsuarioRegisterFragment2 extends Fragment {
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
         usuario.setEstadoCivil((EstadoCivil) valoresRecebidosFragment1.getSerializable("estadoCivil"));
-        usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("cidadeNatal"));
+        usuario.setNaturalidade((Cidade) valoresRecebidosFragment1.getSerializable("naturalidade"));
         usuario.setEscolaridade((Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setNumeroFilhos((valoresRecebidosFragment1.getInt("numeroFilhos")));
-        usuario.setTitular(titular);
+        usuario.setTitular((Usuario) valoresRecebidosFragment1.getSerializable("titular"));
         usuario.setTipoVinculo((Vinculo) valoresRecebidosFragment1.getSerializable("vinculo"));
 
         usuario.setEndereco(endereco);

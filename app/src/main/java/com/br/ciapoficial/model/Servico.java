@@ -26,7 +26,6 @@ import lombok.Setter;
 public class Servico implements Serializable {
     @EqualsAndHashCode.Include
     private Integer id;
-    private LocalDateTime dataHoraCadastro;
     private LocalDate data;
     private Set<Especialista> especialistas = new HashSet<>();
     private Set<Usuario> usuarios = new HashSet<>();
@@ -42,5 +41,6 @@ public class Servico implements Serializable {
     private Set<DocumentoProduzido> documentosProduzidos = new HashSet<>();
     private boolean afastamento;
     private String evolucao;
+    private LocalDateTime dataCadastro;
     private Funcionario responsavelCadastroServico;
 }

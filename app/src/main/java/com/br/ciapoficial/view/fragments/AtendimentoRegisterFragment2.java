@@ -660,12 +660,15 @@ public class AtendimentoRegisterFragment2 extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroAtendimento() throws ParseException {
         if (
-                FieldValidator.validarTipoDeServico(autoCompleteTextViewTipoServico,
-                        listaTiposServicosRecuperados) &&
-                FieldValidator.validarPrograma(autoCompleteTextViewPrograma, listaProgramasRecuperados) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewTipoServico,
+                        listaTiposServicosRecuperados, "O campo TIPO DE SERVIÇO é obrigatório.",
+                        "Insira uma opção de TIPO DE SERVIÇO válida.") &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewPrograma, listaProgramasRecuperados,
+                        "O campo PROGRAMA é obrigatório.", "Insira uma opção de PROGRAMA válida.") &&
                 FieldValidator.isListEmptyOrNull(autoCompleteTextViewDeslocamento,
                         listaDeDeslocamentosSelecionadosNaoValidados, "DESLOCAMENTO") &&
-                FieldValidator.validarDemandaGeral(autoCompleteTextViewDemandaGeral, listaDemandasGeraisRecuperadas) &&
+                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewDemandaGeral, listaDemandasGeraisRecuperadas,
+                        "O campo DEMANDA GERAL é obrigatório.", "Insira uma opção de DEMANDA GERAL válida.") &&
                 FieldValidator.isListEmptyOrNull(autoCompleteTextViewDemandaEspecifica,
                         listaDeDemandasEspecificasSelecionadasNaoValidadas, "DEMANDA ESPECÍFICA") &&
                 FieldValidator.validarCondicaoLaboral(autoCompleteTextViewCondicaoLaboral,
