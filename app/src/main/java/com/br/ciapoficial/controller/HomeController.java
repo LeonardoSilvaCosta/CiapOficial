@@ -26,12 +26,12 @@ import java.util.Map;
 
 import lombok.SneakyThrows;
 
-public class DemandaGeralController {
+public class HomeController {
 
-    private String url = Constants.BASE_API_URL+ "/demandas+gerais";
+    private String url = Constants.BASE_API_URL + "/";
     private SharedPreferences sharedPreferences;
 
-    public void listar(Context context, final IVolleyCallback callback) {
+    public void get(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
         sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
@@ -83,7 +83,6 @@ public class DemandaGeralController {
                 return headers;
             }
         };
-
         queue.add(stringRequest);
     }
 }

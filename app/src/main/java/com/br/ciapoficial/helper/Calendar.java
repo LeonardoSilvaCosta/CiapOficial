@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class Calendar {

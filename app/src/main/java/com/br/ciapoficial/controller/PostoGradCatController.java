@@ -1,6 +1,9 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,11 +28,16 @@ import lombok.SneakyThrows;
 
 public class PostoGradCatController {
 
+    private SharedPreferences sharedPreferences;
+
     public void listar(Context context, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/postos+graduacoes+categorias";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -72,6 +80,7 @@ public class PostoGradCatController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };

@@ -1,8 +1,10 @@
 package com.br.ciapoficial.controller;
 
 import static com.br.ciapoficial.Constants.BASE_API_URL;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -40,10 +42,13 @@ public class AvaliacaoController {
     private static String TAG = AvaliacaoController.class.getName();
 
     private String url = BASE_API_URL + "/avaliacoes";
+    private SharedPreferences sharedPreferences;
 
     public void registrar(Context context, Avaliacao avaliacao, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -88,6 +93,7 @@ public class AvaliacaoController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json; charset=utf8");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
 
@@ -113,6 +119,8 @@ public class AvaliacaoController {
     public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -156,6 +164,7 @@ public class AvaliacaoController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };

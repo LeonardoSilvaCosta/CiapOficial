@@ -1,8 +1,10 @@
 package com.br.ciapoficial.controller;
 
 import static com.br.ciapoficial.Constants.BASE_API_URL;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,11 +29,15 @@ import lombok.SneakyThrows;
 
 public class CidadeController {
 
+    private SharedPreferences sharedPreferences;
+
     public void listar(Context context, final IVolleyCallback callback) {
 
         String url = BASE_API_URL + "/cidades";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -76,6 +82,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -88,6 +95,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/1";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -132,6 +141,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -144,6 +154,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/2";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -188,6 +200,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -200,6 +213,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/3";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -243,6 +258,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -255,6 +271,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/4";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -298,6 +316,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -310,6 +329,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/5";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -353,6 +374,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -365,6 +387,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/6";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -408,6 +432,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -420,6 +445,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/7";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -463,6 +490,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -475,6 +503,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/8";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -518,6 +548,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -530,6 +561,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/9";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -573,6 +606,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -585,6 +619,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/10";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -628,6 +664,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -640,6 +677,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/11";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -683,6 +722,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -695,6 +735,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/12";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -738,6 +780,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -750,6 +793,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/13";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -793,6 +838,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -805,6 +851,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/14";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -848,6 +896,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -860,6 +909,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/15";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -903,6 +954,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -915,6 +967,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/16";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -958,6 +1012,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -970,6 +1025,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/17";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1013,6 +1070,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1025,6 +1083,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/18";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1067,7 +1127,7 @@ public class CidadeController {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
-                headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1080,6 +1140,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/19";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1123,6 +1185,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1135,6 +1198,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/20";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1178,6 +1243,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1190,6 +1256,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/21";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1233,6 +1301,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1245,6 +1314,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/22";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1288,6 +1359,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1300,6 +1372,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/23";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1343,6 +1417,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1355,6 +1430,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/24";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1398,6 +1475,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1410,6 +1488,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/25";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1453,6 +1533,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1465,6 +1546,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/26";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1508,6 +1591,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -1520,6 +1604,8 @@ public class CidadeController {
         String url = BASE_API_URL + "/cidades/27";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -1563,6 +1649,7 @@ public class CidadeController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };

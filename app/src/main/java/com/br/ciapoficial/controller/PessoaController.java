@@ -1,6 +1,9 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -34,12 +37,15 @@ import lombok.SneakyThrows;
 public abstract class PessoaController {
 
     private static String TAG = PessoaController.class.getName();
+    private SharedPreferences sharedPreferences;
 
     public void cadastrar(Context context, Pessoa pessoa, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/pessoas";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -83,6 +89,7 @@ public abstract class PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json; charset=utf8");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
 

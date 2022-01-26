@@ -1,6 +1,9 @@
 package com.br.ciapoficial.controller;
 
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -29,11 +32,15 @@ import lombok.SneakyThrows;
 
 public class TelefoneController {
 
+    private SharedPreferences sharedPreferences;
+
     public void listar(Context context, final IVolleyCallback callback) {
 
         String url = Constants.BASE_API_URL + "/telefones";
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -76,6 +83,7 @@ public class TelefoneController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -88,6 +96,8 @@ public class TelefoneController {
         String url = Constants.URLTelefones + "/deletar.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -104,6 +114,15 @@ public class TelefoneController {
                 error.printStackTrace();
             }
         }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json");
+                headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
+                return headers;
+            }
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

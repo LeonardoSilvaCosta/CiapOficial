@@ -65,5 +65,7 @@ dependencies {
 
     implementation 'org.mindrot:jbcrypt:0.4'
 
+    //A file downloader library for Android
+    implementation 'com.mindorks.android:prdownloader:0.6.0'
 
 }

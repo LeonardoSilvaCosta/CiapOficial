@@ -14,7 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.controller.AuthenticationController;
 import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.helper.PersistentCookieStore;
+import com.br.ciapoficial.controller.HomeController;
+import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Funcionario;
 import com.br.ciapoficial.model.UserModel;
 import com.br.ciapoficial.validation.FieldValidator;
@@ -24,11 +25,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.HttpCookie;
-import java.util.List;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,12 +37,10 @@ public class LoginActivity extends AppCompatActivity {
     public final static String FILE_NAME = "userPrefs";
     public final static String USER_ID = "userId";
     public final static String USER_SEX = "userSex";
+    public final static String TOKEN = "token";
 
     private Dialog dialog;
 
-    //Finalizar o formulário WebView para a redefinição de senha ok
-    //Implementar a mensagem de informação de envio de email para redefinição de senha aqui
-    //no android - realizado com classe de resposta - OK
     //Verificar se a melhor opção é enviar o email para redefinição pelo header ou pelo body ou como
     //param
     @Override
@@ -55,22 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-
-        CookieManager cookieManager = new CookieManager
-                (new PersistentCookieStore(this), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
-        CookieHandler.setDefault(cookieManager);
-
-        List<HttpCookie> httpCookies = cookieManager.getCookieStore().getCookies();
-
-        for(HttpCookie httpCookie : httpCookies)
-        {
-            if(httpCookie.getName().equals("Authorization"))
-            {
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        }
 
         configurarComponentes();
 
@@ -122,29 +100,51 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationController authenticationController = new AuthenticationController();
                 authenticationController.logarUsuario(getApplicationContext(), usuario, response -> {
                     try {
+
                         JSONObject jsonObject = new JSONObject(response);
 
-                        Gson gson = new Gson();
-                        Funcionario funcionario;
-                        funcionario = gson.fromJson(jsonObject.toString(), Funcionario.class);
+                        String token = jsonObject.getString("jwtToken");
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(USER_ID, String.valueOf(funcionario.getId()));
-                        editor.putString(USER_SEX, funcionario.getSexo().getNome());
+                        editor.putString(TOKEN, "Bearer "+ token);
                         editor.apply();
+
+                        salvarDadosDaHomeEmSharedPreferences();
 
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(i);
                         finish();
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
             }
 
         });
+    }
 
+    private void salvarDadosDaHomeEmSharedPreferences() {
+        HomeController homeController = new HomeController();
+        homeController.get(getApplicationContext(), new IVolleyCallback() {
+            @Override
+            public void onSucess(String response) throws JSONException {
+                try {
+                    JSONObject jsonObject =  new JSONObject(response);
+
+                    Gson gson = new Gson();
+                    Funcionario funcionario;
+                    funcionario = gson.fromJson(jsonObject.toString(), Funcionario.class);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(USER_ID, String.valueOf(funcionario.getId()));
+                    editor.putString(USER_SEX, funcionario.getSexo().getNome());
+                    editor.apply();
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void recuperarSenha () {

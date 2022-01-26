@@ -1,8 +1,10 @@
 package com.br.ciapoficial.controller;
 
 import static com.br.ciapoficial.Constants.BASE_API_URL;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -38,10 +40,13 @@ import lombok.SneakyThrows;
 public class FuncionarioController extends PessoaController {
     private static String TAG = FuncionarioController.class.getName();
     private String urlFuncionarios = BASE_API_URL + "/funcionarios";
+    private SharedPreferences sharedPreferences;
 
     public void cadastrar(Context context, Funcionario funcionario, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlFuncionarios,
                 new Response.Listener<String>() {
@@ -84,6 +89,7 @@ public class FuncionarioController extends PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json; charset=utf8");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
 
@@ -108,6 +114,8 @@ public class FuncionarioController extends PessoaController {
     public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlFuncionarios,
                 new Response.Listener<String>() {
@@ -152,6 +160,7 @@ public class FuncionarioController extends PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -162,6 +171,8 @@ public class FuncionarioController extends PessoaController {
     public void atualizar(Context context, final Funcionario funcionario, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         String urlFuncionariosComPathVariable = urlFuncionarios + "/" + funcionario.getId();
 
@@ -214,6 +225,7 @@ public class FuncionarioController extends PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json; charset=utf8");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
 
@@ -270,6 +282,8 @@ public class FuncionarioController extends PessoaController {
         String url = BASE_API_URL + "/forgot-password";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -317,6 +331,7 @@ public class FuncionarioController extends PessoaController {
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
                 headers.put("email", "sir.costa@yahoo.com.br");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -370,6 +385,8 @@ public class FuncionarioController extends PessoaController {
         String url = Constants.URLUsuarios + "/recuperar_imagem.php";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -391,6 +408,7 @@ public class FuncionarioController extends PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/Json; charset=utf8");
                 headers.put("Accept", "application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };
@@ -403,6 +421,8 @@ public class FuncionarioController extends PessoaController {
         String url = urlFuncionarios + "/usuario-logado";
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -445,6 +465,7 @@ public class FuncionarioController extends PessoaController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/Json; charset=utf8");
                 headers.put("Accept", "application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };

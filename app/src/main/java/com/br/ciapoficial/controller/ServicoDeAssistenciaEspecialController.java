@@ -1,8 +1,10 @@
 package com.br.ciapoficial.controller;
 
 import static com.br.ciapoficial.Constants.BASE_API_URL;
+import static com.br.ciapoficial.view.LoginActivity.FILE_NAME;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -37,12 +39,15 @@ import lombok.SneakyThrows;
 
 public class ServicoDeAssistenciaEspecialController {
     private static String TAG = ServicoDeAssistenciaEspecialController.class.getName();
+    private SharedPreferences sharedPreferences;
 
     private String url = BASE_API_URL + "/servicos+de+assistencia+especial";
 
     public void registrar(Context context, ServicoDeAssistenciaEspecial servicoDeAssistenciaEspecial, final IVolleyCallback callback) {
 
         RequestQueue queue = VolleySingleton.getInstance(context).getRequestQueue();
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -86,6 +91,7 @@ public class ServicoDeAssistenciaEspecialController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json; charset=utf8");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
 
@@ -111,6 +117,8 @@ public class ServicoDeAssistenciaEspecialController {
     public void listar(Context context, final IVolleyCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -154,6 +162,7 @@ public class ServicoDeAssistenciaEspecialController {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type","application/Json");
                 headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
                 return headers;
             }
         };

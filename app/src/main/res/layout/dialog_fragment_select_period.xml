@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextViewDataInicial"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="60dp"
+        android:drawableRight="@mipmap/ic_seta_para_baixo"
+        android:fontFamily="@font/poppinsmedium"
+        android:imeOptions="actionNext"
+        android:text="Data inicial"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="jelly_bean" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextViewDataFinal"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="25dp"
+        android:drawableRight="@mipmap/ic_seta_para_baixo"
+        android:fontFamily="@font/poppinsmedium"
+        android:imeOptions="actionNext"
+        android:text="Data final"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="jelly_bean" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

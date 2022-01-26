@@ -6,10 +6,12 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.10260416666666666" />
         <entry key="app/src/main/res/layout/activity_detalhes_atendido.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_detalhes_atendimento.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.14517374517374518" />
         <entry key="app/src/main/res/layout/activity_pesquisar.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/adapter_atendidos.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/adapter_atendimentos.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/app_bar.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/dialog_fragment_select_period.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register1.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register2.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register3.xml" value="0.146875" />
@@ -31,6 +33,7 @@
         <entry key="app/src/main/res/layout/template_usuario_register_form_1.xml" value="0.15" />
         <entry key="app/src/main/res/layout/template_usuario_register_form_3.xml" value="0.18" />
         <entry key="app/src/main/res/menu/ciap_menu.xml" value="0.146875" />
+        <entry key="app/src/main/res/xml/external_files.xml" value="0.146875" />
         <entry key="app/src/main/res/xml/searchable.xml" value="0.146875" />
       </map>
     </option>
