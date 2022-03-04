@@ -20,11 +20,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EscolaridadeController;
-import com.br.ciapoficial.controller.EstadoCivilController;
-import com.br.ciapoficial.controller.UfController;
-import com.br.ciapoficial.controller.UsuarioController;
-import com.br.ciapoficial.controller.VinculoController;
+import com.br.ciapoficial.network.EscolaridadeController;
+import com.br.ciapoficial.network.EstadoCivilController;
+import com.br.ciapoficial.network.UfController;
+import com.br.ciapoficial.network.UsuarioController;
+import com.br.ciapoficial.network.VinculoController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.helper.AddRemoveTextView;
@@ -404,7 +404,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private void popularCampoTitularComDB() {
 
         UsuarioController usuarioTitularController = new UsuarioController();
-        usuarioTitularController.listar(getActivity(), new IVolleyCallback() {
+        usuarioTitularController.listarUsuariosPms(getActivity(), new IVolleyCallback() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSucess(String response) {

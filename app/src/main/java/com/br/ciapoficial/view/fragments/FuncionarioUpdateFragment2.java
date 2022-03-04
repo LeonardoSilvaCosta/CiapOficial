@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.UfController;
+import com.br.ciapoficial.network.UfController;
 import com.br.ciapoficial.helper.DropDownClick;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;

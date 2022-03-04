@@ -17,11 +17,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.AcessoAtendimentoController;
-import com.br.ciapoficial.controller.EspecialistaController;
-import com.br.ciapoficial.controller.ModalidadeController;
-import com.br.ciapoficial.controller.UnidadeController;
-import com.br.ciapoficial.controller.UsuarioController;
+import com.br.ciapoficial.network.AcessoAtendimentoController;
+import com.br.ciapoficial.network.EspecialistaController;
+import com.br.ciapoficial.network.ModalidadeController;
+import com.br.ciapoficial.network.UnidadeController;
+import com.br.ciapoficial.network.UsuarioController;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.Calendar;
 import com.br.ciapoficial.helper.DateFormater;

@@ -2,6 +2,7 @@
     <string name="app_name">CiapOficial</string>
     <string name="POST">POST</string>
     <string name="GET">GET</string>
+    <string name="sharedPreferences_token">token</string>
     <string name="email">Email</string>
     <string name="email_usuario">Email*</string>
     <string name="senha">Senha</string>

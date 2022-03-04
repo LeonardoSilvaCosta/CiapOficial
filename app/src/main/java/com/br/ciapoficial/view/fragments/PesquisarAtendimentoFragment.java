@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.br.ciapoficial.R;
 import com.br.ciapoficial.adapters.ServicosAdapter;
-import com.br.ciapoficial.controller.ServicoController;
+import com.br.ciapoficial.network.ServicoController;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.LocalDateDeserializer;
 import com.br.ciapoficial.helper.LocalDateTimeDeserializer;
@@ -43,13 +43,12 @@ public class PesquisarAtendimentoFragment extends Fragment {
     private RecyclerView recyclerViewAtendimentos;
 
     private ArrayList<Servico> listaDeServicos = new ArrayList<>();
-    private ArrayList<Servico> listaAtualizada;
+    private ArrayList<Servico> listaAtualizada = new ArrayList<>();
     private ServicosAdapter adapter;
 
     public PesquisarAtendimentoFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

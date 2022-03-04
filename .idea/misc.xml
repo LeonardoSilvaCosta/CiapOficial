@@ -4,12 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.10260416666666666" />
+        <entry key="app/src/main/res/drawable/borda_retangular.xml" value="0.158984375" />
         <entry key="app/src/main/res/layout/activity_detalhes_atendido.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_detalhes_atendimento.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14517374517374518" />
         <entry key="app/src/main/res/layout/activity_pesquisar.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/activity_pesquisar_servicos_por_usuarios.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/adapter_atendidos.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/adapter_atendimentos.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/adapter_atendimentos_atendido.xml" value="0.18" />
         <entry key="app/src/main/res/layout/app_bar.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/dialog_fragment_select_period.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register1.xml" value="0.15" />
@@ -19,7 +22,9 @@
         <entry key="app/src/main/res/layout/fragment_funcionario_register2.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_funcionario_register3.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_funcionario_update3.xml" value="0.146875" />
-        <entry key="app/src/main/res/layout/fragment_pesquisar_atendido.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/fragment_pesquisar_atendido.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_pesquisar_atendimento.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/fragment_pesquisar_servicos_por_usuario.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_principal.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_usuario_register1.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_usuario_register2.xml" value="0.146875" />

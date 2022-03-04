@@ -54,26 +54,43 @@ public class PesquisarActivity extends AppCompatActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSearchViewClosed()
             {
-                if(adapter.getPage(0).isAdded())
-                {
-                    PesquisarAtendidoFragment fragment = (PesquisarAtendidoFragment) adapter.getPage(0);
-                    fragment.recarregarAtendidos();
-                }else if (adapter.getPage(1).isAdded())
-                {
-                    PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
-                    fragment.recarregarAtendimentos();
-                }
+//                if(adapter.getPage(0).isAdded())
+//                {
+//                    PesquisarAtendidoFragment fragment = (PesquisarAtendidoFragment) adapter.getPage(0);
+//                    fragment.recarregarAtendidos();
+//                }else if (adapter.getPage(1).isAdded())
+//                {
+//                    PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
+//                    fragment.recarregarAtendimentos();
+//                }
 
 
             }
         });
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+
+                int fragmentAtendido = 0;
+                int fragmentAtendimento = 1;
+                if(viewPager.getCurrentItem() == fragmentAtendido)
+                {
+                    PesquisarAtendidoFragment fragment = (PesquisarAtendidoFragment) adapter.getPage(0);
+                    if(query != null && !query.isEmpty())
+                    {
+                        String text = Normalizer.normalize(query, Normalizer.Form.NFD)
+                                .replaceAll("[^\\p{ASCII}]", "");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            fragment.pesquisarAtendidos(text);
+                        }
+                    }
+                }
+                return true;
             }
 
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -82,16 +99,7 @@ public class PesquisarActivity extends AppCompatActivity {
 
                 int fragmentAtendido = 0;
                 int fragmentAtendimento = 1;
-                if(viewPager.getCurrentItem() == fragmentAtendido)
-                {
-                    PesquisarAtendidoFragment fragment = (PesquisarAtendidoFragment) adapter.getPage(0);
-                    if(newText != null && !newText.isEmpty())
-                    {
-                        String text = Normalizer.normalize(newText, Normalizer.Form.NFD)
-                                .replaceAll("[^\\p{ASCII}]", "");
-                        fragment.pesquisarAtendidos(text.toLowerCase());
-                    }
-                }else if (viewPager.getCurrentItem() == fragmentAtendimento)
+                if(viewPager.getCurrentItem() == fragmentAtendimento)
                 {
                     PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
                     if(newText != null && !newText.isEmpty())
@@ -104,7 +112,7 @@ public class PesquisarActivity extends AppCompatActivity {
                     }
                 }
 
-                return true;
+                return false;
             }
         });
     }

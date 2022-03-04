@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
-import com.br.ciapoficial.controller.CidadeController;
+import com.br.ciapoficial.network.CidadeController;
 import com.br.ciapoficial.enums.UfEnum;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
@@ -16,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MunicipioComBaseNaUF {

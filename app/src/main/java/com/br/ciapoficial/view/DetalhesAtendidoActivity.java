@@ -1,5 +1,6 @@
 package com.br.ciapoficial.view;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +17,13 @@ import com.br.ciapoficial.model.Usuario;
 public class DetalhesAtendidoActivity extends AppCompatActivity {
 
     private LinearLayout linearLayoutRgMilitar, linearLayoutPostoGradCat, linearLayoutNomeGuerra, linearLayoutUnidade,
-    linearLayoutQuadro, linearLayoutDataInclusao, linearLayoutSituacaoFuncional, linearLayoutIdTitular,
-    linearLayoutVinculo, linearLayoutDataHoraAtualizacao;
+            linearLayoutQuadro, linearLayoutDataInclusao, linearLayoutSituacaoFuncional, linearLayoutIdTitular,
+            linearLayoutVinculo, linearLayoutDataHoraAtualizacao;
     private TextView txtTipoAtendido, txtNomeCompleto,  txtDataNascimento, txtCpf, txtSexo, txtEmail, txtEstadoCivil,
-    txtNaturalidade, txtEscolaridade, txtNumeroFilhos, txtEndereco, txtRgMilitar, txtPostoGradCat,
-    txtNomeGuerra, txtUnidade, txtQuadro, txtDataInclusao, txtSituacaoFuncional, txtIdTitular,
-            txtTitularHyperlink, txtVinculo, txtDataHoraCadastro, txtDataHoraAtualizacao;
+            txtNaturalidade, txtEscolaridade, txtNumeroFilhos, txtEndereco, txtRgMilitar, txtPostoGradCat,
+            txtNomeGuerra, txtUnidade, txtQuadro, txtDataInclusao, txtSituacaoFuncional, txtIdTitular,
+            txtTitularHyperlink, txtVinculo, txtDataHoraCadastro, txtDataHoraAtualizacao, txtHyperlinkEvolucao,
+            txtResponsavelCadastro;
 
     private Usuario usuarioSelecionado;
     private Usuario titularRecuperado = new Usuario();
@@ -63,12 +65,13 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
         txtSituacaoFuncional= (TextView) findViewById(R.id.txtSituacaoFuncional);
         txtIdTitular = (TextView) findViewById(R.id.txtTitular);
         txtVinculo = (TextView) findViewById(R.id.txtVinculo);
-        txtDataHoraCadastro= (TextView) findViewById(R.id.txtDataHoraCadastro);
-        txtDataHoraAtualizacao= (TextView) findViewById(R.id.txtDataHoraAtualizacao);
+        txtDataHoraCadastro = (TextView) findViewById(R.id.txtDataHoraCadastro);
+        txtDataHoraAtualizacao = (TextView) findViewById(R.id.txtDataHoraAtualizacao);
+        txtHyperlinkEvolucao = (TextView) findViewById(R.id.txtHyperlinkEvolucao);
+        txtResponsavelCadastro = (TextView) findViewById(R.id.txtResponsavelCadastro);
 
         getExtras();
 //        solicitarProntuarioDoTitular();
-
 
     }
 
@@ -91,6 +94,7 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
             txtNumeroFilhos.setText(String.valueOf(usuarioSelecionado.getNumeroFilhos()));
             txtEndereco.setText(usuarioSelecionado.getEndereco().toString());
             txtDataHoraCadastro.setText(DateFormater.localDateTimeToString(usuarioSelecionado.getDataCadastro()));
+            txtResponsavelCadastro.setText(usuarioSelecionado.getResponsavelCadastro().toString());
             if(usuarioSelecionado.getDataEdicao() != null) {
                 txtDataHoraAtualizacao.setText(DateFormater.localDateTimeToString(usuarioSelecionado.getDataEdicao()));
             }else {
@@ -141,6 +145,21 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
 
         }
 
+        irParaPesquisarAtendimentosPorAtendido(usuarioSelecionado.getId());
+
+    }
+
+    public void irParaPesquisarAtendimentosPorAtendido(Integer id) {
+        txtHyperlinkEvolucao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PesquisarServicosPorUsuario.class);
+                Bundle bundle = getIntent().getExtras();
+                i.putExtra("idUsuario", id);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
 //    public void solicitarProntuarioDoTitular() {
@@ -229,5 +248,4 @@ public class DetalhesAtendidoActivity extends AppCompatActivity {
 //        startActivity(i);
 //        //DetalhesAtendidoActivity.this.finish();
 //    }
-
 }

@@ -3,11 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.fragments.PesquisarAtendidoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewListaAtendidos"
         android:layout_width="match_parent"
+        android:layout_height="570dp"
+        android:layout_marginTop="100dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/buttonsPaginationLayout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp" />
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -608,7 +608,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            android:textStyle="bold"
             <TextView
                 android:id="@+id/txtResponsavelCadastro"
                 android:layout_width="wrap_content"

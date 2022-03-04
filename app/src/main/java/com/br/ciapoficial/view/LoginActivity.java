@@ -5,19 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.AuthenticationController;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.controller.HomeController;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Funcionario;
-import com.br.ciapoficial.model.UserModel;
+import com.br.ciapoficial.network.FuncionarioController;
+import com.br.ciapoficial.network.HomeController;
+import com.br.ciapoficial.network.api.config.ApiModule;
+import com.br.ciapoficial.network.api.dto.LoginRequest;
+import com.br.ciapoficial.network.api.dto.LoginResponse;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -27,7 +30,13 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity {
+
+    private static LoginActivity loginContextInstance;
 
     private TextView textViewLogin, txtRecuperarSenha;
     private TextInputEditText textInputEditTextEmail, textInputEditTextSenha;
@@ -43,18 +52,30 @@ public class LoginActivity extends AppCompatActivity {
 
     //Verificar se a melhor opção é enviar o email para redefinição pelo header ou pelo body ou como
     //param
+
+    public static LoginActivity getInstance() {
+        return loginContextInstance;
+    }
+
+    public static Context getContext(){
+        return loginContextInstance;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loginContextInstance = this;
 
         sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+
+        logarComToken();
 
         configurarComponentes();
 
         txtRecuperarSenha.setOnClickListener(v -> recuperarSenha());
 
-        entrar();
+        logar();
     }
 
     private void configurarComponentes()
@@ -88,39 +109,45 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void entrar() {
-
+    private void logar() {
         btnEntrar.setOnClickListener(v -> {
-
             if(validarCampos()) {
-                UserModel usuario = new UserModel();
-                usuario.setEmail(Objects.requireNonNull(textInputEditTextEmail.getText()).toString().trim());
-                usuario.setSenha(Objects.requireNonNull(textInputEditTextSenha.getText()).toString().trim());
+                LoginRequest loginRequest = new LoginRequest();
+                loginRequest.setEmail(Objects.requireNonNull(textInputEditTextEmail.getText()).toString().trim());
+                loginRequest.setSenha(Objects.requireNonNull(textInputEditTextSenha.getText()).toString().trim());
 
-                AuthenticationController authenticationController = new AuthenticationController();
-                authenticationController.logarUsuario(getApplicationContext(), usuario, response -> {
-                    try {
+                ApiModule apiModule = new ApiModule();
+                Call<LoginResponse> login = apiModule.getRetrofit(
+                        getContext(), sharedPreferences.getString("token", ""))
+                        .logar(loginRequest);
+                login.enqueue(new Callback<LoginResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                        if(response.isSuccessful()) {
 
-                        JSONObject jsonObject = new JSONObject(response);
+                            LoginResponse loginResponse = response.body();
+                            String token = loginResponse.getJwtToken();
 
-                        String token = jsonObject.getString("jwtToken");
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(TOKEN, "Bearer "+ token);
+                            editor.apply();
 
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(TOKEN, "Bearer "+ token);
-                        editor.apply();
+                            salvarDadosDaHomeEmSharedPreferences();
 
-                        salvarDadosDaHomeEmSharedPreferences();
+                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }else {
+                            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        Toast.makeText(getContext(), "Throwable " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
-
         });
     }
 
@@ -167,9 +194,9 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     String mensagem = jsonObject.getString("resposta");
 
-                        Toast.makeText(LoginActivity.this,
-                                mensagem,
-                                Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,
+                            mensagem,
+                            Toast.LENGTH_LONG).show();
 
 
                 } catch (JSONException e) {
@@ -185,6 +212,39 @@ public class LoginActivity extends AppCompatActivity {
 
         dialog.show();
 
+    }
+
+    public void logarComToken() {
+        String token = sharedPreferences.getString("token", "");
+
+        if(!token.isEmpty()) {
+            ApiModule apiModule = new ApiModule();
+            Call<LoginResponse> loginByToken = apiModule.getRetrofit(
+                    getContext(), token)
+                    .authorization(token);
+            loginByToken.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                    if(response.isSuccessful()) {
+
+                        LoginResponse loginResponse = response.body();
+                        String token = loginResponse.getJwtToken();
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }else {
+                        Log.e("Login failed", "Login failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Throwable " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
 }

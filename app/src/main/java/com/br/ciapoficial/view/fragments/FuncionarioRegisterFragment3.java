@@ -2,6 +2,7 @@ package com.br.ciapoficial.view.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EspecialidadeController;
-import com.br.ciapoficial.controller.EspecialistaController;
-import com.br.ciapoficial.controller.FuncaoAdministrativaController;
-import com.br.ciapoficial.controller.FuncionarioController;
-import com.br.ciapoficial.controller.PostoGradCatController;
-import com.br.ciapoficial.controller.QuadroController;
-import com.br.ciapoficial.controller.SituacaoFuncionalController;
-import com.br.ciapoficial.controller.UnidadeController;
+import com.br.ciapoficial.network.EspecialidadeController;
+import com.br.ciapoficial.network.EspecialistaController;
+import com.br.ciapoficial.network.FuncaoAdministrativaController;
+import com.br.ciapoficial.network.FuncionarioController;
+import com.br.ciapoficial.network.PostoGradCatController;
+import com.br.ciapoficial.network.QuadroController;
+import com.br.ciapoficial.network.SituacaoFuncionalController;
+import com.br.ciapoficial.network.UnidadeController;
 import com.br.ciapoficial.enums.EspecialidadeEnum;
 import com.br.ciapoficial.enums.PostoGradCatEnum;
 import com.br.ciapoficial.enums.QuadroEnum;
@@ -520,6 +521,9 @@ public class FuncionarioRegisterFragment3 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validarCadastroDoFuncionario() throws ParseException {
+        boolean isQCOPM = false;
+        if(autoCompleteTextViewQuadro.getText().toString().equals("QCOPM"))  isQCOPM = true;
+        Log.e("quadro", autoCompleteTextViewQuadro.getText().toString());
         if (
                 FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewPostGradCat,
                         listaPostoGradCatRecuperados, "O campo POSTO/GRAD/CAT é obrigatório.",
@@ -537,10 +541,10 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                         FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewSituacaoFuncional,
                                 listaSituacoesFuncionaisRecuperadas, "o campo SITUAÇÃO FUNCIONAL é obrigatório",
                                 "Insira uma SITUAÇÃO FUNCIONAL válida.") &&
-                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEspecialidade,
+                        FieldValidator.validarAutoCompleteTextViewFuncionario(isQCOPM, autoCompleteTextViewEspecialidade,
                                 listaEspecialidadesRecuperadas, "O campo ESPECIALIDADE é obrigatório.",
                                 "Insira uma opção de ESPECIALIDADE válida.") &&
-                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRegistroConselho, "REGISTRO DO CONSELHO"))
+                        FieldValidator.isFieldEmptyOrNullFuncionario(isQCOPM, textInputEditTextRegistroConselho, "REGISTRO DO CONSELHO"))
         {
             receberDadosDoFuncionarioPreenchidos();
             return true;

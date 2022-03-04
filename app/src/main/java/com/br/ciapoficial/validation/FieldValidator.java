@@ -34,6 +34,18 @@ public class FieldValidator {
         }else { campoString.setError(null);return true; }
     }
 
+    public static boolean isFieldEmptyOrNullFuncionario(boolean isQCOPM, TextInputEditText campoString, String nomeDoCampo)
+    {
+        if(!isQCOPM) return true;
+        String valorDoCampo = Objects.requireNonNull(campoString.getText()).toString().trim();
+        if(valorDoCampo.isEmpty()) {
+            campoString.setError("O campo " + nomeDoCampo + " é obrigatório.");
+            campoString.requestFocus();
+            DellayAction.clearErrorAfter2Seconds(campoString);
+            return false;
+        }else { campoString.setError(null);return true; }
+    }
+
     public static boolean isListEmptyOrNull(AutoCompleteTextView campo,
                                             List<?> lista, String nomeDoCampo) {
         if (lista.isEmpty()) {
@@ -205,6 +217,49 @@ public class FieldValidator {
     public static boolean validarAutoCompleteTextView(EditText campoRecebido, List<?> listaRecebida,
                                                       String mensagemParaCampoVazio, String mensagemInvalida)
     {
+        String valorDoCampo = campoRecebido.getText().toString().trim();
+
+        if(valorDoCampo.isEmpty())
+        {
+            campoRecebido.setError(mensagemParaCampoVazio);
+            campoRecebido.requestFocus();
+            DellayAction.clearErrorAfter2Seconds((AutoCompleteTextView) campoRecebido);
+            return false;
+        }else
+        {
+            if(listaRecebida != null)
+            {
+                boolean valueExists = false;
+                for(Object estadoSelecionado : listaRecebida)
+                {
+                    if(estadoSelecionado.toString().equals(valorDoCampo))
+                    {
+                        valueExists = true;
+                        break;
+                    }
+                }
+
+                if(valueExists)
+                { campoRecebido.setError(null); return true; }
+                else
+                {
+                    campoRecebido.setError(mensagemInvalida);
+                    campoRecebido.requestFocus();
+                    DellayAction.clearErrorAfter2Seconds((AutoCompleteTextView) campoRecebido);
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+
+    public static boolean validarAutoCompleteTextViewFuncionario(boolean isQCOPM, EditText campoRecebido,
+                                                                 List<?> listaRecebida,
+                                                                 String mensagemParaCampoVazio,
+                                                                 String mensagemInvalida)
+    {
+        if(!isQCOPM) return true;
         String valorDoCampo = campoRecebido.getText().toString().trim();
 
         if(valorDoCampo.isEmpty())

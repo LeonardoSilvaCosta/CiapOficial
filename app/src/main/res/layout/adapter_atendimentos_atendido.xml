@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="2dp"
+    android:paddingTop="5dp"
+    android:paddingRight="2dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/background_cartao"
+        android:padding="10px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/txtData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dd/MM/yyyy"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_weight="5"/>
+
+        <TextView
+            android:id="@+id/txtNomeOficial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nome"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

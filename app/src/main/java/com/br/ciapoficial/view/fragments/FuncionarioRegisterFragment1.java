@@ -19,9 +19,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.EscolaridadeController;
-import com.br.ciapoficial.controller.EstadoCivilController;
-import com.br.ciapoficial.controller.UfController;
+import com.br.ciapoficial.network.EscolaridadeController;
+import com.br.ciapoficial.network.EstadoCivilController;
+import com.br.ciapoficial.network.UfController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;

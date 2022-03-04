@@ -17,11 +17,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.PostoGradCatController;
-import com.br.ciapoficial.controller.QuadroController;
-import com.br.ciapoficial.controller.SituacaoFuncionalController;
-import com.br.ciapoficial.controller.UnidadeController;
-import com.br.ciapoficial.controller.UsuarioController;
+import com.br.ciapoficial.network.PostoGradCatController;
+import com.br.ciapoficial.network.QuadroController;
+import com.br.ciapoficial.network.SituacaoFuncionalController;
+import com.br.ciapoficial.network.UnidadeController;
+import com.br.ciapoficial.network.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;

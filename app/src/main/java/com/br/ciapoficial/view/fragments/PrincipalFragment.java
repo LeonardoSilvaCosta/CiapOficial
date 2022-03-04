@@ -29,10 +29,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.Constants;
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.controller.FuncionarioController;
 import com.br.ciapoficial.helper.Calendar;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.UserModel;
+import com.br.ciapoficial.network.FuncionarioController;
 import com.br.ciapoficial.view.PesquisarActivity;
 import com.bumptech.glide.Glide;
 import com.downloader.Error;
@@ -89,6 +89,8 @@ public class PrincipalFragment extends Fragment {
     private ImageView imageAtualizarPerfil;
     private Button btnNovoFuncionario, btnAtualizaFuncionario, btnNovoUsuario,
             btnRegistrarServico, btnPesquisar, btnRelatorio;
+
+    private String token;
 
     public PrincipalFragment() {
         // Required empty public constructor
@@ -333,74 +335,77 @@ public class PrincipalFragment extends Fragment {
                             t.show();
                         } else {
 
-                                Date initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(
-                                        autoCompleteTextViewDataInicial.getText().toString().trim());
-                                Date finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(
-                                        autoCompleteTextViewDataFinal.getText().toString().trim());
+                            Date initialDate = new SimpleDateFormat("dd/MM/yyyy").parse(
+                                    autoCompleteTextViewDataInicial.getText().toString().trim());
+                            Date finalDate = new SimpleDateFormat("dd/MM/yyyy").parse(
+                                    autoCompleteTextViewDataFinal.getText().toString().trim());
 
                             if(initialDate.after(finalDate)) {
-                                    autoCompleteTextViewDataFinal.setText(null);
-                                    Toast.makeText(getActivity(),
-                                            "A data final não pode ser inferior a data inicial",
-                                            Toast.LENGTH_SHORT).show();
-                                }else {
+                                autoCompleteTextViewDataFinal.setText(null);
+                                Toast.makeText(getActivity(),
+                                        "A data final não pode ser inferior a data inicial",
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
 
-                                    String data_inicial = new SimpleDateFormat("yyyy-MM-dd").format(initialDate);
-                                    String data_final = new SimpleDateFormat("yyyy-MM-dd").format(finalDate);
+                                String data_inicial = new SimpleDateFormat("yyyy-MM-dd").format(initialDate);
+                                String data_final = new SimpleDateFormat("yyyy-MM-dd").format(finalDate);
 
-                                    ProgressDialog pd = new ProgressDialog(requireActivity());
-                                    pd.setMessage("Downloading...");
-                                    pd.setCancelable(false);
-                                    pd.show();
+                                ProgressDialog pd = new ProgressDialog(requireActivity());
+                                pd.setMessage("Downloading...");
+                                pd.setCancelable(false);
+                                pd.show();
 
-                                    File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                token = sharedPreferences.getString("token", "");
 
-                                    int downloadId = PRDownloader.download(filepath+"?data_inicial="+data_inicial+"&data_final="+data_final,
-                                            file.getPath(), "ciapReport.pdf")
-                                            .build()
-                                            .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                                @Override
-                                                public void onStartOrResume() {
+                                File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-                                                }
-                                            })
-                                            .setOnPauseListener(new OnPauseListener() {
-                                                @Override
-                                                public void onPause() {
+                                PRDownloader.download(filepath+"?data_inicial="+data_inicial+"&data_final="+data_final,
+                                        file.getPath(), "ciapReport.pdf")
+                                        .setHeader("Authorization", token )
+                                        .build()
+                                        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                            @Override
+                                            public void onStartOrResume() {
 
-                                                }
-                                            })
-                                            .setOnCancelListener(new OnCancelListener() {
-                                                @Override
-                                                public void onCancel() {
+                                            }
+                                        })
+                                        .setOnPauseListener(new OnPauseListener() {
+                                            @Override
+                                            public void onPause() {
 
-                                                }
-                                            })
-                                            .setOnProgressListener(new OnProgressListener() {
-                                                @Override
-                                                public void onProgress(Progress progress) {
+                                            }
+                                        })
+                                        .setOnCancelListener(new OnCancelListener() {
+                                            @Override
+                                            public void onCancel() {
 
-                                                    long per = progress.totalBytes*100 / progress.currentBytes;
+                                            }
+                                        })
+                                        .setOnProgressListener(new OnProgressListener() {
+                                            @Override
+                                            public void onProgress(Progress progress) {
 
-                                                    pd.setMessage("Downloading : " +per+" %");
+                                                long per = progress.totalBytes*100 / progress.currentBytes;
 
-                                                }
-                                            })
-                                            .start(new OnDownloadListener() {
-                                                @Override
-                                                public void onDownloadComplete() {
-                                                    pd.dismiss();
-                                                    Toast.makeText(getContext(), "Download completed", Toast.LENGTH_SHORT).show();
+                                                pd.setMessage("Downloading : " +per+" %");
 
-                                                }
+                                            }
+                                        })
+                                        .start(new OnDownloadListener() {
+                                            @Override
+                                            public void onDownloadComplete() {
+                                                pd.dismiss();
+                                                Toast.makeText(getContext(), "Download completed", Toast.LENGTH_SHORT).show();
 
-                                                @Override
-                                                public void onError(Error error) {
-                                                    pd.dismiss();
-                                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
+                                            }
+
+                                            @Override
+                                            public void onError(Error error) {
+                                                pd.dismiss();
+                                                Toast.makeText(getContext(), "Error " + error.getServerErrorMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
                         }
                     }
                 })
