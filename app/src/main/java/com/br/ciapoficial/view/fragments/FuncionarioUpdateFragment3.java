@@ -930,13 +930,11 @@ public class FuncionarioUpdateFragment3 extends Fragment {
                         Especialista novoEspecialista;
                         novoEspecialista = encapsularValoresParaCadastroDeEspecialista();
                         atualizarEspecialista(novoEspecialista);
-                        Toast.makeText(getContext(), "especialista", Toast.LENGTH_SHORT).show();
                     }else
                     {
                         Funcionario novoFuncionario;
                         novoFuncionario = encapsularValoresParaCadastroDeFuncionario();
                         atualizarFuncionario(novoFuncionario);
-                        Toast.makeText(getContext(), "funcionário", Toast.LENGTH_SHORT).show();
                     }
 
                     principalFragment = new PrincipalFragment();

@@ -45,9 +45,7 @@ public class TokenAuthenticator implements Authenticator {
             String newAccessToken = refreshTokenResponse.getData().getToken();
 
             return response.request().newBuilder()
-
                     .header("Authorization", newAccessToken)
-
                     .build();
 
         }

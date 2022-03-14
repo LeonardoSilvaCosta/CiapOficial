@@ -20,11 +20,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.network.EscolaridadeController;
-import com.br.ciapoficial.network.EstadoCivilController;
-import com.br.ciapoficial.network.UfController;
-import com.br.ciapoficial.network.UsuarioController;
-import com.br.ciapoficial.network.VinculoController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.enums.TipoAtendido;
 import com.br.ciapoficial.helper.AddRemoveTextView;
@@ -42,6 +37,11 @@ import com.br.ciapoficial.model.EstadoCivil;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Usuario;
 import com.br.ciapoficial.model.Vinculo;
+import com.br.ciapoficial.network.EscolaridadeController;
+import com.br.ciapoficial.network.EstadoCivilController;
+import com.br.ciapoficial.network.UfController;
+import com.br.ciapoficial.network.UsuarioController;
+import com.br.ciapoficial.network.VinculoController;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -73,8 +73,9 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private AutoCompleteTextView autoCompleteTextViewUfNatal, autoCompleteTextViewCidadeNatal,
             autoCompleteTextViewEstadoCivil, autoCompleteTextViewEscolaridade,
             autoCompleteTextViewTitular, autoCompleteTextViewVinculo;
-    private RadioGroup radioGroupSexo, radioGroupTipoAtendido;
-    private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino;
+    private RadioGroup radioGroupSexo, radioGroupTipoAtendido, radioGroupEAtendido;
+    private RadioButton rbtnPm, rbtnDependente, rbtnCivil, rbtnMasculino, rbtnFeminino,
+            rbtnEAtendido, rbtnNaoEAtendido;
     private Button btnAdicionarTelefone, btnProxima;
 
     private List<Telefone> arrayListTelefoneAdicionados = new ArrayList<>();
@@ -98,6 +99,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
     private TipoAtendido tipoAtendido;
     private Usuario titular;
     private Vinculo vinculo;
+    private boolean eAtendido = false;
 
     public UsuarioRegisterFragment1() {
         // Required empty public constructor
@@ -115,6 +117,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
         configurarCampoDeTelefone();
         definirComportamentoRadioButtonsTipoAtendido();
         definirComportamentoRadioButtonsSexo();
+        definirComportamentoRadioButtonsEAtendido();
         popularCampoUfNatalComDB();
         popularCampoCidadeComDB();
         popularCampoEstadoCivilComDB();
@@ -153,6 +156,9 @@ public class UsuarioRegisterFragment1 extends Fragment {
         autoCompleteTextViewTitular = view.findViewById(R.id.edtTitular);
         autoCompleteTextViewVinculo = view.findViewById(R.id.edtVinculo);
         btnAdicionarTelefone = view.findViewById(R.id.btnAdicionarTelefone);
+        rbtnEAtendido = view.findViewById(R.id.rbtnEAtendido);
+        radioGroupEAtendido = view.findViewById(R.id.radioGroupEAtendido);
+        rbtnNaoEAtendido = view.findViewById(R.id.rbtnNaoEAtendido);
         btnProxima = view.findViewById(R.id.btnProxima);
 
         configurarVisibilidadeInicialDeCampos();
@@ -260,6 +266,20 @@ public class UsuarioRegisterFragment1 extends Fragment {
                     sexo = sexo.MASCULINO;
                 } else if (checkedId == R.id.rbtnFeminino) {
                     sexo = sexo.FEMININO;
+                }
+            }
+        });
+    }
+
+    private void definirComportamentoRadioButtonsEAtendido() {
+
+        radioGroupEAtendido.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.rbtnEAtendido) {
+                    eAtendido = true;
+                } else if (checkedId == R.id.rbtnNaoEAtendido) {
+                    eAtendido = false;
                 }
             }
         });
@@ -497,22 +517,23 @@ public class UsuarioRegisterFragment1 extends Fragment {
     {
         if (
                 FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeCompleto, "NOME COMPLETO") &&
-                FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
-                FieldValidator.validarCpf(textInputEditTextCpf) &&
-                FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUfNatal, listaUfsRecuperadas,
-                        "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas,
-                        "O campo CIDADE é obrigatório.", "Insira uma opção de CIDADE válida.") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados,
-                        "O campo ESTADO CIVIL é obrigatório.", "Insira uma pção de ESTADO CIVIL válida.") &&
-                FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas,
-                        "O campo ESCOLARIDADE é obrigatório.", "Insira uma opção de ESCOLARIDADE válida.") &&
-                FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
-                FieldValidator.validarEmail(textInputEditTextEmail) &&
-                FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
-                FieldValidator.validarVinculo(autoCompleteTextViewVinculo, listaVinculosRecuperados, rbtnDependente))
+                        FieldValidator.validarData(textInputEditTextDataNascimento, "DATA DE NASCIMENTO") &&
+                        FieldValidator.validarCpf(textInputEditTextCpf) &&
+                        FieldValidator.validarRadioGroup(radioGroupSexo, rbtnMasculino, "SEXO") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUfNatal, listaUfsRecuperadas,
+                                "O campo UF é obrigatório.", "Insira uma opção de UF válida.") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewCidadeNatal, listaCidadesRecuperadas,
+                                "O campo CIDADE é obrigatório.", "Insira uma opção de CIDADE válida.") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEstadoCivil, listaEstadosCivisRecuperados,
+                                "O campo ESTADO CIVIL é obrigatório.", "Insira uma pção de ESTADO CIVIL válida.") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextNumeroFilhos, "NÚMERO DE FILHOS") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewEscolaridade, listaEscolaridadesRecuperadas,
+                                "O campo ESCOLARIDADE é obrigatório.", "Insira uma opção de ESCOLARIDADE válida.") &&
+                        FieldValidator.validarTelefones(textInputEditTextTelefone, arrayListTelefoneAdicionados) &&
+                        FieldValidator.validarEmail(textInputEditTextEmail) &&
+                        FieldValidator.validarTitular(autoCompleteTextViewTitular, listaTitularesRecuperados, rbtnDependente) &&
+                        FieldValidator.validarVinculo(autoCompleteTextViewVinculo, listaVinculosRecuperados, rbtnDependente) &&
+                        FieldValidator.validarRadioGroup(radioGroupEAtendido, rbtnNaoEAtendido, "É ATENDIDO?"))
         {
             receberDadosFuncionarioPreenchidos();
             return true;
@@ -594,6 +615,7 @@ public class UsuarioRegisterFragment1 extends Fragment {
         bundle.putString("email", email);
         bundle.putSerializable("titular", titular);
         bundle.putSerializable("vinculo", vinculo);
+        bundle.putSerializable("eAtendido", eAtendido);
 
         return bundle;
     }

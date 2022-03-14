@@ -265,40 +265,6 @@ public class PrincipalFragment extends Fragment {
         });
     }
 
-//    private void abrirRelatorio() {
-//        Log.v(TAG, "view() Method invoked");
-//
-//        if (!hasPermissions(getActivity(), PERMISSIONS)) {
-//
-//            Log.v(TAG, "download() Method DON'T HAVE PERMISSIONS ");
-//
-//            Toast t = Toast.makeText(getActivity(), "You don't have read access !", Toast.LENGTH_LONG);
-//            t.show();
-//        } else {
-//            File d = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-//            File pdfFile = new File(d, "ciapReport.pdf");
-//
-//            Log.v(TAG, "view() Method pdfFile " + pdfFile.getAbsolutePath());
-//
-//            Uri path = FileProvider.getUriForFile(
-//                    getActivity(), BuildConfig.APPLICATION_ID + ".fileprovider", pdfFile);
-//
-//            Log.v(TAG, "view() Method path " + path);
-//
-//            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-//            pdfIntent.setDataAndType(path, "application/pdf");
-//            pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//
-//            try {
-//                startActivity(pdfIntent);
-//            } catch (ActivityNotFoundException e) {
-//                Toast.makeText(getActivity(), "No application avaliable to view PDF", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        Log.v(TAG, "view() Method completed ");
-//    }
-
     private void baixarRelatorio() {
         btnRelatorio.setOnClickListener(new View.OnClickListener() {
             @SneakyThrows
@@ -395,7 +361,7 @@ public class PrincipalFragment extends Fragment {
                                             @Override
                                             public void onDownloadComplete() {
                                                 pd.dismiss();
-                                                Toast.makeText(getContext(), "Download completed", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Download realizado com sucesso!", Toast.LENGTH_SHORT).show();
 
                                             }
 

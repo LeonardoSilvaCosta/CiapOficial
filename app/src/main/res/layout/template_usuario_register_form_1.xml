@@ -392,6 +392,32 @@
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:id="@+id/radioGroupEAtendido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSituacaoFuncional">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="O Usuário é atendido?:" />
+
+            <RadioButton
+                android:id="@+id/rbtnEAtendido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sim"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbtnNaoEAtendido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nao"
+                android:textSize="20sp" />
+        </RadioGroup>
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
@@ -399,7 +425,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutVinculo" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupEAtendido" />
 
         <Button
             android:id="@+id/btnProxima"

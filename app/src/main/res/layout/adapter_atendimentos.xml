@@ -8,6 +8,16 @@
     android:paddingTop="5dp"
     android:paddingRight="2dp">
 
+    <ImageView
+        android:id="@+id/imageSignStatus"
+        android:elevation="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"

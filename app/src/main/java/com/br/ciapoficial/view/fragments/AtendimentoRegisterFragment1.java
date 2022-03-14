@@ -286,7 +286,7 @@ public class AtendimentoRegisterFragment1 extends Fragment {
     private void popularCampoAtendidoComDB() {
 
         UsuarioController atendidoController = new UsuarioController();
-        atendidoController.listar(getActivity(), new IVolleyCallback() {
+        atendidoController.listarUsuariosAtendidos(getActivity(), new IVolleyCallback() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSucess(String response) {

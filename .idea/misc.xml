@@ -4,17 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.10260416666666666" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1761904761904762" />
         <entry key="app/src/main/res/drawable/borda_retangular.xml" value="0.158984375" />
-        <entry key="app/src/main/res/layout/activity_detalhes_atendido.xml" value="0.15" />
-        <entry key="app/src/main/res/layout/activity_detalhes_atendimento.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_detalhes_atendido.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_detalhes_atendimento.xml" value="0.17" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14517374517374518" />
         <entry key="app/src/main/res/layout/activity_pesquisar.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/activity_pesquisar_servicos_por_usuarios.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1649122807017544" />
         <entry key="app/src/main/res/layout/adapter_atendidos.xml" value="0.146875" />
-        <entry key="app/src/main/res/layout/adapter_atendimentos.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/adapter_atendimentos.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_atendimentos_atendido.xml" value="0.18" />
         <entry key="app/src/main/res/layout/app_bar.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/dialog_fragment_download_pdf.xml" value="0.22" />
         <entry key="app/src/main/res/layout/dialog_fragment_select_period.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/dialog_fragment_upload_pdf.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register1.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register2.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/fragment_atendimento_register3.xml" value="0.146875" />
@@ -31,13 +35,14 @@
         <entry key="app/src/main/res/layout/fragment_usuario_register3.xml" value="0.18" />
         <entry key="app/src/main/res/layout/template_atendimento_register_form_1.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/template_atendimento_register_form_2.xml" value="0.146875" />
-        <entry key="app/src/main/res/layout/template_atendimento_register_form_3.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/template_atendimento_register_form_3.xml" value="0.18" />
         <entry key="app/src/main/res/layout/template_funcionario_register_form_1.xml" value="0.12152777777777778" />
         <entry key="app/src/main/res/layout/template_funcionario_register_form_2.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/template_funcionario_update_form_3.xml" value="0.13680555555555557" />
-        <entry key="app/src/main/res/layout/template_usuario_register_form_1.xml" value="0.15" />
+        <entry key="app/src/main/res/layout/template_usuario_register_form_1.xml" value="0.13055555555555556" />
         <entry key="app/src/main/res/layout/template_usuario_register_form_3.xml" value="0.18" />
         <entry key="app/src/main/res/menu/ciap_menu.xml" value="0.146875" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_brasao_ciap_round.xml" value="0.10964912280701754" />
         <entry key="app/src/main/res/xml/external_files.xml" value="0.146875" />
         <entry key="app/src/main/res/xml/searchable.xml" value="0.146875" />
       </map>

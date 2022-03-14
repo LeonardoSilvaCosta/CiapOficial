@@ -21,14 +21,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.network.AtendimentoController;
-import com.br.ciapoficial.network.AvaliacaoController;
-import com.br.ciapoficial.network.DocumentoProduzidoController;
-import com.br.ciapoficial.network.EncaminhamentoController;
-import com.br.ciapoficial.network.MedicacaoPsiquiatricaController;
-import com.br.ciapoficial.network.ProcedimentoController;
-import com.br.ciapoficial.network.ServicoDeAssistenciaEspecialController;
-import com.br.ciapoficial.network.SinalSintomaController;
 import com.br.ciapoficial.enums.TipoServicoEnum;
 import com.br.ciapoficial.helper.AddRemoveTextView;
 import com.br.ciapoficial.helper.DateFormater;
@@ -46,14 +38,18 @@ import com.br.ciapoficial.model.in_servico.DemandaGeral;
 import com.br.ciapoficial.model.in_servico.Deslocamento;
 import com.br.ciapoficial.model.in_servico.DocumentoProduzido;
 import com.br.ciapoficial.model.in_servico.Encaminhamento;
-import com.br.ciapoficial.model.in_servico.MedicacaoPsiquiatrica;
 import com.br.ciapoficial.model.in_servico.Modalidade;
 import com.br.ciapoficial.model.in_servico.Procedimento;
 import com.br.ciapoficial.model.in_servico.Programa;
 import com.br.ciapoficial.model.in_servico.ServicoDeAssistenciaEspecial;
-import com.br.ciapoficial.model.in_servico.SinalSintoma;
 import com.br.ciapoficial.model.in_servico.TipoAvaliacao;
 import com.br.ciapoficial.model.in_servico.TipoServico;
+import com.br.ciapoficial.network.AtendimentoController;
+import com.br.ciapoficial.network.AvaliacaoController;
+import com.br.ciapoficial.network.DocumentoProduzidoController;
+import com.br.ciapoficial.network.EncaminhamentoController;
+import com.br.ciapoficial.network.ProcedimentoController;
+import com.br.ciapoficial.network.ServicoDeAssistenciaEspecialController;
 import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -74,37 +70,26 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
     private PrincipalFragment principalFragment;
 
-    private LinearLayout linearLayoutDocumentoProduzido, linearLayoutEncaminhamento, linearLayoutSinalSintoma,
-            linearLayoutMedicacaoPsiquiatrica;
+    private LinearLayout linearLayoutDocumentoProduzido, linearLayoutEncaminhamento;
     private AutoCompleteTextView autoCompleteTextViewProcedimento, autoCompleteTextViewDocumentoProduzido,
-            autoCompleteTextViewEncaminhamento, autoCompleteTextViewSinalSintoma,
-            autoCompleteTextViewMedicacaoPsiquiatrica;
+            autoCompleteTextViewEncaminhamento;
     private TextInputEditText textInputEditTextEvolucao;
     private RadioGroup radioGroupAfastamento, radioGroupEncaminhanhamento;
     private RadioButton rbtnAfastamentoSim, rbtnAfastamentoNao, rbtnEncaminhamentoInterno,
             rbtnEncaminhamentoExterno;
-    private Button btnAdicionarDocumentoProduzido, btnAdicionarEncaminhamento, btnAdicionarSinalSintoma,
-            btnAdicionarMedicacao, btnRegistrar;
+    private Button btnAdicionarDocumentoProduzido, btnAdicionarEncaminhamento, btnRegistrar;
 
     private List<Procedimento> listaProcedimentosRecuperados = new ArrayList<>();
     private List<DocumentoProduzido> listaDocumentosProduzidosRecuperados = new ArrayList<>();
     private List<Encaminhamento> listaDeEncaminhamentosRecuperados = new ArrayList<>();
-    private List<SinalSintoma> listaSinaisSintomasRecuperados = new ArrayList<>();
-    private List<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas = new ArrayList<>();
 
     private List<DocumentoProduzido> listaDeDocumentosSelecionadosNaoValidados;
-    private List<SinalSintoma> listaDeSinaisSintomasSelecionadosNaoValidados;
     private List<Encaminhamento> listaDeEncaminhamentosSelecionadosNaoValidados = new ArrayList<>();
-    private List<MedicacaoPsiquiatrica> listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas;
     private ArrayAdapter<DocumentoProduzido>  adapterDocumentos;
     private ArrayAdapter<Encaminhamento> adapterEncaminhamento;
-    private ArrayAdapter<SinalSintoma> adapterSinaisSintomas;
-    private ArrayAdapter<MedicacaoPsiquiatrica> adapterMedicacoes;
 
     private List<DocumentoProduzido> listaDeDocumentosSelecionadosValidados = new ArrayList<>();
     private List<Encaminhamento> listaDeEncaminhamentosSelecionadosValidados = new ArrayList<>();
-    private List<SinalSintoma> listaDeSinaisSintomasSelecionadosValidados = new ArrayList<>();
-    private List<MedicacaoPsiquiatrica> listaDeMedicacoesPsiquiatricasSelecionadasValidadas = new ArrayList<>();
 
     private Atendimento atendimento;
     private Avaliacao avaliacao;
@@ -128,15 +113,10 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         criarTextViewParaDocumentosProduzidosSelecionados();
         criarTextViewParaEncaminhamentosSelecionados();
-        criarTextViewParaSinaisSintomasSelecionados();
-        criarTextViewParaMedicacoesPsiquiatricasSelecionadas();
 
         popularCampoProcedimentoComDB();
         popularCampoDocumentoProduzidoComDB();
         popularCampoEncaminhamentoComDB();
-        popularCampoSinalSintomaComDB();
-        popularCampoMedicacaoPsiquiatricaComDB();
-        popularCampoMedicacaoPsiquiatricaComDB();
 
         enviarFormulario();
         return view;
@@ -146,21 +126,15 @@ public class AtendimentoRegisterFragment3 extends Fragment {
     {
         linearLayoutDocumentoProduzido = view.findViewById(R.id.linearLayoutDocumentoProduzido);
         linearLayoutEncaminhamento = view.findViewById(R.id.linearLayoutEncaminhamento);
-        linearLayoutSinalSintoma = view.findViewById(R.id.linearLayoutSinaisSintomas);
-        linearLayoutMedicacaoPsiquiatrica = view.findViewById(R.id.linearLayoutMedicacao);
         autoCompleteTextViewProcedimento = view.findViewById(R.id.edtProcedimento);
         autoCompleteTextViewDocumentoProduzido = view.findViewById(R.id.edtDocumentoProduzido);
         autoCompleteTextViewEncaminhamento = view.findViewById(R.id.edtEncaminhamento);
-        autoCompleteTextViewSinalSintoma = view.findViewById(R.id.edtSinaisSintomas);
-        autoCompleteTextViewMedicacaoPsiquiatrica = view.findViewById(R.id.edtMedicacao);
         radioGroupAfastamento = view.findViewById(R.id.radioGroupAfastamento);
         rbtnAfastamentoSim = view.findViewById(R.id.rbtnAfastamentoSim);
         rbtnAfastamentoNao = view.findViewById(R.id.rbtnAfastamentoNao);
         textInputEditTextEvolucao = view.findViewById(R.id.edtEvolucao);
         btnAdicionarDocumentoProduzido = view.findViewById(R.id.btnAdicionarDocumentoProduzido);
         btnAdicionarEncaminhamento = view.findViewById(R.id.btnAdicionarEncaminhamento);
-        btnAdicionarSinalSintoma = view.findViewById(R.id.btnAdicionarSinaisSintomas);
-        btnAdicionarMedicacao = view.findViewById(R.id.btnAdicionarMedicacao);
         btnRegistrar = view.findViewById(R.id.btnRegistrar);
     }
 
@@ -242,85 +216,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                         textView.setVisibility(View.GONE);
                         break;
-                    }
-                }
-            }
-        });
-    }
-
-    private void criarTextViewParaSinaisSintomasSelecionados()
-    {
-        TextView textView = new TextView(getContext());
-        for(SinalSintoma sinalSintomaRecebido : listaDeSinaisSintomasSelecionadosValidados) {
-            String textoRecebido = sinalSintomaRecebido.toString();
-
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
-
-            linearLayoutSinalSintoma.addView(textView);
-        }
-        removerItemDaListaDeSinaisSintomas(textView, listaDeSinaisSintomasSelecionadosNaoValidados, adapterSinaisSintomas);
-    }
-
-    private static void removerItemDaListaDeSinaisSintomas(TextView textView, List<SinalSintoma> listaDisplay,
-                                                           ArrayAdapter<SinalSintoma> adapter)
-    {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String string = textView.getText().toString();
-                for(Iterator<SinalSintoma> iter = listaDisplay.iterator(); iter.hasNext();)
-                {
-                    SinalSintoma sinalSintomaSelecionado = iter.next();
-                    if(sinalSintomaSelecionado.toString().equals(string))
-                    {
-                        listaDisplay.remove(sinalSintomaSelecionado);
-                        adapter.notifyDataSetChanged();
-
-                        textView.setVisibility(View.GONE);
-                        break;
-                    }
-                }
-            }
-        });
-    }
-
-    private void criarTextViewParaMedicacoesPsiquiatricasSelecionadas()
-    {
-        TextView textView = new TextView(getContext());
-        for(MedicacaoPsiquiatrica medicacaoPsiquiatricaRecebida : listaDeMedicacoesPsiquiatricasSelecionadasValidadas) {
-            String textoRecebido = medicacaoPsiquiatricaRecebida.toString();
-
-            textView.setPadding(0, 10, 0, 10);
-            textView.setText(textoRecebido);
-            textView.setTag("lista");
-
-            linearLayoutMedicacaoPsiquiatrica.addView(textView);
-        }
-        removerItemDaListaDeMedicaoPsiquiatrica(textView, listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas, adapterMedicacoes);
-    }
-
-    private static void removerItemDaListaDeMedicaoPsiquiatrica(TextView textView, List<MedicacaoPsiquiatrica> listaDisplay,
-                                                                ArrayAdapter<MedicacaoPsiquiatrica> adapter)
-    {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String string = textView.getText().toString();
-                for(Iterator<MedicacaoPsiquiatrica> iter = listaDisplay.iterator(); iter.hasNext();)
-                {
-                    MedicacaoPsiquiatrica medicacaoPsiquiatricaSelecionada = iter.next();
-                    if(medicacaoPsiquiatricaSelecionada.toString().equals(string))
-                    {
-                        listaDisplay.remove(medicacaoPsiquiatricaSelecionada);
-                        adapter.notifyDataSetChanged();
-
-                        textView.setVisibility(View.GONE);
-                        break;
-
                     }
                 }
             }
@@ -510,136 +405,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
         });
     }
 
-    private void popularCampoSinalSintomaComDB() {
-
-        SinalSintomaController sinalSintomaController = new SinalSintomaController();
-        sinalSintomaController.listar(getActivity(), new IVolleyCallback() {
-            @Override
-            public void onSucess(String response) {
-
-                try {
-
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for(int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject object = jsonArray.getJSONObject(i);
-
-                        SinalSintoma sinalSintoma = new SinalSintoma();
-                        sinalSintoma.setId(Integer.parseInt(object.getString("id")));
-                        sinalSintoma.setNome(object.getString("nome"));
-
-                        listaSinaisSintomasRecuperados.add(sinalSintoma);
-                        configurarCampoSinalSintoma(listaSinaisSintomasRecuperados);
-
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-
-    private void configurarCampoSinalSintoma(List<SinalSintoma> listaSinaisSintomasRecuperados)
-    {
-        linearLayoutSinalSintoma.removeAllViews();
-
-        adapterSinaisSintomas= new ArrayAdapter<SinalSintoma>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                listaSinaisSintomasRecuperados);
-        autoCompleteTextViewSinalSintoma.setAdapter(adapterSinaisSintomas);
-        autoCompleteTextViewSinalSintoma.setThreshold(1);
-
-        listaDeSinaisSintomasSelecionadosNaoValidados = new ArrayList<SinalSintoma>();
-        adapterSinaisSintomas = new ArrayAdapter<SinalSintoma>(getActivity(),
-                android.R.layout.simple_list_item_1,
-                listaDeSinaisSintomasSelecionadosNaoValidados);
-
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewSinalSintoma);
-
-        gerenciarListaDeSinaisSintomasSelecionados();
-    }
-
-    private void gerenciarListaDeSinaisSintomasSelecionados()
-    {
-        btnAdicionarSinalSintoma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AddRemoveTextView.adicionarTextViewSinalSintoma(getActivity(), autoCompleteTextViewSinalSintoma,
-                        listaSinaisSintomasRecuperados, listaDeSinaisSintomasSelecionadosNaoValidados,
-                        adapterSinaisSintomas, linearLayoutSinalSintoma);
-            }
-        });
-    }
-
-    private void popularCampoMedicacaoPsiquiatricaComDB() {
-
-        MedicacaoPsiquiatricaController medicacaoPsiquiatricaController = new MedicacaoPsiquiatricaController();
-        medicacaoPsiquiatricaController.listar(getActivity(), new IVolleyCallback() {
-            @Override
-            public void onSucess(String response) {
-
-                try {
-
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for(int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject object = jsonArray.getJSONObject(i);
-
-                        MedicacaoPsiquiatrica medicacaoPsiquiatrica = new MedicacaoPsiquiatrica();
-                        medicacaoPsiquiatrica.setId(Integer.parseInt(object.getString("id")));
-                        medicacaoPsiquiatrica.setNome(object.getString("nome"));
-
-                        listaMedicacoesPsiquiatricasRecuperadas.add(medicacaoPsiquiatrica);
-                        configurarCampoMedicacaoPsiquiatrica(listaMedicacoesPsiquiatricasRecuperadas);
-
-                    }
-
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-
-    private void configurarCampoMedicacaoPsiquiatrica(List<MedicacaoPsiquiatrica> listaMedicacoesPsiquiatricasRecuperadas) {
-
-        adapterMedicacoes = new ArrayAdapter<MedicacaoPsiquiatrica>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line,
-                listaMedicacoesPsiquiatricasRecuperadas);
-        autoCompleteTextViewMedicacaoPsiquiatrica.setAdapter(adapterMedicacoes);
-        autoCompleteTextViewMedicacaoPsiquiatrica.setThreshold(1);
-
-        listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas = new ArrayList<MedicacaoPsiquiatrica>();
-        adapterMedicacoes = new ArrayAdapter<MedicacaoPsiquiatrica>(getActivity(),
-                android.R.layout.simple_list_item_1,
-                listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas);
-
-        DropDownClick.showDropDown(getActivity(), autoCompleteTextViewMedicacaoPsiquiatrica);
-
-
-        gerenciarListaDeMedicacoesSelecionadas();
-
-    }
-
-    private void gerenciarListaDeMedicacoesSelecionadas()
-    {
-        btnAdicionarMedicacao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AddRemoveTextView.adicionarTextViewMedicacaoPsiquiatrica(getActivity(), autoCompleteTextViewMedicacaoPsiquiatrica,
-                        listaMedicacoesPsiquiatricasRecuperadas, listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas,
-                        adapterMedicacoes, linearLayoutMedicacaoPsiquiatrica);
-            }
-        });
-    }
-
     private void definirComportamentoRadioButtons() {
 
         radioGroupAfastamento.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -660,16 +425,12 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                 FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewProcedimento,
                         listaProcedimentosRecuperados, "O campo PROCEDIMENTO é obrigatório.",
                         "Insira uma opção de PROCEDIMENTO válida.") &&
-                FieldValidator.isListEmptyOrNull(autoCompleteTextViewDocumentoProduzido,
-                        listaDeDocumentosSelecionadosNaoValidados, "DOCUMENTO PRODUZIDO") &&
-                FieldValidator.isListEmptyOrNull(autoCompleteTextViewEncaminhamento,
-                        listaDeEncaminhamentosSelecionadosNaoValidados, "ENCAMINHAMENTO") &&
-                FieldValidator.isListEmptyOrNull(autoCompleteTextViewSinalSintoma,
-                        listaDeSinaisSintomasSelecionadosNaoValidados, "SINAL/SINTOMA") &&
-                FieldValidator.isListEmptyOrNull(autoCompleteTextViewMedicacaoPsiquiatrica,
-                        listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas, "MEDICAÇÃO PSIQUIÁTRICA") &&
-                FieldValidator.validarRadioGroup(radioGroupAfastamento, rbtnAfastamentoNao, "AFASTAMENTO") &&
-                FieldValidator.isFieldEmptyOrNull(textInputEditTextEvolucao, "EVOLUÇÃO")) {
+                        FieldValidator.isListEmptyOrNull(autoCompleteTextViewDocumentoProduzido,
+                                listaDeDocumentosSelecionadosNaoValidados, "DOCUMENTO PRODUZIDO") &&
+                        FieldValidator.isListEmptyOrNull(autoCompleteTextViewEncaminhamento,
+                                listaDeEncaminhamentosSelecionadosNaoValidados, "ENCAMINHAMENTO") &&
+                        FieldValidator.validarRadioGroup(radioGroupAfastamento, rbtnAfastamentoNao, "AFASTAMENTO") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextEvolucao, "EVOLUÇÃO")) {
             receberDadosAtendimentoPreenchidos();
             return true;
         } else { return false; }
@@ -687,9 +448,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
         listaDeDocumentosSelecionadosValidados = listaDeDocumentosSelecionadosNaoValidados;
         listaDeEncaminhamentosSelecionadosValidados = listaDeEncaminhamentosSelecionadosNaoValidados;
-        listaDeSinaisSintomasSelecionadosValidados = listaDeSinaisSintomasSelecionadosNaoValidados;
-        listaDeMedicacoesPsiquiatricasSelecionadasValidadas = listaDeMedicacoesPsiquiatricasSelecionadasNaoValidadas;
-
         evolucao = textInputEditTextEvolucao.getText().toString();
     }
 
@@ -722,10 +480,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                 (ArrayList<DocumentoProduzido>) listaDeDocumentosSelecionadosValidados));
         atendimento.setEncaminhamentos(new HashSet<>(
                 (ArrayList<Encaminhamento>) listaDeEncaminhamentosSelecionadosValidados));
-        atendimento.setSinaisSintomas(new HashSet<>(
-                (ArrayList<SinalSintoma>) listaDeSinaisSintomasSelecionadosValidados));
-        atendimento.setMedicacoesPsiquiatricas(new HashSet<>(
-                (ArrayList<MedicacaoPsiquiatrica>) listaDeMedicacoesPsiquiatricasSelecionadasValidadas));
         atendimento.setAfastamento(afastamento);
         atendimento.setEvolucao(evolucao);
 
@@ -801,8 +555,6 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                     @Override
                     public void onSucess(String response) {
 
-                        Log.e("ERRO", response);
-
                         try{
 
                             JSONObject jsonObject = new JSONObject(response);
@@ -813,6 +565,7 @@ public class AtendimentoRegisterFragment3 extends Fragment {
 
                         }catch (JSONException e) {
                             e.printStackTrace();
+                            Log.e("e.pritStack", e.getMessage());
                         }
                     }
                 });
@@ -886,18 +639,15 @@ public class AtendimentoRegisterFragment3 extends Fragment {
                         Atendimento novoAtendimento;
                         novoAtendimento = encapsularValoresParaRegistroDeAtendimento();
                         registrarAtendimento(novoAtendimento);
-                        Toast.makeText(getContext(), "atendimento", Toast.LENGTH_SHORT).show();
                     } else if (tipo.getNome().equals(TipoServicoEnum.AVALIACAO_PSICOLOGICA.getNome()) ||
                             tipo.getNome().equals(TipoServicoEnum.AVALIACAO_SOCIAL.getNome())) {
                         Avaliacao novaAvaliacao;
                         novaAvaliacao = encapsularValoresParaRegistroDeAvaliacao();
                         registrarAvaliacao(novaAvaliacao);
-                        Toast.makeText(getContext(), "avaliacao", Toast.LENGTH_SHORT).show();
                     } else {
                         ServicoDeAssistenciaEspecial novoSae;
                         novoSae = encapsularValoresParaRegistroDeSae();
                         registrarSae(novoSae);
-                        Toast.makeText(getContext(), "sae", Toast.LENGTH_SHORT).show();
                     }
 
                     principalFragment = new PrincipalFragment();

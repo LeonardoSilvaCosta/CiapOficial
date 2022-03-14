@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,16 +23,19 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
 
     private List<Servico> servicos;
     private Context context;
+    private int images[];
 
-    public ServicosAdapter(List<Servico> lista, Context c) {
+    public ServicosAdapter(List<Servico> lista, Context c, int images[]) {
         this.servicos = lista;
         this.context = c;
+        this.images = images;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_atendimentos, parent, false);
+
         return new MyViewHolder(itemLista);
     }
 
@@ -74,7 +78,13 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
             }
         }
 
+        if(servico.isSigned()) {
+            holder.imageView.setImageResource(images[0]);
+        }else {
+            holder.imageView.setImageResource(images[1]);
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -84,6 +94,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView data, nomeAtendidos, nomeOficiais;
+        ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -91,6 +102,7 @@ public class ServicosAdapter extends RecyclerView.Adapter<ServicosAdapter.MyView
             data = itemView.findViewById(R.id.txtData);
             nomeAtendidos = itemView.findViewById(R.id.txtNomeAtendido);
             nomeOficiais = itemView.findViewById(R.id.txtNomeOficial);
+            imageView = itemView.findViewById(R.id.imageSignStatus);
         }
     }
 }

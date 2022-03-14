@@ -748,13 +748,11 @@ public class FuncionarioRegisterFragment3 extends Fragment {
                         Especialista novoEspecialista;
                         novoEspecialista = encapsularValoresParaCadastroDeEspecialista();
                         cadastrarEspecialista(novoEspecialista);
-                        Toast.makeText(getContext(), "especialista", Toast.LENGTH_SHORT).show();
                     }else
                     {
                         Funcionario novoFuncionario;
                         novoFuncionario = encapsularValoresParaCadastroDeFuncionario();
                         cadastrarFuncionario(novoFuncionario);
-                        Toast.makeText(getContext(), "funcionário", Toast.LENGTH_SHORT).show();
                     }
 
                     principalFragment = new PrincipalFragment();

@@ -36,6 +36,13 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
 
         Usuario usuario = usuarios.get(position);
 
+        if(usuario.isAtendido()) {
+            holder.identificacaoProntuario.setText(
+                    "Prontuário " + usuario.getProntuario().getIdentificador());
+        }else {
+            holder.identificacaoProntuario.setText("");
+        }
+
         if(usuario.getNomeCompleto() != null)
             holder.nome.setText(usuario.toString());
 
@@ -54,6 +61,7 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
 
         TextView nome;
         TextView legendaCpf, cpf;
+        TextView identificacaoProntuario;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +69,7 @@ public class AtendidosAdapter extends RecyclerView.Adapter<AtendidosAdapter.MyVi
             nome = itemView.findViewById(R.id.txtNome);
             legendaCpf = itemView.findViewById(R.id.txtLegendaCpf);
             cpf = itemView.findViewById(R.id.txtCpf);
+            identificacaoProntuario = itemView.findViewById(R.id.txtIdentificadorProntuario);
 
             cpf.setVisibility(View.GONE);
         }

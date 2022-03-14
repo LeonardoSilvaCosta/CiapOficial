@@ -45,4 +45,5 @@ public class Servico implements Serializable {
     private String evolucao;
     private LocalDateTime dataCadastro;
     private Funcionario responsavelCadastroServico;
+    private boolean signed;
 }

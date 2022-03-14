@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Usuario extends Pessoa {
 
     private PostoGradCat postoGradCat;
@@ -18,6 +20,8 @@ public class Usuario extends Pessoa {
     private SituacaoFuncional situacaoFuncional;
     private Usuario titular;
     private Vinculo tipoVinculo;
+    private boolean atendido;
+    private Prontuario prontuario;
     private Set<Servico> servicos = new HashSet<>();
 
     public Usuario() {

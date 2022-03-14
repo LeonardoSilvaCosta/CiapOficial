@@ -89,6 +89,13 @@ public class PesquisarActivity extends AppCompatActivity {
                             fragment.pesquisarAtendidos(text);
                         }
                     }
+                } else if(viewPager.getCurrentItem() == fragmentAtendimento) {
+                    PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
+                    String text = Normalizer.normalize(query, Normalizer.Form.NFD)
+                            .replaceAll("[^\\p{ASCII}]", "");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        fragment.pesquisarAtendimentos(text);
+                    }
                 }
                 return true;
             }
@@ -97,20 +104,6 @@ public class PesquisarActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                int fragmentAtendido = 0;
-                int fragmentAtendimento = 1;
-                if(viewPager.getCurrentItem() == fragmentAtendimento)
-                {
-                    PesquisarAtendimentoFragment fragment = (PesquisarAtendimentoFragment) adapter.getPage(1);
-                    if(newText != null && !newText.isEmpty())
-                    {
-                        String text = Normalizer.normalize(newText, Normalizer.Form.NFD)
-                                .replaceAll("[^\\p{ASCII}]", "");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            fragment.pesquisarAtendimentos(text.toLowerCase());
-                        }
-                    }
-                }
 
                 return false;
             }

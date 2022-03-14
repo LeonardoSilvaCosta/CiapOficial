@@ -4,13 +4,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.br.ciapoficial.R;
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         return loginContextInstance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +70,6 @@ public class LoginActivity extends AppCompatActivity {
         loginContextInstance = this;
 
         sharedPreferences = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-
-        logarComToken();
 
         configurarComponentes();
 
@@ -109,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void logar() {
         btnEntrar.setOnClickListener(v -> {
             if(validarCampos()) {
@@ -144,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
+//                        Log.e("abcd", String.valueOf(t.getCause()));
                         Toast.makeText(getContext(), "Throwable " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -212,39 +214,6 @@ public class LoginActivity extends AppCompatActivity {
 
         dialog.show();
 
-    }
-
-    public void logarComToken() {
-        String token = sharedPreferences.getString("token", "");
-
-        if(!token.isEmpty()) {
-            ApiModule apiModule = new ApiModule();
-            Call<LoginResponse> loginByToken = apiModule.getRetrofit(
-                    getContext(), token)
-                    .authorization(token);
-            loginByToken.enqueue(new Callback<LoginResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
-                    if(response.isSuccessful()) {
-
-                        LoginResponse loginResponse = response.body();
-                        String token = loginResponse.getJwtToken();
-
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-                    }else {
-                        Log.e("Login failed", "Login failed");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Toast.makeText(getContext(), "Throwable " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        }
     }
 
 }

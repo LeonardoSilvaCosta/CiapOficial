@@ -37,8 +37,8 @@ import com.br.ciapoficial.view.DetalhesAtendidoActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -143,72 +143,9 @@ public class PesquisarAtendidoFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void recarregarAtendidos()
-    {
-        if(callback != null) callback.remove();
-        callback.remove();
-        workingWithOnBackPressed(false);
-
-        adapter = new AtendidosAdapter(listaDeUsuarios, getActivity());
-        listaAtualizada = listaDeUsuarios;
-        recyclerViewAtendidos.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-        currentPage = pageUsuario.getNumber();
-        totalPages = pageUsuario.getTotalPages();
-        totalElements = pageUsuario.getTotalElements();
-
-        layout.removeAllViews();
-        addButton(currentPage, totalPages, totalElements);
-
-
-    }
-
-    public void recuperarAtendidos()
-    {
-        UsuarioController usuarioController = new UsuarioController();
-        usuarioController.listar(getActivity(), new IVolleyCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onSucess(String response) {
-
-                listaDeUsuarios.clear();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    for(int i = 0; i < jsonObject.getJSONArray("content").length(); i++) {
-
-                        GsonBuilder customGson = new GsonBuilder();
-                        customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-                        customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-                        Gson gson = customGson.create();
-                        pageUsuario = gson.fromJson(String.valueOf(jsonObject), PageUsuario.class);
-
-                        Usuario usuario = pageUsuario.getContent().get(i);
-                        currentPage = pageUsuario.getNumber();
-                        totalPages = pageUsuario.getTotalPages();
-                        totalElements = pageUsuario.getTotalElements();
-
-                        listaDeUsuarios.add(usuario);
-
-                    }
-
-                    addButton(currentPage, totalPages, totalElements);
-
-                    adapter.notifyDataSetChanged();
-
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void pesquisarAtendidos(String termoDePesquisa) {
         String token = sharedPreferences.getString("token", "");
 
-        Toast.makeText(getContext(), termoDePesquisa, Toast.LENGTH_SHORT).show();
         if (!termoDePesquisa.isEmpty()) {
             ApiModule apiModule = new ApiModule();
             Call<PageUsuario> filtrarAtendidos = apiModule.getRetrofit(
@@ -220,7 +157,7 @@ public class PesquisarAtendidoFragment extends Fragment {
                     ArrayList<Usuario> list = new ArrayList<>();
                     if(response.isSuccessful()) {
 
-                        PageUsuario pageUsuario = response.body();
+                        pageUsuario = response.body();
                         for(int i = 0; i < pageUsuario.getContent().size(); i++) {
                             Usuario usuario = pageUsuario.getContent().get(i);
                             currentPage = pageUsuario.getNumber();
@@ -253,6 +190,65 @@ public class PesquisarAtendidoFragment extends Fragment {
             });
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recarregarAtendidos()
+    {
+        if(callback != null) callback.remove();
+        callback.remove();
+        workingWithOnBackPressed(false);
+
+        adapter = new AtendidosAdapter(listaDeUsuarios, getActivity());
+        listaAtualizada = listaDeUsuarios;
+        recyclerViewAtendidos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        currentPage = pageUsuario.getNumber();
+        totalPages = pageUsuario.getTotalPages();
+        totalElements = pageUsuario.getTotalElements();
+
+        layout.removeAllViews();
+        addButton(currentPage, totalPages, totalElements);
+
+
+    }
+
+    public void recuperarAtendidos()
+    {
+        UsuarioController usuarioController = new UsuarioController();
+        usuarioController.listar(getActivity(), new IVolleyCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onSucess(String response) {
+
+                listaDeUsuarios.clear();
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for(int i = 0; i < jsonArray.length(); i++) {
+
+                        GsonBuilder customGson = new GsonBuilder();
+                        customGson.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                        customGson.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+                        Gson gson = customGson.create();
+                        Usuario usuario = gson.fromJson(String.valueOf(jsonArray.get(i)), Usuario.class);
+
+                        listaDeUsuarios.add(usuario);
+
+                    }
+
+                    addButton(currentPage, totalPages, totalElements);
+
+                    adapter.notifyDataSetChanged();
+
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addButton(int currentPage, int totalPages, Long totalElements) {

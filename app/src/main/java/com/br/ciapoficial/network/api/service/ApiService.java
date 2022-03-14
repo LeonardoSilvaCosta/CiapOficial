@@ -2,6 +2,7 @@ package com.br.ciapoficial.network.api.service;
 
 import com.br.ciapoficial.network.api.dto.LoginRequest;
 import com.br.ciapoficial.network.api.dto.LoginResponse;
+import com.br.ciapoficial.network.api.dto.PageServico;
 import com.br.ciapoficial.network.api.dto.PageUsuario;
 
 import retrofit2.Call;
@@ -26,12 +27,20 @@ public interface ApiService {
             @Field("userId") String userId,
             @Field("refreshToken") String refreshToken);
 
-    @GET("usuarios")
+    @GET("usuarios/paginados")
     Call<PageUsuario> atendidosFiltrados(
             @Query("keyword") String keyword);
 
-    @GET("usuarios")
+    @GET("usuarios/paginados")
     Call<PageUsuario> paginarAtendidos(
+            @Query("page") int page);
+
+    @GET("servicos/paginados")
+    Call<PageServico> servicosFiltrados(
+            @Query("keyword") String keyword);
+
+    @GET("servicos/paginados")
+    Call<PageServico> paginarServicos(
             @Query("page") int page);
 
 }

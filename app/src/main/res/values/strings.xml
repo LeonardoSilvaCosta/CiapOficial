@@ -41,6 +41,8 @@
     <string name="especialidade">Especialidade*</string>
     <string name="masculino">Masculino</string>
     <string name="feminino">Feminino</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
     <string name="pm">PM</string>
     <string name="dependente">Dependente</string>
     <string name="civil">Civil</string>

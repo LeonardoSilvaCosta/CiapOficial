@@ -17,15 +17,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.br.ciapoficial.R;
-import com.br.ciapoficial.network.PostoGradCatController;
-import com.br.ciapoficial.network.QuadroController;
-import com.br.ciapoficial.network.SituacaoFuncionalController;
-import com.br.ciapoficial.network.UnidadeController;
-import com.br.ciapoficial.network.UsuarioController;
 import com.br.ciapoficial.enums.SexoEnum;
 import com.br.ciapoficial.helper.DateFormater;
 import com.br.ciapoficial.helper.DropDownClick;
-import com.br.ciapoficial.validation.FieldValidator;
 import com.br.ciapoficial.helper.Mascaras;
 import com.br.ciapoficial.interfaces.IVolleyCallback;
 import com.br.ciapoficial.model.Cidade;
@@ -38,6 +32,12 @@ import com.br.ciapoficial.model.SituacaoFuncional;
 import com.br.ciapoficial.model.Telefone;
 import com.br.ciapoficial.model.Unidade;
 import com.br.ciapoficial.model.Usuario;
+import com.br.ciapoficial.network.PostoGradCatController;
+import com.br.ciapoficial.network.QuadroController;
+import com.br.ciapoficial.network.SituacaoFuncionalController;
+import com.br.ciapoficial.network.UnidadeController;
+import com.br.ciapoficial.network.UsuarioController;
+import com.br.ciapoficial.validation.FieldValidator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -57,9 +57,9 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private TextInputEditText textInputEditTextRgMilitar, textInputEditTextNomeGuerra, textInputEditTextDataInclusao;
     private AutoCompleteTextView autoCompleteTextViewPostGradCat, autoCompleteTextViewQuadro, autoCompleteTextViewUnidade,
             autoCompleteTextViewSituacaoFuncional;
-    Button btnCadastrar;
+    private Button btnCadastrar;
 
-    Usuario usuario;
+    private Usuario usuario;
 
     private List<PostoGradCat> listaPostoGradCatRecuperados = new ArrayList<>();
     private List<Quadro> listaQuadrosRecuperados = new ArrayList<>();
@@ -299,18 +299,18 @@ public class UsuarioRegisterFragment3 extends Fragment {
     private boolean validarCadastroDoUsuario() throws ParseException {
         if (
                 FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewPostGradCat,
-                listaPostoGradCatRecuperados, "O campo POSTO/GRAD/CAT é obrigatório.",
+                        listaPostoGradCatRecuperados, "O campo POSTO/GRAD/CAT é obrigatório.",
                         "Insira uma opção de POSTO/GRAD/CAT válida.") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewQuadro, listaQuadrosRecuperados,
-                        "O campo QUADRO é obrigatório.", "Insira uma opção de QUADRO válida.") &&
-                FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
-                FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUnidade, listaUnidadesRecuperadas,
-                        "O campo UNIDADE é obrigatório.", "Insira uma opção de UNIDADE válida.") &&
-                FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
-                FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewSituacaoFuncional,
-                        listaSituacoesFuncionaisRecuperadas, "O campo SITUAÇÃO FUNCIONAL é obrigatório.",
-                        "Insira uma opção de SITUAÇÃO FUNCIONAL válida."))
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewQuadro, listaQuadrosRecuperados,
+                                "O campo QUADRO é obrigatório.", "Insira uma opção de QUADRO válida.") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextRgMilitar, "RG MILITAR") &&
+                        FieldValidator.isFieldEmptyOrNull(textInputEditTextNomeGuerra, "NOME DE GUERRA") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewUnidade, listaUnidadesRecuperadas,
+                                "O campo UNIDADE é obrigatório.", "Insira uma opção de UNIDADE válida.") &&
+                        FieldValidator.validarData(textInputEditTextDataInclusao, "DATA DE INCLUSÃO") &&
+                        FieldValidator.validarAutoCompleteTextView(autoCompleteTextViewSituacaoFuncional,
+                                listaSituacoesFuncionaisRecuperadas, "O campo SITUAÇÃO FUNCIONAL é obrigatório.",
+                                "Insira uma opção de SITUAÇÃO FUNCIONAL válida."))
         {
             receberDadosDoUsuarioPreenchidos();
             return true;
@@ -363,8 +363,6 @@ public class UsuarioRegisterFragment3 extends Fragment {
 
         usuario = new Usuario();
 
-        Toast.makeText(getContext(), valoresRecebidosFragment1.getString("cpf"), Toast.LENGTH_SHORT).show();
-
         usuario.setNomeCompleto(valoresRecebidosFragment1.getString("nomeCompleto"));
         usuario.setDataNascimento(dataNascimento);
         usuario.setCpf(valoresRecebidosFragment1.getString("cpf"));
@@ -375,6 +373,7 @@ public class UsuarioRegisterFragment3 extends Fragment {
         usuario.setEscolaridade( (Escolaridade) valoresRecebidosFragment1.getSerializable("escolaridade"));
         usuario.setTelefones((ArrayList<Telefone>) valoresRecebidosFragment1.getSerializable("telefones"));
         usuario.setEmail(valoresRecebidosFragment1.getString("email"));
+        usuario.setAtendido(valoresRecebidosFragment1.getBoolean("eAtendido"));
         usuario.setEndereco((Endereco) valoresRecebidosFragment1e2.getSerializable("endereco"));
         usuario.setRgMilitar(rgMilitar);
         usuario.setPostoGradCat((postoGradCat));

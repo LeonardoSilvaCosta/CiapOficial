@@ -305,43 +305,43 @@
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="340dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:padding="20dp"
-                        android:background="@drawable/backgroud__informacoes">
+<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:layout_width="340dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_marginBottom="10dp"-->
+<!--                        android:padding="20dp"-->
+<!--                        android:background="@drawable/backgroud__informacoes">-->
 
-                        <TextView
-                            android:id="@+id/txtInformacoes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/white_rectangle_backgroud"
-                            android:paddingStart="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="2dp"
-                            android:text="@string/info"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            />
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtInformacoes"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:background="@drawable/white_rectangle_backgroud"-->
+<!--                            android:paddingStart="8dp"-->
+<!--                            android:paddingTop="2dp"-->
+<!--                            android:paddingEnd="8dp"-->
+<!--                            android:paddingBottom="2dp"-->
+<!--                            android:text="@string/info"-->
+<!--                            android:textColor="@color/colorPrimary"-->
+<!--                            android:textSize="16sp"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:ellipsize="end"
-                            android:maxLines="3"
-                            android:text="Parabéns pelo seu aniversário!"
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            app:layout_constraintTop_toBottomOf="@id/txtInformacoes"
-                            />
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:maxLines="3"-->
+<!--                            android:text="Parabéns pelo seu aniversário!"-->
+<!--                            android:textColor="@color/white"-->
+<!--                            android:textSize="20sp"-->
+<!--                            app:layout_constraintTop_toBottomOf="@id/txtInformacoes"-->
+<!--                            />-->
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
                 </LinearLayout>
 

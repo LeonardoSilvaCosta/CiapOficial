@@ -41,7 +41,7 @@ public class ServicoController {
     private static String TAG = ServicoController.class.getName();
     private SharedPreferences sharedPreferences;
 
-    private String url = BASE_API_URL + "/servicos";
+    private String urlServicos = BASE_API_URL + "/servicos";
 
     public void registrarAtendimento(Context context, Servico servico, final IVolleyCallback callback) {
 
@@ -49,7 +49,7 @@ public class ServicoController {
         sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlServicos,
                 new Response.Listener<String>() {
                     @SneakyThrows
                     @Override
@@ -120,7 +120,7 @@ public class ServicoController {
         sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlServicos,
                 new Response.Listener<String>() {
                     @SneakyThrows
                     @Override
@@ -176,9 +176,9 @@ public class ServicoController {
         sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
 
-        url += "/atendidos/" + idUsuario;
+        urlServicos += "/atendidos/" + idUsuario;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlServicos,
                 new Response.Listener<String>() {
                     @SneakyThrows
                     @Override
@@ -222,6 +222,78 @@ public class ServicoController {
                 headers.put("Accept","application/Json; charset=utf8");
                 headers.put("Authorization", token);
                 return headers;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+    public void atualizar(Context context, final Servico servico, final IVolleyCallback callback) {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+
+        String urlServicosComPathVariable = urlServicos + "/" + servico.getId();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT,
+                urlServicosComPathVariable,
+                new Response.Listener<String>() {
+                    @SneakyThrows
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSucess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( error instanceof NetworkError) {
+                    Toast.makeText(context,
+                            "Falha na rede",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ServerError) {
+                    Toast.makeText(context,
+                            "500 Internal Server Error",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof ParseError) {
+                    Toast.makeText(context,
+                            "ParseError",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof NoConnectionError) {
+                    Toast.makeText(context,
+                            "Falha na conexão",
+                            Toast.LENGTH_SHORT).show();
+                } else if( error instanceof TimeoutError) {
+                    Toast.makeText(context,
+                            "504 Timeout Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type","application/Json; charset=utf8");
+                headers.put("Accept","application/Json; charset=utf8");
+                headers.put("Authorization", token);
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() { return "application/json; charset=utf-8"; }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+                gsonBuilder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
+                Gson gson = gsonBuilder.setPrettyPrinting().create();
+
+                return gson.toJson(servico).getBytes();
             }
         };
 

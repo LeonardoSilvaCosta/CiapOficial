@@ -295,6 +295,7 @@ public class UsuarioRegisterFragment2 extends Fragment {
         usuario.setNumeroFilhos((valoresRecebidosFragment1.getInt("numeroFilhos")));
         usuario.setTitular((Usuario) valoresRecebidosFragment1.getSerializable("titular"));
         usuario.setTipoVinculo((Vinculo) valoresRecebidosFragment1.getSerializable("vinculo"));
+        usuario.setAtendido(valoresRecebidosFragment1.getBoolean("eAtendido"));
 
         usuario.setEndereco(endereco);
 
